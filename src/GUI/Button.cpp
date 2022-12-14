@@ -22,9 +22,10 @@ Button::Button(Theme theme, std::string text, CallbackType callback)
         break;
     }
     
-    m_default_sprite.setOrigin(0.f, m_default_sprite.getTexture()->getSize().y);
-    m_hovered_sprite.setOrigin(0.f, m_hovered_sprite.getTexture()->getSize().y);
-    m_pressed_sprite.setOrigin(0.f, m_pressed_sprite.getTexture()->getSize().y);
+    m_hovered_sprite.setOrigin(0.f, m_hovered_sprite.getTexture()->getSize().y
+                               - float(m_default_sprite.getTexture()->getSize().y));
+    m_pressed_sprite.setOrigin(0.f, m_pressed_sprite.getTexture()->getSize().y
+                               - float(m_default_sprite.getTexture()->getSize().y));
     
     setSize(sf::Vector2f(m_default_sprite.getTexture()->getSize()));
 }

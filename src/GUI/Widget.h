@@ -27,6 +27,7 @@ public:
     
     void setPosition(sf::Vector2f position);
     void scalePosition(sf::Vector2f scale);
+    void move(sf::Vector2f delta);
     
     void setState(State state);
     

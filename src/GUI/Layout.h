@@ -26,8 +26,6 @@ public:
     void setPadding(float padding);
     void setMargin(float margin);
     
-    void recomputeSize();
-    
     
     
     void addWidget(Widget *widget);
@@ -54,28 +52,31 @@ private:
     
     using ListIterator = std::list<Widget *>::iterator;
     
-    
-    
     float padding() const; // Spacing inside widgets
     float margin() const; // Spacing between widgets
+    
+    
+    
+    void addLayoutSizeBy(Widget *widget);
+    void calcPositionWidget(Widget *widget);
     
     
     
     void setFocus();
     void unfocus();
     
-    void updateBorder();
     
     
-    
-    ListIterator m_focused;
-    std::list<Widget *> m_contains;
-    
-    Type m_type;
-    float m_padding;
-    float m_margin;
+    sf::Transform m_transform;
     
     sf::RectangleShape m_border;
+    
+    ListIterator        m_focused;
+    std::list<Widget *> m_contains;
+    
+    Type        m_type;
+    float       m_padding;
+    float       m_margin;
 };
 
 

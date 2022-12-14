@@ -21,9 +21,15 @@ void Widget::setPosition(sf::Vector2f position)
 
 void Widget::scalePosition(sf::Vector2f scale)
 {
-    m_position.x *= scale.x;
-    m_position.y *= scale.y;
+    setPosition({getPosition().x * scale.x, getPosition().y * scale.y});
 }
+
+void Widget::move(sf::Vector2f delta)
+{
+    setPosition(getPosition() + delta);
+}
+
+
 
 void Widget::setState(State state)
 {
@@ -39,8 +45,7 @@ void Widget::setSize(sf::Vector2f size)
 
 void Widget::scale(sf::Vector2f scale)
 {
-    m_size.x *= scale.x;
-    m_size.y *= scale.y;
+    setSize({getSize().x * scale.x, getSize().y * scale.y});
 }
 
 
