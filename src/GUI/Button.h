@@ -5,7 +5,11 @@
 
 #include <functional>
 
+
+
 #include "Widget.h"
+
+#include "Text.h"
 
 
 
@@ -38,6 +42,7 @@ public:
 protected:
     
     void onEvent_(const sf::Event &event) override; 
+    void onSizeChange(sf::Vector2f new_size) override;
     
     
     
@@ -45,7 +50,7 @@ private:
     
     
     
-    std::string m_text;
+    Text m_text;
     
     CallbackType m_callback;
     

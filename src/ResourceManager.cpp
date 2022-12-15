@@ -4,6 +4,7 @@
 
 std::string ResourceManager::m_path;
 std::map<std::string, sf::Texture*> ResourceManager::m_textures;
+std::map<std::string, sf::Font*> ResourceManager::m_fonts;
 
 
 
@@ -11,6 +12,8 @@ void ResourceManager::init(std::string path)
 {
     m_path = path;
 }
+
+
 
 const sf::Texture * ResourceManager::getTexture(std::string name)
 {
@@ -20,6 +23,18 @@ const sf::Texture * ResourceManager::getTexture(std::string name)
         sf::Texture *texture = new sf::Texture;
         texture->loadFromFile(m_path + name + ".png");
         iter = m_textures.emplace(name, texture).first;
+    }
+    return (*iter).second;
+}
+
+const sf::Font * ResourceManager::getFont(std::string name)
+{
+    auto iter = m_fonts.find(name);
+    if (iter == m_fonts.end())
+    {
+        sf::Font *font = new sf::Font;
+        font->loadFromFile(m_path + name + ".ttf");
+        iter = m_fonts.emplace(name, font).first;
     }
     return (*iter).second;
 }

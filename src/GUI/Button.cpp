@@ -5,7 +5,7 @@
 
 
 Button::Button(Theme theme, std::string text, CallbackType callback)
-    : m_text(text),
+    : m_text(),
       m_callback(callback)
 {
     switch (theme)
@@ -104,6 +104,17 @@ void Button::onEvent_(const sf::Event &event)
     }
 }
 
+void Button::onSizeChange(sf::Vector2f new_size)
+{
+    if (getSize().x != 0 && getSize().y != 0)
+    {
+        sf::Vector2f k = {new_size.x / getSize().x, new_size.y / getSize().y};
+        
+        m_default_sprite.scale(k);
+        m_hovered_sprite.scale(k);
+        m_pressed_sprite.scale(k);
+    }
+}
 
 
 // private:

@@ -13,15 +13,18 @@ public:
     
     Image(std::string image_name);
     
-    Image(std::string image_name, sf::IntRect rectangle);
-    
     
     
     void setRectangle(const sf::IntRect &rectangle);
     
     
-    
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    
+    
+    
+protected:
+    
+    void onSizeChange(sf::Vector2f new_size) override;
     
     
     

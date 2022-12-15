@@ -14,6 +14,7 @@
 #include "src/GUI/Button.h"
 #include "src/GUI/Image.h"
 #include "src/GUI/Layout.h"
+#include "src/GUI/Text.h"
 
 
 
@@ -25,6 +26,7 @@ int main(int, char *argv[])
     
     Button b1(Button::Theme::Red, "abc", [](){std::cout << "Hello world!" << std::endl;});
     Button b2(Button::Theme::Red, "awert", [](){std::cout << "Goodbye world!" << std::endl;});
+    b2.scale({1.5f, 1.f});
     
     Image i1("duckcarrier");
     i1.setPosition({100.f, 100.f});
@@ -33,11 +35,14 @@ int main(int, char *argv[])
     Layout::need_draw_border = true;
     Layout l(Layout::Horizontal);
     l.setPosition({50.f, 50.f});
-    l.setSize({300.f, 200.f});
     
     l.addWidget(&b1);
     l.addWidget(&b2);
-    // l.recomputeSize();
+    l.addWidget(&i1);
+    
+    
+    Text t;
+    t.setString(L"ывауℤ∜∀∫☔♥☆и");
     
     
     sf::RenderWindow window(sf::VideoMode(1280, 721), "My window", sf::Style::Close);
@@ -66,11 +71,11 @@ int main(int, char *argv[])
         }
         
         window.clear();
-        window.draw(i1);
-        // window.draw(b1);
         window.draw(l);
+        window.draw(t);
         window.display();
     }
+    
     
     return 0;
 }

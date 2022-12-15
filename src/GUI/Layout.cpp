@@ -77,9 +77,6 @@ void Layout::onSizeChange(sf::Vector2f new_size)
 
 void Layout::onPositionChange(sf::Vector2f new_position)
 {
-    //m_transform = sf::Transform();
-    //m_transform.translate(new_position);
-    
     m_border.setPosition(new_position);
     
     for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
@@ -157,7 +154,7 @@ void Layout::calcPositionWidget(Widget *widget)
         {
             shift = sf::Vector2f(0.f, prev_widget->getSize().y + margin());
         }
-        widget->move(prev_widget->getPosition() + shift);
+        widget->setPosition(prev_widget->getPosition() + shift);
     }
 }
 
