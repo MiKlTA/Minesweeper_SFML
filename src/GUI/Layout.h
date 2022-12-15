@@ -71,10 +71,11 @@ private:
     
     
     void unfocus();
+    
+    ListIterator getNextFocusableWidget(ListIterator iter);
+    ListIterator getPrevFocusableWidget(ListIterator iter);
     void setFocusOnNextWidget();
     void setFocusOnPrevWidget();
-    void goNextFocusableWidget();
-    void goPrevFocusableWidget();
     
     bool haveTargetsForFocus();
     

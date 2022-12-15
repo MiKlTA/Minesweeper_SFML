@@ -30,6 +30,7 @@ int main(int, char *argv[])
     GUIKeyManager::attachKey("right", sf::Keyboard::Right);
     GUIKeyManager::attachKey("up", sf::Keyboard::Up);
     GUIKeyManager::attachKey("down", sf::Keyboard::Down);
+    GUIKeyManager::attachKey("enter", sf::Keyboard::Enter);
     
     Button b1(Button::Theme::Blue, L"Превед", [](){std::cout << "Hello world!" << std::endl;});
     Button b2(Button::Theme::Red, L"Медвед", [](){std::cout << "Goodbye world!" << std::endl;});

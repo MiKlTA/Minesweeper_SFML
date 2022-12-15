@@ -1,5 +1,7 @@
 #include "Button.h"
 
+#include "GUIKeyManager.h"
+
 #include "../ResourceManager.h"
 
 
@@ -72,48 +74,51 @@ bool Button::canBeFocused()
 
 void Button::onEvent_(const sf::Event &event)
 {
-    switch (event.type)
+    switch (getState())
     {
-    case sf::Event::MouseMoved:
-    {
+    case State::Default:
+        
         if (containsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y)))
         {
-            if (getState() == State::Default)
-            {
-                setState(State::Hovered);
-            }
+           setState(State::Hovered); 
         }
-        else
-        {
-            if (getState() == State::Hovered)
-            {
-                setState(State::Default);
-            }
-        }
+        
         break;
-    }
-    case sf::Event::MouseButtonPressed:
-        if (getState() == State::Hovered)
+    case State::Focused:
+        
+        if (event.type == sf::Event::KeyPressed
+                && event.key.code == GUIKeyManager::key("enter"))
         {
-            setState(State::Pressed);
+            press();
         }
+        
         break;
-    case sf::Event::MouseButtonReleased:
-        if (getState() == State::Pressed)
+    case State::Hovered:
+        
+        if (!containsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y)))
         {
-            if (containsPoint(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
-            {
-                setState(State::Hovered);
-            }
-            else
-            {
-                setState(State::Default);
-            }
-            
-            m_callback();
+           setState(State::Default); 
         }
+        else if (event.type == sf::Event::KeyPressed
+                 && event.key.code == GUIKeyManager::key("enter"))
+        {
+            press();
+        }
+        
         break;
-    default:
+    case State::Pressed:
+        
+        if (event.type == sf::Event::MouseButtonReleased
+                    && event.mouseButton.button == sf::Mouse::Left)
+        {
+            setState(State::Default);
+        }
+        else if (event.type == sf::Event::KeyReleased
+                 && event.key.code == GUIKeyManager::key("enter"))
+        {
+            setState(State::Focused);
+        }
+        
         break;
     }
 }
@@ -147,6 +152,14 @@ void Button::onStateChange(State new_state)
 
 
 // private:
+
+
+
+void Button::press()
+{
+    setState(State::Pressed);
+    m_callback();
+}
 
 
 

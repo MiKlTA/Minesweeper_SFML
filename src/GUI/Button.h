@@ -54,6 +54,10 @@ protected:
     
 private:
     
+    void press();
+    
+    
+    
     void locateText(State new_state, sf::Vector2f position);
     
     

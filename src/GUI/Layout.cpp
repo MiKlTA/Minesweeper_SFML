@@ -117,6 +117,11 @@ void Layout::onEvent_(const sf::Event &event)
                 }
             }
             
+            if (event.key.code == GUIKeyManager::key("enter"))
+            {
+                break;
+            }
+            
             // continue!
         case sf::Event::MouseButtonPressed:
             
@@ -234,6 +239,30 @@ void Layout::unfocus()
     m_border.setOutlineColor(sf::Color::Red);
 }
 
+
+
+Layout::ListIterator Layout::getNextFocusableWidget(ListIterator iter)
+{
+    iter = std::next(iter);
+    while (iter != m_contains.end() && !(*iter)->canBeFocused())
+    {
+        iter = std::next(iter);
+    }
+    
+    return iter;
+}
+
+Layout::ListIterator Layout::getPrevFocusableWidget(ListIterator iter)
+{
+    iter = std::prev(iter);
+    while (iter != m_contains.begin() && !(*iter)->canBeFocused())
+    {
+        iter = std::prev(iter);
+    }
+    
+    return iter;
+}
+
 void Layout::setFocusOnNextWidget()
 {
     if (getState() == State::Focused)
@@ -241,6 +270,10 @@ void Layout::setFocusOnNextWidget()
         if (haveTargetsForFocus())
         {
             m_focused_widget = m_contains.begin();
+            if (!(*m_focused_widget)->canBeFocused())
+            {
+                m_focused_widget = getNextFocusableWidget(m_focused_widget);
+            }
             
             unfocus();
             (*m_focused_widget)->setState(State::Focused);
@@ -250,7 +283,7 @@ void Layout::setFocusOnNextWidget()
     {
         (*m_focused_widget)->setState(State::Default);
         
-        m_focused_widget = std::next(m_focused_widget);
+        m_focused_widget = getNextFocusableWidget(m_focused_widget);
         
         if (m_focused_widget == m_contains.end())
         {
@@ -270,8 +303,10 @@ void Layout::setFocusOnPrevWidget()
         if (haveTargetsForFocus())
         {
             m_focused_widget = std::prev(m_contains.end());
-            while (!(*m_focused_widget)->canBeFocused())
-                m_focused_widget = std::prev(m_focused_widget);
+            if (!(*m_focused_widget)->canBeFocused())
+            {
+                m_focused_widget = getPrevFocusableWidget(m_focused_widget);
+            }
             
             unfocus();
             (*m_focused_widget)->setState(State::Focused);
@@ -287,7 +322,7 @@ void Layout::setFocusOnPrevWidget()
         }
         else
         {
-            m_focused_widget = std::prev(m_focused_widget);
+            m_focused_widget = getPrevFocusableWidget(m_focused_widget);
             (*m_focused_widget)->setState(State::Focused);
         }
     }
