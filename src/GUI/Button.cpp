@@ -5,7 +5,7 @@
 
 
 Button::Button(Theme theme, std::wstring text, CallbackType callback)
-    : m_text(text),
+    : m_text(Text::Alignment::Centre, text),
       m_callback(callback)
 {
     switch (theme)
@@ -21,15 +21,18 @@ Button::Button(Theme theme, std::wstring text, CallbackType callback)
         m_pressed_sprite = sf::Sprite(*ResourceManager::getTexture("red_button_pressed"));
         break;
     }
-    m_text_padding = {16.f, 0.f};
-    
+    m_text_padding = {0.f, 16.f};
     
     m_sadding = float(m_default_sprite.getTexture()->getSize().y)
             - m_pressed_sprite.getTexture()->getSize().y;
     
     m_pressed_sprite.setOrigin(0.f, -m_sadding);
     
+    
+    
     setSize(sf::Vector2f(m_default_sprite.getTexture()->getSize()));
+    
+    m_text.setColor(sf::Color(150, 40, 10));
 }
 
 
@@ -108,6 +111,11 @@ void Button::onEvent_(const sf::Event &event)
     }
 }
 
+void Button::onPositionChange(sf::Vector2f new_position)
+{
+    locateText(getState(), new_position);
+}
+
 void Button::onSizeChange(sf::Vector2f new_size)
 {
     if (getSize().x != 0 && getSize().y != 0)
@@ -122,7 +130,7 @@ void Button::onSizeChange(sf::Vector2f new_size)
 
 void Button::onStateChange(State new_state)
 {
-    locateText(new_state);
+    locateText(new_state, getPosition());
 }
 
 
@@ -131,9 +139,10 @@ void Button::onStateChange(State new_state)
 
 
 
-void Button::locateText(State new_state)
+void Button::locateText(State new_state, sf::Vector2f position)
 {
-    sf::Vector2f text_position(getPosition() + m_text_padding);
+    sf::Vector2f text_position(position + m_text_padding);
+    text_position.x += getSize().x / 2.f;
     
     if (new_state == State::Pressed)
     {

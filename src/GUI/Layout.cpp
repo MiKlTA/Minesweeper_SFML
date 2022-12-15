@@ -8,7 +8,7 @@ bool Layout::need_draw_border = false;
 
 Layout::Layout(Type type)
     : m_type(type),
-      m_padding(30.f),
+      m_padding(20.f),
       m_margin(50.f)
 {
     m_border.setFillColor(sf::Color::Transparent);

@@ -41,14 +41,15 @@ public:
     
 protected:
     
-    void onEvent_(const sf::Event &event) override; 
+    void onEvent_(const sf::Event &event) override;
+    void onPositionChange(sf::Vector2f new_position) override; 
     void onSizeChange(sf::Vector2f new_size) override;
     void onStateChange(State new_state) override;
     
     
 private:
     
-    void locateText(State new_state);
+    void locateText(State new_state, sf::Vector2f position);
     
     
     

@@ -24,12 +24,13 @@ int main(int, char *argv[])
     path += '\\';
     ResourceManager::init(path);
     
-    Button b1(Button::Theme::Red, L"abc", [](){std::cout << "Hello world!" << std::endl;});
-    Button b2(Button::Theme::Red, L"awert", [](){std::cout << "Goodbye world!" << std::endl;});
+    Button b1(Button::Theme::Red, L"Превед", [](){std::cout << "Hello world!" << std::endl;});
+    Button b2(Button::Theme::Red, L"Медвед", [](){std::cout << "Goodbye world!" << std::endl;});
     b2.scale({1.5f, 1.f});
     
     Image i1("duckcarrier");
-    i1.scale({0.5f, 0.5f});
+    i1.setPosition({86.f, 86.f});
+    i1.scale({0.3f, 0.3f});
     
     Layout::need_draw_border = true;
     Layout l(Layout::Horizontal);
@@ -38,6 +39,7 @@ int main(int, char *argv[])
     l.addWidget(&b1);
     l.addWidget(&b2);
     l.addWidget(&i1);
+    
     
     
     Text t;
@@ -74,6 +76,7 @@ int main(int, char *argv[])
         window.clear();
         window.draw(l);
         window.draw(t);
+        // window.draw(i1);
         window.display();
     }
     
