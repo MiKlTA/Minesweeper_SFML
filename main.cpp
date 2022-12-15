@@ -31,28 +31,39 @@ int main(int, char *argv[])
     GUIKeyManager::attachKey("up", sf::Keyboard::Up);
     GUIKeyManager::attachKey("down", sf::Keyboard::Down);
     GUIKeyManager::attachKey("enter", sf::Keyboard::Enter);
+    GUIKeyManager::attachButton("left", sf::Mouse::Left);
     
     Button b1(Button::Theme::Blue, L"Превед", [](){std::cout << "Hello world!" << std::endl;});
     Button b2(Button::Theme::Red, L"Медвед", [](){std::cout << "Goodbye world!" << std::endl;});
+    Button b3(Button::Theme::Blue, L"Кнопка", [](){std::cout << "adsada" << std::endl;});
+    Button b4(Button::Theme::Red, L"Акпонк", [](){std::cout << "yiyuiyuiu" << std::endl;});
     b2.scale({1.5f, 1.f});
     
     Image i1("duckcarrier");
     i1.setPosition({86.f, 86.f});
     i1.scale({0.3f, 0.3f});
     
+    Text t;
+    t.setString(L"ывауℤ∜∀∫☔♥☆и");
+    
+    
+    
     Layout::need_draw_border = true;
     Layout l(Layout::Horizontal);
     l.setPosition({50.f, 50.f});
     
-    l.addWidget(&b1);
-    l.addWidget(&b2);
-    l.addWidget(&i1);
+    Layout l1(Layout::Vertical);
+    Layout l2(Layout::Vertical);
     
+    l1.addWidget(&b1);
+    l1.addWidget(&b2);
+    l1.addWidget(&t);
+    l2.addWidget(&b3);
+    l2.addWidget(&b4);
+    l2.addWidget(&i1);
     
-    
-    Text t;
-    t.setString(L"ывауℤ∜∀∫☔♥☆и");
-    l.addWidget(&t);
+    l.addWidget(&l1);
+    l.addWidget(&l2);
     
     
     sf::RenderWindow window(sf::VideoMode(1280, 721), "My window", sf::Style::Close);
@@ -75,10 +86,10 @@ int main(int, char *argv[])
                 switch (event.key.code)
                 {
                 case sf::Keyboard::P:
-                    
+                    l.move({0.3f, 0.3f});
                     break;
                 case sf::Keyboard::Tab:
-                    l.setFocus();
+                    l.setState(Layout::State::Focused);
                     break;
                 default:
                     break;
@@ -90,8 +101,6 @@ int main(int, char *argv[])
         
         window.clear();
         window.draw(l);
-        window.draw(t);
-        // window.draw(i1);
         window.display();
     }
     

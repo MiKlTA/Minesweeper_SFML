@@ -32,10 +32,6 @@ public:
     
     
     
-    void setFocus();
-    
-    
-    
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     
     
@@ -53,6 +49,7 @@ protected:
     void onEvent_(const sf::Event &event) override;
     void onSizeChange(sf::Vector2f new_size) override;
     void onPositionChange(sf::Vector2f new_position) override;
+    void onStateChange(State new_state) override;
     
     
     

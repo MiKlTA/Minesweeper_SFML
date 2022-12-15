@@ -45,14 +45,6 @@ void Layout::addWidget(Widget *widget)
 
 
 
-void Layout::setFocus()
-{
-    setState(State::Focused);
-    m_border.setOutlineColor(sf::Color::Green);
-}
-
-
-
 void Layout::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     states.transform *= m_transform;
@@ -82,6 +74,13 @@ bool Layout::canBeFocused()
 
 void Layout::onEvent_(const sf::Event &event)
 {
+    for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
+    {
+        (*widget_iter)->onEvent(event);
+    }
+    
+    
+    
     if (getState() == State::Focused || m_focused_widget != m_contains.end())
     {
         switch (event.type)
@@ -130,16 +129,12 @@ void Layout::onEvent_(const sf::Event &event)
             {
                 (*m_focused_widget)->setState(State::Default);
             }
+            m_focused_widget = m_contains.end();
             
             break;
         default:
             break;
         }
-    }
-    
-    for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
-    {
-        (*widget_iter)->onEvent(event);
     }
 }
 
@@ -156,6 +151,14 @@ void Layout::onPositionChange(sf::Vector2f new_position)
     {
         Widget *widget = *widget_iter;
         widget->move(new_position - getPosition());
+    }
+}
+
+void Layout::onStateChange(State new_state)
+{
+    if (new_state == State::Focused)
+    {
+        m_border.setOutlineColor(sf::Color::Green);
     }
 }
 
@@ -287,7 +290,7 @@ void Layout::setFocusOnNextWidget()
         
         if (m_focused_widget == m_contains.end())
         {
-            setFocus();
+            setState(State::Focused);
         }
         else
         {
@@ -318,7 +321,7 @@ void Layout::setFocusOnPrevWidget()
         
         if (m_focused_widget == m_contains.begin())
         {
-            setFocus();
+            setState(State::Focused);
         }
         else
         {

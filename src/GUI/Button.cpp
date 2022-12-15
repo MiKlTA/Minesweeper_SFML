@@ -89,34 +89,43 @@ void Button::onEvent_(const sf::Event &event)
         if (event.type == sf::Event::KeyPressed
                 && event.key.code == GUIKeyManager::key("enter"))
         {
-            press();
+            setState(State::Pressed);
         }
         
         break;
     case State::Hovered:
         
-        if (!containsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y)))
+        if (event.type == sf::Event::MouseMoved
+                && !containsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y)))
         {
            setState(State::Default); 
         }
-        else if (event.type == sf::Event::KeyPressed
-                 && event.key.code == GUIKeyManager::key("enter"))
+        else if (event.type == sf::Event::MouseButtonPressed)
         {
-            press();
+            setState(State::Pressed);
         }
         
         break;
     case State::Pressed:
         
         if (event.type == sf::Event::MouseButtonReleased
-                    && event.mouseButton.button == sf::Mouse::Left)
+                    && event.mouseButton.button == GUIKeyManager::button("left"))
         {
-            setState(State::Default);
+            if (containsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y)))
+            {
+                setState(State::Default);
+            }
+            else
+            {
+                setState(State::Hovered);
+            }
+            m_callback();
         }
         else if (event.type == sf::Event::KeyReleased
                  && event.key.code == GUIKeyManager::key("enter"))
         {
             setState(State::Focused);
+            m_callback();
         }
         
         break;
@@ -152,14 +161,6 @@ void Button::onStateChange(State new_state)
 
 
 // private:
-
-
-
-void Button::press()
-{
-    setState(State::Pressed);
-    m_callback();
-}
 
 
 
