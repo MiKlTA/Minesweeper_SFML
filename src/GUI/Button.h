@@ -39,12 +39,17 @@ public:
     
     
     
+    bool canBeFocused() override;
+    
+    
+    
 protected:
     
     void onEvent_(const sf::Event &event) override;
     void onPositionChange(sf::Vector2f new_position) override; 
     void onSizeChange(sf::Vector2f new_size) override;
     void onStateChange(State new_state) override;
+    
     
     
 private:

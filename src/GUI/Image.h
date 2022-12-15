@@ -18,7 +18,12 @@ public:
     void setRectangle(const sf::IntRect &rectangle);
     
     
+    
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    
+    
+    
+    bool canBeFocused() override;
     
     
     

@@ -11,6 +11,8 @@
 
 
 #include "src/ResourceManager.h"
+
+#include "src/GUI/GUIKeyManager.h"
 #include "src/GUI/Button.h"
 #include "src/GUI/Image.h"
 #include "src/GUI/Layout.h"
@@ -24,7 +26,12 @@ int main(int, char *argv[])
     path += '\\';
     ResourceManager::init(path);
     
-    Button b1(Button::Theme::Red, L"Превед", [](){std::cout << "Hello world!" << std::endl;});
+    GUIKeyManager::attachKey("left", sf::Keyboard::Left);
+    GUIKeyManager::attachKey("right", sf::Keyboard::Right);
+    GUIKeyManager::attachKey("up", sf::Keyboard::Up);
+    GUIKeyManager::attachKey("down", sf::Keyboard::Down);
+    
+    Button b1(Button::Theme::Blue, L"Превед", [](){std::cout << "Hello world!" << std::endl;});
     Button b2(Button::Theme::Red, L"Медвед", [](){std::cout << "Goodbye world!" << std::endl;});
     b2.scale({1.5f, 1.f});
     
@@ -64,9 +71,16 @@ int main(int, char *argv[])
                 window.close();
                 break;
             case sf::Event::KeyPressed:
-                if (event.key.code == sf::Keyboard::P)
+                switch (event.key.code)
                 {
+                case sf::Keyboard::P:
                     
+                    break;
+                case sf::Keyboard::Tab:
+                    l.setFocus();
+                    break;
+                default:
+                    break;
                 }
             default:
                 break;

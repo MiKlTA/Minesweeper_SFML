@@ -23,7 +23,7 @@ public:
     
     Layout(Type type);
     
-    void setPadding(float padding);
+    void setPadding(sf::Vector2f padding);
     void setMargin(float margin);
     
     
@@ -32,7 +32,15 @@ public:
     
     
     
+    void setFocus();
+    
+    
+    
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    
+    
+    
+    bool canBeFocused() override;
     
     
     
@@ -52,7 +60,7 @@ private:
     
     using ListIterator = std::list<Widget *>::iterator;
     
-    float padding() const; // Spacing inside widgets
+    sf::Vector2f padding() const; // Spacing inside widgets
     float margin() const; // Spacing between widgets
     
     
@@ -62,8 +70,13 @@ private:
     
     
     
-    void setFocus();
     void unfocus();
+    void setFocusOnNextWidget();
+    void setFocusOnPrevWidget();
+    void goNextFocusableWidget();
+    void goPrevFocusableWidget();
+    
+    bool haveTargetsForFocus();
     
     
     
@@ -71,12 +84,12 @@ private:
     
     sf::RectangleShape m_border;
     
-    ListIterator        m_focused;
     std::list<Widget *> m_contains;
+    ListIterator        m_focused_widget;
     
-    Type        m_type;
-    float       m_padding;
-    float       m_margin;
+    Type            m_type;
+    sf::Vector2f    m_padding;
+    float           m_margin;
 };
 
 

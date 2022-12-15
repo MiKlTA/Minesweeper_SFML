@@ -32,6 +32,10 @@ public:
     
     
     
+    bool canBeFocused() override;
+    
+    
+        
 private:
     
     void onPositionChange(sf::Vector2f new_position) override;

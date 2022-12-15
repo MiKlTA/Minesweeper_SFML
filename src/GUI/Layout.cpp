@@ -1,5 +1,7 @@
 #include "Layout.h"
 
+#include "GUIKeyManager.h"
+
 
 
 bool Layout::need_draw_border = false;
@@ -7,8 +9,10 @@ bool Layout::need_draw_border = false;
 
 
 Layout::Layout(Type type)
-    : m_type(type),
-      m_padding(20.f),
+    : m_focused_widget(m_contains.end()),
+      
+      m_type(type),
+      m_padding(20.f, 20.f),
       m_margin(50.f)
 {
     m_border.setFillColor(sf::Color::Transparent);
@@ -18,7 +22,7 @@ Layout::Layout(Type type)
 
 
 
-void Layout::setPadding(float padding)
+void Layout::setPadding(sf::Vector2f padding)
 {
     m_padding = padding;
 }
@@ -41,6 +45,14 @@ void Layout::addWidget(Widget *widget)
 
 
 
+void Layout::setFocus()
+{
+    setState(State::Focused);
+    m_border.setOutlineColor(sf::Color::Green);
+}
+
+
+
 void Layout::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     states.transform *= m_transform;
@@ -57,12 +69,68 @@ void Layout::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 
 
+bool Layout::canBeFocused()
+{
+    return true;
+}
+
+
+
 // protected:
 
 
 
 void Layout::onEvent_(const sf::Event &event)
 {
+    if (getState() == State::Focused || m_focused_widget != m_contains.end())
+    {
+        switch (event.type)
+        {
+        case sf::Event::KeyPressed:
+            
+            // warning!!!
+            
+            if (m_type == Type::Horizontal)
+            {
+                if (event.key.code == GUIKeyManager::key("right"))
+                {
+                    setFocusOnNextWidget();
+                    break;
+                }
+                else if (event.key.code == GUIKeyManager::key("left"))
+                {
+                    setFocusOnPrevWidget();
+                    break;
+                }
+            }
+            else // m_type == Type::Vertical
+            {
+                if (event.key.code == GUIKeyManager::key("down"))
+                {
+                    setFocusOnNextWidget();
+                    break;
+                }
+                else if (event.key.code == GUIKeyManager::key("up"))
+                {
+                    setFocusOnPrevWidget();
+                    break;
+                }
+            }
+            
+            // continue!
+        case sf::Event::MouseButtonPressed:
+            
+            unfocus();
+            if (m_focused_widget != m_contains.end())
+            {
+                (*m_focused_widget)->setState(State::Default);
+            }
+            
+            break;
+        default:
+            break;
+        }
+    }
     
     for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
     {
@@ -92,7 +160,7 @@ void Layout::onPositionChange(sf::Vector2f new_position)
 
 
 
-float Layout::padding() const
+sf::Vector2f Layout::padding() const
 {
     return m_padding;
 }
@@ -108,7 +176,7 @@ void Layout::addLayoutSizeBy(Widget *widget)
 {
     if (m_contains.empty())
     {
-        setSize({2.f*padding(), 2.f*padding()});
+        setSize({2.f*padding().x, 2.f*padding().y});
     }
     
     float new_width;
@@ -121,11 +189,11 @@ void Layout::addLayoutSizeBy(Widget *widget)
         {
             new_width += margin();
         }
-        new_height = std::max(getSize().y, widget->getSize().y + 2.f*padding());
+        new_height = std::max(getSize().y, widget->getSize().y + 2.f*padding().y);
     }
     else // m_type == Type::Vertical
     {
-        new_width = std::max(getSize().x, widget->getSize().x + 2.f*padding());
+        new_width = std::max(getSize().x, widget->getSize().x + 2.f*padding().x);
         new_height = getSize().y + widget->getSize().y;
         if (!m_contains.empty())
         {
@@ -140,7 +208,7 @@ void Layout::calcPositionWidget(Widget *widget)
 {
     if (m_contains.empty())
     {
-        widget->move(getPosition() + sf::Vector2f(padding(), padding()));
+        widget->move(getPosition() + padding());
     }
     else
     {
@@ -160,14 +228,77 @@ void Layout::calcPositionWidget(Widget *widget)
 
 
 
-void Layout::setFocus()
-{
-    setState(Widget::Focused);
-    m_border.setOutlineColor(sf::Color::Green);
-}
-
 void Layout::unfocus()
 {
-    setState(Widget::Default);
+    setState(State::Default);
     m_border.setOutlineColor(sf::Color::Red);
+}
+
+void Layout::setFocusOnNextWidget()
+{
+    if (getState() == State::Focused)
+    {
+        if (haveTargetsForFocus())
+        {
+            m_focused_widget = m_contains.begin();
+            
+            unfocus();
+            (*m_focused_widget)->setState(State::Focused);
+        }
+    }
+    else
+    {
+        (*m_focused_widget)->setState(State::Default);
+        
+        m_focused_widget = std::next(m_focused_widget);
+        
+        if (m_focused_widget == m_contains.end())
+        {
+            setFocus();
+        }
+        else
+        {
+            (*m_focused_widget)->setState(State::Focused);
+        }
+    }
+}
+
+void Layout::setFocusOnPrevWidget()
+{
+    if (getState() == State::Focused)
+    {
+        if (haveTargetsForFocus())
+        {
+            m_focused_widget = std::prev(m_contains.end());
+            while (!(*m_focused_widget)->canBeFocused())
+                m_focused_widget = std::prev(m_focused_widget);
+            
+            unfocus();
+            (*m_focused_widget)->setState(State::Focused);
+        }
+    }
+    else
+    {
+        (*m_focused_widget)->setState(State::Default);
+        
+        if (m_focused_widget == m_contains.begin())
+        {
+            setFocus();
+        }
+        else
+        {
+            m_focused_widget = std::prev(m_focused_widget);
+            (*m_focused_widget)->setState(State::Focused);
+        }
+    }
+}
+
+bool Layout::haveTargetsForFocus()
+{
+    for (Widget *widget : m_contains)
+    {
+        if (widget->canBeFocused())
+            return true;
+    }
+    return false;
 }

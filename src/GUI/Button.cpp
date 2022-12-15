@@ -59,6 +59,13 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 
 
+bool Button::canBeFocused()
+{
+    return true;
+}
+
+
+
 // protected:
 
 
@@ -125,6 +132,10 @@ void Button::onSizeChange(sf::Vector2f new_size)
         m_default_sprite.scale(k);
         m_hovered_sprite.scale(k);
         m_pressed_sprite.scale(k);
+        
+        m_sadding *= k.y;
+        m_text_padding.x *= k.x;
+        m_text_padding.y *= k.y;
     }
 }
 

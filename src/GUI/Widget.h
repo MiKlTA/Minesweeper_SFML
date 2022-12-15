@@ -50,6 +50,10 @@ public:
     
     
     
+    virtual bool canBeFocused() = 0;
+    
+    
+    
 protected:
     
     const sf::Transform & getTransform() const;

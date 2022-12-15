@@ -27,6 +27,13 @@ void Image::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 
 
+bool Image::canBeFocused()
+{
+    return false;
+}
+
+
+
 void Image::onSizeChange(sf::Vector2f new_size)
 {
     if (getSize().x != 0 && getSize().y != 0)

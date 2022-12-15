@@ -47,6 +47,13 @@ void Text::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 
 
+bool Text::canBeFocused()
+{
+    return false;
+}
+
+
+
 // private:
 
 
