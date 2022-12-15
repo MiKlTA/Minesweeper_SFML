@@ -4,8 +4,8 @@
 
 
 
-Button::Button(Theme theme, std::string text, CallbackType callback)
-    : m_text(),
+Button::Button(Theme theme, std::wstring text, CallbackType callback)
+    : m_text(text),
       m_callback(callback)
 {
     switch (theme)
@@ -21,11 +21,13 @@ Button::Button(Theme theme, std::string text, CallbackType callback)
         m_pressed_sprite = sf::Sprite(*ResourceManager::getTexture("red_button_pressed"));
         break;
     }
+    m_text_padding = {16.f, 0.f};
     
-    m_hovered_sprite.setOrigin(0.f, m_hovered_sprite.getTexture()->getSize().y
-                               - float(m_default_sprite.getTexture()->getSize().y));
-    m_pressed_sprite.setOrigin(0.f, m_pressed_sprite.getTexture()->getSize().y
-                               - float(m_default_sprite.getTexture()->getSize().y));
+    
+    m_sadding = float(m_default_sprite.getTexture()->getSize().y)
+            - m_pressed_sprite.getTexture()->getSize().y;
+    
+    m_pressed_sprite.setOrigin(0.f, -m_sadding);
     
     setSize(sf::Vector2f(m_default_sprite.getTexture()->getSize()));
 }
@@ -48,6 +50,8 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const
         target.draw(m_pressed_sprite, states);
         break;
     }
+    
+    target.draw(m_text);
 }
 
 
@@ -64,36 +68,36 @@ void Button::onEvent_(const sf::Event &event)
     {
         if (containsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y)))
         {
-            if (getState() == Button::Default)
+            if (getState() == State::Default)
             {
-                setState(Button::Hovered);
+                setState(State::Hovered);
             }
         }
         else
         {
-            if (getState() == Button::Hovered)
+            if (getState() == State::Hovered)
             {
-                setState(Button::Default);
+                setState(State::Default);
             }
         }
         break;
     }
     case sf::Event::MouseButtonPressed:
-        if (getState() == Button::Hovered)
+        if (getState() == State::Hovered)
         {
-            setState(Button::Pressed);
+            setState(State::Pressed);
         }
         break;
     case sf::Event::MouseButtonReleased:
-        if (getState() == Button::Pressed)
+        if (getState() == State::Pressed)
         {
             if (containsPoint(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
             {
-                setState(Button::Hovered);
+                setState(State::Hovered);
             }
             else
             {
-                setState(Button::Default);
+                setState(State::Default);
             }
             
             m_callback();
@@ -116,5 +120,25 @@ void Button::onSizeChange(sf::Vector2f new_size)
     }
 }
 
+void Button::onStateChange(State new_state)
+{
+    locateText(new_state);
+}
+
+
 
 // private:
+
+
+
+void Button::locateText(State new_state)
+{
+    sf::Vector2f text_position(getPosition() + m_text_padding);
+    
+    if (new_state == State::Pressed)
+    {
+        text_position.y += m_sadding;
+    }
+    
+    m_text.setPosition(text_position);
+}

@@ -31,7 +31,7 @@ public:
     
     
     
-    Button(Theme theme, std::string text, CallbackType callback);
+    Button(Theme theme, std::wstring text, CallbackType callback);
     
     
     
@@ -43,10 +43,12 @@ protected:
     
     void onEvent_(const sf::Event &event) override; 
     void onSizeChange(sf::Vector2f new_size) override;
-    
+    void onStateChange(State new_state) override;
     
     
 private:
+    
+    void locateText(State new_state);
     
     
     
@@ -54,9 +56,11 @@ private:
     
     CallbackType m_callback;
     
-    sf::Sprite m_default_sprite;
-    sf::Sprite m_hovered_sprite;
-    sf::Sprite m_pressed_sprite;
+    sf::Sprite      m_default_sprite;
+    sf::Sprite      m_hovered_sprite;
+    sf::Sprite      m_pressed_sprite;
+    float           m_sadding;
+    sf::Vector2f    m_text_padding;
 };
 
 

@@ -24,12 +24,11 @@ int main(int, char *argv[])
     path += '\\';
     ResourceManager::init(path);
     
-    Button b1(Button::Theme::Red, "abc", [](){std::cout << "Hello world!" << std::endl;});
-    Button b2(Button::Theme::Red, "awert", [](){std::cout << "Goodbye world!" << std::endl;});
+    Button b1(Button::Theme::Red, L"abc", [](){std::cout << "Hello world!" << std::endl;});
+    Button b2(Button::Theme::Red, L"awert", [](){std::cout << "Goodbye world!" << std::endl;});
     b2.scale({1.5f, 1.f});
     
     Image i1("duckcarrier");
-    i1.setPosition({100.f, 100.f});
     i1.scale({0.5f, 0.5f});
     
     Layout::need_draw_border = true;
@@ -43,6 +42,7 @@ int main(int, char *argv[])
     
     Text t;
     t.setString(L"ывауℤ∜∀∫☔♥☆и");
+    l.addWidget(&t);
     
     
     sf::RenderWindow window(sf::VideoMode(1280, 721), "My window", sf::Style::Close);
@@ -55,6 +55,7 @@ int main(int, char *argv[])
         while (window.pollEvent(event))
         {
             l.onEvent(event);
+            
             switch (event.type)
             {
             case sf::Event::Closed:
@@ -63,7 +64,7 @@ int main(int, char *argv[])
             case sf::Event::KeyPressed:
                 if (event.key.code == sf::Keyboard::P)
                 {
-                    l.setPosition({100.f, 100.f});
+                    
                 }
             default:
                 break;

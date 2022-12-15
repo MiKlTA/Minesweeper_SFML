@@ -33,6 +33,8 @@ void Widget::move(sf::Vector2f delta)
 
 void Widget::setState(State state)
 {
+    onStateChange(state);
+    
     m_state = state;
 }
 

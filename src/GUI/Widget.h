@@ -57,6 +57,7 @@ protected:
     virtual void onEvent_(const sf::Event &event) {};
     virtual void onPositionChange(sf::Vector2f new_position) {};
     virtual void onSizeChange(sf::Vector2f new_size) {};
+    virtual void onStateChange(State new_state) {};
     
     
     
