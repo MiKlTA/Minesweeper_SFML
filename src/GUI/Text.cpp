@@ -39,6 +39,30 @@ void Text::setColor(const sf::Color &color)
 
 
 
+void Text::append(wchar_t symbol)
+{
+    setString(getString() + symbol);
+}
+
+void Text::pop_back()
+{
+    std::wstring string = getString();
+    if (!string.empty())
+    {
+        string.pop_back();
+        setString(string);
+    }
+}
+
+
+
+std::wstring Text::getString() const
+{
+    return m_text.getString().toWideString();
+}
+
+
+
 
 void Text::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {

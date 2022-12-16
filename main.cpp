@@ -17,6 +17,7 @@
 #include "src/GUI/Image.h"
 #include "src/GUI/Layout.h"
 #include "src/GUI/Text.h"
+#include "src/GUI/InputField.h"
 
 
 
@@ -31,6 +32,7 @@ int main(int, char *argv[])
     GUIKeyManager::attachKey("up", sf::Keyboard::Up);
     GUIKeyManager::attachKey("down", sf::Keyboard::Down);
     GUIKeyManager::attachKey("enter", sf::Keyboard::Enter);
+    GUIKeyManager::attachKey("backspace", sf::Keyboard::Backspace);
     GUIKeyManager::attachButton("left", sf::Mouse::Left);
     
     Button b1(Button::Theme::Blue, L"Превед", [](){std::cout << "Hello world!" << std::endl;});
@@ -46,9 +48,12 @@ int main(int, char *argv[])
     Text t;
     t.setString(L"ывауℤ∜∀∫☔♥☆и");
     
+    InputField input(InputField::Theme::Blue);
     
     
-    Layout::need_draw_border = false;
+    
+    Layout::need_draw_border = true;
+    
     Layout l(Layout::Horizontal);
     l.setPosition({50.f, 50.f});
     
@@ -61,6 +66,7 @@ int main(int, char *argv[])
     l2.addWidget(&b3);
     l2.addWidget(&b4);
     l2.addWidget(&i1);
+    l2.addWidget(&input);
     
     l.addWidget(&l1);
     l.addWidget(&l2);
@@ -85,15 +91,19 @@ int main(int, char *argv[])
             case sf::Event::KeyPressed:
                 switch (event.key.code)
                 {
-                case sf::Keyboard::P:
-                    l.move({0.3f, 0.3f});
-                    break;
+//                case sf::Keyboard::P:
+//                    l.move({1.0f, 1.0f});
+//                    break;
                 case sf::Keyboard::Tab:
                     l.setState(Layout::State::Focused);
                     break;
                 default:
                     break;
                 }
+            case sf::Event::TextEntered:
+                t.setString(std::to_wstring(event.text.unicode)
+                            + L' ' + static_cast<wchar_t>(event.text.unicode));
+                break;
             default:
                 break;
             }

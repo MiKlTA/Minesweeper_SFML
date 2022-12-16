@@ -26,6 +26,11 @@ public:
     void setCharacterSize(unsigned int size);
     void setColor(const sf::Color &color);
     
+    void append(wchar_t symbol);
+    void pop_back();
+    
+    std::wstring getString() const;
+    
     
     
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
