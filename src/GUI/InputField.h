@@ -17,7 +17,11 @@ public:
         Blue
     };
     
-    InputField(Theme theme);
+    InputField(Theme theme, Text::Alignment alignment = Text::Alignment::Left);
+    
+    
+    
+    void onlyNumbers(bool isOnlyNumbers);
     
     
     
@@ -38,18 +42,28 @@ protected:
     void onEvent_(const sf::Event &event) override;
     void onSizeChange(sf::Vector2f new_size) override;
     void onPositionChange(sf::Vector2f new_position) override;
-    void onStateChange(State new_state) override;
     
     
     
 private:
     
+    void recalcTextPosition(sf::Vector2f new_field_position);
+    
+    bool canPushSymbol(wchar_t symbol);
+    
+    
+    
     Text m_text;
     
-    Theme m_theme;
-    sf::Sprite m_default_sprite;
-    sf::Sprite m_active_sprite;
-    sf::Vector2f m_text_padding;
+    bool m_only_numbers;
+    unsigned int m_max_text_length;
+    
+    Theme           m_theme;
+    Text::Alignment m_alignment;
+    sf::Sprite      m_default_sprite;
+    sf::Sprite      m_active_sprite;
+    sf::Vector2f    m_text_padding;
+    sf::Vector2f    m_text_shift;
 };
 
 
