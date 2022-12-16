@@ -74,67 +74,35 @@ bool Layout::canBeFocused()
 
 void Layout::onEvent_(const sf::Event &event)
 {
+    if (getState() == State::Focused && event.type == sf::Event::KeyPressed)
+    {
+        if (m_type == Type::Horizontal)
+        {
+            if (event.key.code == GUIKeyManager::key("right"))
+            {
+                setFocusOnNextWidget();
+            }
+            else if (event.key.code == GUIKeyManager::key("left"))
+            {
+                setFocusOnPrevWidget();
+            }
+        }
+        else // m_type == Type::Vertical
+        {
+            if (event.key.code == GUIKeyManager::key("down"))
+            {
+                setFocusOnNextWidget();
+            }
+            else if (event.key.code == GUIKeyManager::key("up"))
+            {
+                setFocusOnPrevWidget();
+            }
+        }
+    }
+    
     for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
     {
         (*widget_iter)->onEvent(event);
-    }
-    
-    
-    
-    if (getState() == State::Focused || m_focused_widget != m_contains.end())
-    {
-        switch (event.type)
-        {
-        case sf::Event::KeyPressed:
-            
-            // warning!!!
-            
-            if (m_type == Type::Horizontal)
-            {
-                if (event.key.code == GUIKeyManager::key("right"))
-                {
-                    setFocusOnNextWidget();
-                    break;
-                }
-                else if (event.key.code == GUIKeyManager::key("left"))
-                {
-                    setFocusOnPrevWidget();
-                    break;
-                }
-            }
-            else // m_type == Type::Vertical
-            {
-                if (event.key.code == GUIKeyManager::key("down"))
-                {
-                    setFocusOnNextWidget();
-                    break;
-                }
-                else if (event.key.code == GUIKeyManager::key("up"))
-                {
-                    setFocusOnPrevWidget();
-                    break;
-                }
-            }
-            
-            if (event.key.code == GUIKeyManager::key("enter"))
-            {
-                break;
-            }
-            
-            // continue!
-        case sf::Event::MouseButtonPressed:
-            
-            unfocus();
-            if (m_focused_widget != m_contains.end())
-            {
-                (*m_focused_widget)->setState(State::Default);
-            }
-            m_focused_widget = m_contains.end();
-            
-            break;
-        default:
-            break;
-        }
     }
 }
 
@@ -159,6 +127,22 @@ void Layout::onStateChange(State new_state)
     if (new_state == State::Focused)
     {
         m_border.setOutlineColor(sf::Color::Green);
+        
+        if (m_focused_widget == m_contains.end())
+        {
+            m_focused_widget = getNextFocusableWidgetFromBegin();
+            (*m_focused_widget)->setState(State::Focused);
+        }
+    }
+    else
+    {
+        m_border.setOutlineColor(sf::Color::Red);
+        
+        if (m_focused_widget != m_contains.end())
+        {
+            (*m_focused_widget)->setState(State::Default);
+            m_focused_widget = m_contains.end();
+        }
     }
 }
 
@@ -184,7 +168,7 @@ void Layout::addLayoutSizeBy(Widget *widget)
 {
     if (m_contains.empty())
     {
-        setSize({2.f*padding().x, 2.f*padding().y});
+        setSize(2.f*padding());
     }
     
     float new_width;
@@ -236,14 +220,6 @@ void Layout::calcPositionWidget(Widget *widget)
 
 
 
-void Layout::unfocus()
-{
-    setState(State::Default);
-    m_border.setOutlineColor(sf::Color::Red);
-}
-
-
-
 Layout::ListIterator Layout::getNextFocusableWidget(ListIterator iter)
 {
     iter = std::next(iter);
@@ -266,69 +242,45 @@ Layout::ListIterator Layout::getPrevFocusableWidget(ListIterator iter)
     return iter;
 }
 
-void Layout::setFocusOnNextWidget()
+Layout::ListIterator Layout::getNextFocusableWidgetFromBegin()
 {
-    if (getState() == State::Focused)
+    if ((*m_contains.begin())->canBeFocused())
     {
-        if (haveTargetsForFocus())
-        {
-            m_focused_widget = m_contains.begin();
-            if (!(*m_focused_widget)->canBeFocused())
-            {
-                m_focused_widget = getNextFocusableWidget(m_focused_widget);
-            }
-            
-            unfocus();
-            (*m_focused_widget)->setState(State::Focused);
-        }
+        return m_contains.begin();
     }
     else
     {
-        (*m_focused_widget)->setState(State::Default);
-        
-        m_focused_widget = getNextFocusableWidget(m_focused_widget);
-        
-        if (m_focused_widget == m_contains.end())
-        {
-            setState(State::Focused);
-        }
-        else
-        {
-            (*m_focused_widget)->setState(State::Focused);
-        }
+        return getNextFocusableWidget(m_contains.begin());
     }
+}
+
+void Layout::setFocusOnNextWidget()
+{
+    (*m_focused_widget)->setState(State::Default);
+    
+    m_focused_widget = getNextFocusableWidget(m_focused_widget);
+    
+    if (m_focused_widget == m_contains.end())
+    {
+        m_focused_widget = getNextFocusableWidgetFromBegin();
+    }
+    (*m_focused_widget)->setState(State::Focused);
 }
 
 void Layout::setFocusOnPrevWidget()
 {
-    if (getState() == State::Focused)
+    (*m_focused_widget)->setState(State::Default);
+    
+    if (m_focused_widget == m_contains.begin())
     {
-        if (haveTargetsForFocus())
-        {
-            m_focused_widget = std::prev(m_contains.end());
-            if (!(*m_focused_widget)->canBeFocused())
-            {
-                m_focused_widget = getPrevFocusableWidget(m_focused_widget);
-            }
-            
-            unfocus();
-            (*m_focused_widget)->setState(State::Focused);
-        }
+        m_focused_widget = getPrevFocusableWidget(m_contains.end());
     }
     else
     {
-        (*m_focused_widget)->setState(State::Default);
-        
-        if (m_focused_widget == m_contains.begin())
-        {
-            setState(State::Focused);
-        }
-        else
-        {
-            m_focused_widget = getPrevFocusableWidget(m_focused_widget);
-            (*m_focused_widget)->setState(State::Focused);
-        }
+        m_focused_widget = getPrevFocusableWidget(m_focused_widget);
     }
+    
+    (*m_focused_widget)->setState(State::Focused);
 }
 
 bool Layout::haveTargetsForFocus()
@@ -339,4 +291,5 @@ bool Layout::haveTargetsForFocus()
             return true;
     }
     return false;
+
 }

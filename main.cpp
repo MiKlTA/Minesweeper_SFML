@@ -48,7 +48,7 @@ int main(int, char *argv[])
     
     
     
-    Layout::need_draw_border = true;
+    Layout::need_draw_border = false;
     Layout l(Layout::Horizontal);
     l.setPosition({50.f, 50.f});
     
