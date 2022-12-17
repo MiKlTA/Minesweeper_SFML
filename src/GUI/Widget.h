@@ -52,6 +52,8 @@ public:
     
     virtual bool canBeFocused() = 0;
     
+    virtual void onUpdate(float time) {};
+    
     
     
 protected:

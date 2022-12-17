@@ -68,6 +68,16 @@ bool Layout::canBeFocused()
 
 
 
+void Layout::onUpdate(float time)
+{
+    for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
+    {
+        (*widget_iter)->onUpdate(time);
+    }
+}
+
+
+
 // protected:
 
 

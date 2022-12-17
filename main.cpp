@@ -51,7 +51,7 @@ int main(int, char *argv[])
     
     InputField input(InputField::Theme::Blue);
     
-    ScrollBar sb(ScrollBar::Theme::White, ScrollBar::Type::Horisontal, 10);
+    ScrollBar sb(ScrollBar::Theme::White, ScrollBar::Type::Vertical, 128);
     
     
     
@@ -81,6 +81,8 @@ int main(int, char *argv[])
     window.setPosition({0, 0});
     window.setSize({1280, 720});
     window.setView(sf::View({640, 360}, {1280, 720}));
+    
+    sf::Clock clock;
     while (window.isOpen())
     {
         sf::Event event;
@@ -102,13 +104,15 @@ int main(int, char *argv[])
                 default:
                     break;
                 }
+            case sf::Event::MouseButtonPressed:
+                std::cout << "Button!" << std::endl;
+                break;
             default:
                 break;
             }
         }
         
-        // t.setString(std::to_wstring(sb.getSliderValue()));
-        
+        l.onUpdate(clock.getElapsedTime().asSeconds());
         window.clear();
         window.draw(l);
         window.display();

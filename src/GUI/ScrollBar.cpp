@@ -135,8 +135,18 @@ void ScrollBar::onEvent_(const sf::Event &event)
         }
         else if (event.type == sf::Event::MouseWheelScrolled)
         {
+            float k;
+            switch (m_type)
+            {
+            case Type::Horisontal:
+                k = 1;
+                break;
+            case Type::Vertical:
+                k = -1;
+                break;
+            }
             int new_sider_value = m_slider_value;
-            new_sider_value += std::round(event.mouseWheelScroll.delta);
+            new_sider_value += std::round(k * event.mouseWheelScroll.delta);
             new_sider_value = std::min(new_sider_value, int(m_range));
             new_sider_value = std::max(new_sider_value, 0);
             m_slider_value = static_cast<unsigned int>(new_sider_value);
@@ -159,7 +169,17 @@ void ScrollBar::onEvent_(const sf::Event &event)
         }
         else if (event.type == sf::Event::MouseMoved)
         {
-            m_slider_value = toSliderValue(event.mouseMove.x - getPosition().x);
+            float delta;
+            switch (m_type)
+            {
+            case Type::Horisontal:
+                delta = event.mouseMove.x - getPosition().x;
+                break;
+            case Type::Vertical:
+                delta = event.mouseMove.y - getPosition().y;
+                break;
+            }
+            m_slider_value = toSliderValue(delta);
         }
         
         break;
@@ -210,7 +230,7 @@ sf::Vector2f ScrollBar::getSliderRelativePosition() const
     switch (m_type)
     {
     case Type::Horisontal:
-        x = getSliderValue() * getSliderDelta()
+        x = getSliderValue() * getSize().x / float(getRange())
                 - m_slider_default.getTextureRect().width / 2.f;
         y = getSize().y / 2.f
                 - m_slider_default.getTexture()->getSize().y / 2.f;
@@ -218,7 +238,7 @@ sf::Vector2f ScrollBar::getSliderRelativePosition() const
     case Type::Vertical:
         x = getSize().x / 2.f
                 - m_slider_default.getTexture()->getSize().x / 2.f;
-        y = getSliderValue() * getSliderDelta()
+        y = getSliderValue() * getSize().y / float(getRange())
                 - m_slider_default.getTextureRect().height / 2.f;
         break;
     }
@@ -241,11 +261,4 @@ unsigned int ScrollBar::toSliderValue(float slider_position) const
     }
     if (slider_position > bar_size) slider_position = bar_size;
     return std::round(m_range * slider_position / bar_size);
-}
-
-// ?????
-
-float ScrollBar::getSliderDelta() const
-{
-    return getSize().x / float(getRange());
 }

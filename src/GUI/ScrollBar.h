@@ -57,7 +57,6 @@ private:
     bool            isSliderContainsPoint(sf::Vector2f point) const;
     sf::Vector2f    getSliderRelativePosition() const;
     unsigned int    toSliderValue(float slider_position) const;
-    float           getSliderDelta() const;
     
     
     
