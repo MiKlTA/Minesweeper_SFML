@@ -15,6 +15,7 @@
 #include "src/GUI/GUIKeyManager.h"
 #include "src/GUI/Button.h"
 #include "src/GUI/Image.h"
+#include "src/GUI/AnimatedImage.h"
 #include "src/GUI/Layout.h"
 #include "src/GUI/Text.h"
 #include "src/GUI/InputField.h"
@@ -53,6 +54,9 @@ int main(int, char *argv[])
     
     ScrollBar sb(ScrollBar::Theme::White, ScrollBar::Type::Vertical, 128);
     
+    AnimatedImage ai("player", {48, 48}, 6, 4, 0.2f);
+    ai.setRepeatAnimation(false);
+    
     
     
     
@@ -71,6 +75,7 @@ int main(int, char *argv[])
     l2.addWidget(&b4);
     l2.addWidget(&i1);
     l2.addWidget(&input);
+    l2.addWidget(&ai);
     
     l.addWidget(&l1);
     l.addWidget(&l2);
@@ -101,18 +106,17 @@ int main(int, char *argv[])
                 case sf::Keyboard::Tab:
                     l.setState(Layout::State::Focused);
                     break;
+                case sf::Keyboard::P:
+                    ai.startAnimation();
+                    break;
                 default:
                     break;
                 }
-            case sf::Event::MouseButtonPressed:
-                std::cout << "Button!" << std::endl;
-                break;
             default:
                 break;
             }
         }
         
-        l.onUpdate(clock.getElapsedTime().asSeconds());
         window.clear();
         window.draw(l);
         window.display();

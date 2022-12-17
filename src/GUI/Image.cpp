@@ -15,6 +15,7 @@ Image::Image(std::string image_name)
 void Image::setRectangle(const sf::IntRect &rectangle)
 {
     m_image.setTextureRect(rectangle);
+    setSize(sf::Vector2f(rectangle.width, rectangle.height));
 }
 
 
@@ -31,6 +32,10 @@ bool Image::canBeFocused()
 {
     return false;
 }
+
+
+
+// protected:
 
 
 

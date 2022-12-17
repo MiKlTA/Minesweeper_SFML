@@ -38,8 +38,6 @@ public:
     
     bool canBeFocused() override;
     
-    void onUpdate(float time) override; 
-    
     
     
     static bool need_draw_border;
