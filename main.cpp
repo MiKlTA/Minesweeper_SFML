@@ -18,6 +18,7 @@
 #include "src/GUI/Layout.h"
 #include "src/GUI/Text.h"
 #include "src/GUI/InputField.h"
+#include "src/GUI/ScrollBar.h"
 
 
 
@@ -50,6 +51,9 @@ int main(int, char *argv[])
     
     InputField input(InputField::Theme::Blue);
     
+    ScrollBar sb(ScrollBar::Theme::White, ScrollBar::Type::Horisontal, 10);
+    
+    
     
     
     Layout::need_draw_border = true;
@@ -70,6 +74,7 @@ int main(int, char *argv[])
     
     l.addWidget(&l1);
     l.addWidget(&l2);
+    l.addWidget(&sb);
     
     
     sf::RenderWindow window(sf::VideoMode(1280, 721), "My window", sf::Style::Close);
@@ -91,23 +96,18 @@ int main(int, char *argv[])
             case sf::Event::KeyPressed:
                 switch (event.key.code)
                 {
-//                case sf::Keyboard::P:
-//                    l.move({1.0f, 1.0f});
-//                    break;
                 case sf::Keyboard::Tab:
                     l.setState(Layout::State::Focused);
                     break;
                 default:
                     break;
                 }
-            case sf::Event::TextEntered:
-                t.setString(std::to_wstring(event.text.unicode)
-                            + L' ' + static_cast<wchar_t>(event.text.unicode));
-                break;
             default:
                 break;
             }
         }
+        
+        // t.setString(std::to_wstring(sb.getSliderValue()));
         
         window.clear();
         window.draw(l);

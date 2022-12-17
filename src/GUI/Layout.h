@@ -79,7 +79,7 @@ private:
     
     sf::Transform m_transform;
     
-    sf::RectangleShape m_border;
+    sf::RectangleShape  m_border;
     
     std::list<Widget *> m_contains;
     ListIterator        m_focused_widget;

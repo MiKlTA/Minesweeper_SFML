@@ -74,29 +74,36 @@ bool Layout::canBeFocused()
 
 void Layout::onEvent_(const sf::Event &event)
 {
-    if (getState() == State::Focused && event.type == sf::Event::KeyPressed)
+    if (getState() == State::Focused)
     {
-        if (m_type == Type::Horizontal)
+        if (event.type == sf::Event::KeyPressed)
         {
-            if (event.key.code == GUIKeyManager::key("right"))
+            if (m_type == Type::Horizontal)
             {
-                setFocusOnNextWidget();
+                if (event.key.code == GUIKeyManager::key("right"))
+                {
+                    setFocusOnNextWidget();
+                }
+                else if (event.key.code == GUIKeyManager::key("left"))
+                {
+                    setFocusOnPrevWidget();
+                }
             }
-            else if (event.key.code == GUIKeyManager::key("left"))
+            else // m_type == Type::Vertical
             {
-                setFocusOnPrevWidget();
+                if (event.key.code == GUIKeyManager::key("down"))
+                {
+                    setFocusOnNextWidget();
+                }
+                else if (event.key.code == GUIKeyManager::key("up"))
+                {
+                    setFocusOnPrevWidget();
+                }
             }
         }
-        else // m_type == Type::Vertical
+        else if (event.type == sf::Event::MouseButtonPressed)
         {
-            if (event.key.code == GUIKeyManager::key("down"))
-            {
-                setFocusOnNextWidget();
-            }
-            else if (event.key.code == GUIKeyManager::key("up"))
-            {
-                setFocusOnPrevWidget();
-            }
+            setState(State::Default);
         }
     }
     
