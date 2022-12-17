@@ -12,29 +12,28 @@
 ScrollBar::ScrollBar(Theme theme, Type type, unsigned int range)
     : m_type(type),
       
-      m_range(range),
-      m_slider_value(1)
+      m_range(range)
 {
     switch (theme)
     {
     case Theme::White:
         
-        m_slider_default = sf::Sprite(*ResourceManager::getTexture("slider"));
-        m_slider_hovered = sf::Sprite(*ResourceManager::getTexture("slider"));
-        m_slider_pressed = sf::Sprite(*ResourceManager::getTexture("slider"));
-        m_horisontal_bar = sf::Sprite(*ResourceManager::getTexture("bar_horisontal"));
-        m_vertical_bar = sf::Sprite(*ResourceManager::getTexture("bar_vertical"));
+        m_slider_default.setImage("slider");
+        m_slider_hovered.setImage("slider");
+        m_slider_pressed.setImage("slider");
+        m_horisontal_bar.setImage("bar_horisontal");
+        m_vertical_bar.setImage("bar_vertical");
         
         break;
     }
     
     if (m_type == Type::Horisontal)
     {
-        setSize(sf::Vector2f(m_horisontal_bar.getTexture()->getSize()));
+        setSize(sf::Vector2f(m_horisontal_bar.getSize()));
     }
     else // m_type == Type::Vertical
     {
-        setSize(sf::Vector2f(m_vertical_bar.getTexture()->getSize()));
+        setSize(sf::Vector2f(m_vertical_bar.getSize()));
     }
 }
 
@@ -214,7 +213,7 @@ void ScrollBar::onStateChange(State new_state)
 
 bool ScrollBar::isSliderContainsPoint(sf::Vector2f point) const
 {
-    sf::Vector2f size(m_slider_default.getTexture()->getSize());
+    sf::Vector2f size(m_slider_default.getSize());
     size = size * 2.f;
     const sf::Vector2f position = getSliderRelativePosition() + getPosition();
     return (point.x > position.x && point.x < position.x + size.x)
@@ -231,15 +230,15 @@ sf::Vector2f ScrollBar::getSliderRelativePosition() const
     {
     case Type::Horisontal:
         x = getSliderValue() * getSize().x / float(getRange())
-                - m_slider_default.getTextureRect().width / 2.f;
+                - m_slider_default.getSize().x / 2.f;
         y = getSize().y / 2.f
-                - m_slider_default.getTexture()->getSize().y / 2.f;
+                - m_slider_default.getSize().y / 2.f;
         break;
     case Type::Vertical:
         x = getSize().x / 2.f
-                - m_slider_default.getTexture()->getSize().x / 2.f;
+                - m_slider_default.getSize().x / 2.f;
         y = getSliderValue() * getSize().y / float(getRange())
-                - m_slider_default.getTextureRect().height / 2.f;
+                - m_slider_default.getSize().y / 2.f;
         break;
     }
     

@@ -16,8 +16,8 @@ InputField::InputField(Theme theme, Text::Alignment alignment)
     switch (theme)
     {
     case Theme::Blue:
-        m_default_sprite = sf::Sprite(*ResourceManager::getTexture("blue_input_field_default"));
-        m_active_sprite = sf::Sprite(*ResourceManager::getTexture("blue_input_field_active"));
+        m_field_default.setImage("blue_input_field_default");
+        m_field_active.setImage("blue_input_field_active");
         m_text.setColor(sf::Color::Cyan);
         m_text_padding = {16.f, 16.f};
         
@@ -25,7 +25,7 @@ InputField::InputField(Theme theme, Text::Alignment alignment)
         break;
     }
     
-    setSize(sf::Vector2f(m_default_sprite.getTexture()->getSize()));
+    setSize(sf::Vector2f(m_field_default.getSize()));
 }
 
 
@@ -52,11 +52,11 @@ void InputField::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
     case State::Default:
     case State::Hovered:
-        target.draw(m_default_sprite, states);
+        target.draw(m_field_default, states);
         break;
     case State::Focused:
     case State::Pressed:
-        target.draw(m_active_sprite, states);
+        target.draw(m_field_active, states);
         break;
     }
     
@@ -131,12 +131,12 @@ void InputField::onSizeChange(sf::Vector2f new_size)
 {
     m_text.setSize(new_size);
     
+    m_field_default.setSize(new_size);
+    m_field_active.setSize(new_size);
+    
     if (getSize().x != 0 && getSize().y != 0)
     {
         sf::Vector2f k = {new_size.x / getSize().x, new_size.y / getSize().y};
-        
-        m_default_sprite.scale(k);
-        m_active_sprite.scale(k);
         
         m_text_padding.x *= k.x;
         m_text_padding.y *= k.y;

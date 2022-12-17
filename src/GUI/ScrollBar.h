@@ -5,6 +5,8 @@
 
 #include "Widget.h"
 
+#include "Image.h"
+
 
 
 class ScrollBar : public Widget
@@ -60,11 +62,11 @@ private:
     
     
     
-    sf::Sprite  m_slider_default;
-    sf::Sprite  m_slider_hovered;
-    sf::Sprite  m_slider_pressed;
-    sf::Sprite  m_horisontal_bar;
-    sf::Sprite  m_vertical_bar;
+    Image       m_slider_default;
+    Image       m_slider_hovered;
+    Image       m_slider_pressed;
+    Image       m_horisontal_bar;
+    Image       m_vertical_bar;
     Theme       m_theme;
     
     Type        m_type;

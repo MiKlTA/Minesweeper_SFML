@@ -4,6 +4,8 @@
 
 
 #include "Widget.h"
+
+#include "Image.h"
 #include "Text.h"
 
 
@@ -60,8 +62,8 @@ private:
     
     Theme           m_theme;
     Text::Alignment m_alignment;
-    sf::Sprite      m_default_sprite;
-    sf::Sprite      m_active_sprite;
+    Image           m_field_default;
+    Image           m_field_active;
     sf::Vector2f    m_text_padding;
     sf::Vector2f    m_text_shift;
 };

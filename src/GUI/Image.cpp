@@ -4,13 +4,18 @@
 
 
 
-Image::Image(std::string image_name)
+Image::Image()
+{
+    
+}
+
+
+
+void Image::setImage(std::string image_name)
 {
     m_image = sf::Sprite(*ResourceManager::getTexture(image_name));
     setSize(sf::Vector2f(m_image.getTexture()->getSize()));
 }
-
-
 
 void Image::setRectangle(const sf::IntRect &rectangle)
 {

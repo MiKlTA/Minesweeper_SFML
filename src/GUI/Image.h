@@ -11,10 +11,11 @@ class Image : public Widget
 {
 public:
     
-    Image(std::string image_name);
+    Image();
     
     
     
+    void setImage(std::string image_name);
     void setRectangle(const sf::IntRect &rectangle);
     
     

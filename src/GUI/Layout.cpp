@@ -17,7 +17,7 @@ Layout::Layout(Type type)
 {
     m_border.setFillColor(sf::Color::Transparent);
     m_border.setOutlineColor(sf::Color::Red);
-    m_border.setOutlineThickness(1.f);
+    m_border.setOutlineThickness(2.f);
 }
 
 

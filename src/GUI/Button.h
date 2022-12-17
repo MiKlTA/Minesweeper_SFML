@@ -9,6 +9,7 @@
 
 #include "Widget.h"
 
+#include "Image.h"
 #include "Text.h"
 
 
@@ -62,9 +63,9 @@ private:
     
     CallbackType m_callback;
     
-    sf::Sprite      m_default_sprite;
-    sf::Sprite      m_hovered_sprite;
-    sf::Sprite      m_pressed_sprite;
+    Image           m_button_default;
+    Image           m_button_hovered;
+    Image           m_button_pressed;
     float           m_sadding;
     sf::Vector2f    m_text_padding;
 };

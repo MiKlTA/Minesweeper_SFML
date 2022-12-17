@@ -13,26 +13,23 @@ Button::Button(Theme theme, std::wstring text, CallbackType callback)
     switch (theme)
     {
     case Theme::Blue:
-        m_default_sprite = sf::Sprite(*ResourceManager::getTexture("blue_button_default"));
-        m_hovered_sprite = sf::Sprite(*ResourceManager::getTexture("blue_button_hovered"));
-        m_pressed_sprite = sf::Sprite(*ResourceManager::getTexture("blue_button_pressed"));
+        m_button_default.setImage("blue_button_default");
+        m_button_hovered.setImage("blue_button_hovered");
+        m_button_pressed.setImage("blue_button_pressed");
         break;
     case Theme::Red:
-        m_default_sprite = sf::Sprite(*ResourceManager::getTexture("red_button_default"));
-        m_hovered_sprite = sf::Sprite(*ResourceManager::getTexture("red_button_hovered"));
-        m_pressed_sprite = sf::Sprite(*ResourceManager::getTexture("red_button_pressed"));
+        m_button_default.setImage("red_button_default");
+        m_button_hovered.setImage("red_button_hovered");
+        m_button_pressed.setImage("red_button_pressed");
         break;
     }
     m_text_padding = {0.f, 16.f};
     
-    m_sadding = float(m_default_sprite.getTexture()->getSize().y)
-            - m_pressed_sprite.getTexture()->getSize().y;
-    
-    m_pressed_sprite.setOrigin(0.f, -m_sadding);
+    m_sadding = float(m_button_default.getSize().y) - m_button_pressed.getSize().y;
     
     
     
-    setSize(sf::Vector2f(m_default_sprite.getTexture()->getSize()));
+    setSize(sf::Vector2f(m_button_default.getSize()));
     
     m_text.setColor(sf::Color(150, 40, 10));
 }
@@ -45,14 +42,15 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const
     switch (getState())
     {
     case Widget::Default:
-        target.draw(m_default_sprite, states);
+        target.draw(m_button_default, states);
         break;
     case Widget::Hovered:
     case Widget::Focused:
-        target.draw(m_hovered_sprite, states);
+        target.draw(m_button_hovered, states);
         break;
     case Widget::Pressed:
-        target.draw(m_pressed_sprite, states);
+        states.transform.translate(0, m_sadding);
+        target.draw(m_button_pressed, states);
         break;
     }
     
@@ -141,11 +139,13 @@ void Button::onSizeChange(sf::Vector2f new_size)
 {
     if (getSize().x != 0 && getSize().y != 0)
     {
-        sf::Vector2f k = {new_size.x / getSize().x, new_size.y / getSize().y};
+        m_button_default.setSize(new_size);
+        m_button_hovered.setSize(new_size);
+        sf::Vector2f new_size_pressed(new_size);
+        new_size_pressed.y -= m_sadding * new_size.y / getSize().y;
+        m_button_pressed.setSize(new_size_pressed);
         
-        m_default_sprite.scale(k);
-        m_hovered_sprite.scale(k);
-        m_pressed_sprite.scale(k);
+        sf::Vector2f k = {new_size.x / getSize().x, new_size.y / getSize().y};
         
         m_sadding *= k.y;
         m_text_padding.x *= k.x;

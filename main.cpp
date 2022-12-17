@@ -43,7 +43,8 @@ int main(int, char *argv[])
     Button b4(Button::Theme::Red, L"Акпонк", [](){std::cout << "yiyuiyuiu" << std::endl;});
     b2.scale({1.5f, 1.f});
     
-    Image i1("duckcarrier");
+    Image i1;
+//    i1.setImage("duckcarrier");
     i1.setPosition({86.f, 86.f});
     i1.scale({0.3f, 0.3f});
     
@@ -82,7 +83,7 @@ int main(int, char *argv[])
     l.addWidget(&sb);
     
     
-    sf::RenderWindow window(sf::VideoMode(1280, 721), "My window", sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(1280, 721), "My window", sf::Style::Default);
     window.setPosition({0, 0});
     window.setSize({1280, 720});
     window.setView(sf::View({640, 360}, {1280, 720}));
