@@ -19,7 +19,8 @@ public:
         Blue
     };
     
-    InputField(Theme theme, Text::Alignment alignment = Text::Alignment::Left);
+    InputField(const sf::RenderWindow &window, 
+               Theme theme, Text::Alignment alignment = Text::Alignment::Left);
     
     
     
@@ -35,7 +36,7 @@ public:
     
     
     
-    bool canBeFocused() override;
+    bool canBeFocused() const override;
     
     
     

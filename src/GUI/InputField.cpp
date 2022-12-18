@@ -5,13 +5,18 @@
 
 
 
-InputField::InputField(Theme theme, Text::Alignment alignment)
-    : m_text(alignment),
+InputField::InputField(const sf::RenderWindow &window, Theme theme, Text::Alignment alignment)
+    : Widget(window),
+      
+      m_text(window, alignment),
       
       m_only_numbers(false),
       
       m_theme(theme),
-      m_alignment(alignment)
+      m_alignment(alignment),
+      
+      m_field_default(window),
+      m_field_active(window)
 {
     switch (theme)
     {
@@ -65,7 +70,7 @@ void InputField::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 
 
-bool InputField::canBeFocused()
+bool InputField::canBeFocused() const
 {
     return true;
 }
@@ -84,7 +89,7 @@ void InputField::onEvent_(const sf::Event &event)
     case State::Hovered:
         if (event.type == sf::Event::MouseButtonPressed
                 && event.mouseButton.button == GUIKeyManager::button("left")
-                && containsPoint(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))
+                && containsPoint({event.mouseButton.x, event.mouseButton.y})
                 )
         {
             setState(State::Pressed);
@@ -93,7 +98,7 @@ void InputField::onEvent_(const sf::Event &event)
     case State::Pressed:
         
         if (event.type == sf::Event::MouseButtonPressed
-                && !containsPoint(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
+                && !containsPoint({event.mouseButton.x, event.mouseButton.y}))
         {
             setState(State::Default);
         }

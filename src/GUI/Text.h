@@ -18,7 +18,7 @@ public:
         Right
     };
     
-    Text(Alignment alignment = Left, std::wstring text = L"");
+    Text(const sf::RenderWindow &window, Alignment alignment = Left, std::wstring text = L"");
     
     
     
@@ -37,7 +37,7 @@ public:
     
     
     
-    bool canBeFocused() override;
+    bool canBeFocused() const override;
     
     
         

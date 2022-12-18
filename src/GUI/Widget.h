@@ -21,7 +21,7 @@ public:
     
     
     
-    Widget();
+    Widget(const sf::RenderWindow &window);
     
     
     
@@ -36,7 +36,7 @@ public:
     
     
     
-    bool containsPoint(sf::Vector2f point) const;
+    bool containsPoint(sf::Vector2i pixel_point) const;
     
     sf::Vector2f getPosition() const;
     
@@ -50,13 +50,17 @@ public:
     
     
     
-    virtual bool canBeFocused() = 0;
+    virtual bool canBeFocused() const = 0;
+    virtual bool readyToPassFocus();
     
     
     
 protected:
     
     const sf::Transform & getTransform() const;
+    
+    sf::Vector2f mapPixelToCoords(sf::Vector2i point) const;
+    sf::Vector2i mapCoordsToPixel(sf::Vector2f point) const;
     
     virtual void onEvent_(const sf::Event &event) {};
     virtual void onPositionChange(sf::Vector2f new_position) {};
@@ -71,9 +75,7 @@ private:
     
     
     
-    sf::Vector2u m_window_size;
-    
-    
+    const sf::RenderWindow &m_window;
     
     State m_state;
     

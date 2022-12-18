@@ -8,8 +8,10 @@ bool Layout::need_draw_border = false;
 
 
 
-Layout::Layout(Type type)
-    : m_focused_widget(m_contains.end()),
+Layout::Layout(const sf::RenderWindow &window, Type type)
+    : Widget(window),
+      
+      m_focused_widget(m_contains.end()),
       
       m_type(type),
       m_padding(20.f, 20.f),
@@ -61,9 +63,28 @@ void Layout::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 
 
-bool Layout::canBeFocused()
+bool Layout::canBeFocused() const
 {
     return true;
+}
+
+bool Layout::readyToPassFocus()
+{
+    bool isReady;
+    if (!m_contains.empty())
+    {
+        isReady = m_focused_widget == getPrevFocusableWidget(m_contains.end());
+        isReady |= m_focused_widget == m_contains.begin();
+        if (!(*m_contains.begin())->canBeFocused())
+        {
+            isReady |= m_focused_widget == getNextFocusableWidget(m_contains.begin());
+        }
+    }
+    else
+    {
+        isReady = true;
+    }
+    return isReady;
 }
 
 
@@ -74,9 +95,19 @@ bool Layout::canBeFocused()
 
 void Layout::onEvent_(const sf::Event &event)
 {
+    for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
+    {
+        (*widget_iter)->onEvent(event);
+    }
+    
+    bool focused_widget_ready = true;
+    if (m_focused_widget != m_contains.end())
+    {
+        focused_widget_ready = (*m_focused_widget)->readyToPassFocus();
+    }
     if (getState() == State::Focused)
     {
-        if (event.type == sf::Event::KeyPressed)
+        if (event.type == sf::Event::KeyPressed && focused_widget_ready)
         {
             if (m_type == Type::Horizontal)
             {
@@ -105,11 +136,6 @@ void Layout::onEvent_(const sf::Event &event)
         {
             setState(State::Default);
         }
-    }
-    
-    for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
-    {
-        (*widget_iter)->onEvent(event);
     }
 }
 

@@ -5,10 +5,13 @@
 
 
 
-AnimatedImage::AnimatedImage(std::string animation_name,
-              sf::Vector2u frame_size, unsigned int frames_count, unsigned int row,
-              float delay_sec)
-    : m_spritesheet(ResourceManager::getTexture(animation_name)),
+AnimatedImage::AnimatedImage(
+        const sf::RenderWindow &window, std::string animation_name,
+        sf::Vector2u frame_size, unsigned int frames_count, unsigned int row,
+        float delay_sec)
+    : Widget(window),
+      
+      m_spritesheet(ResourceManager::getTexture(animation_name)),
       
       m_frame_size(frame_size),
       m_frames_count(frames_count),
@@ -59,7 +62,7 @@ void AnimatedImage::draw(sf::RenderTarget &target, sf::RenderStates states) cons
 
 
 
-bool AnimatedImage::canBeFocused()
+bool AnimatedImage::canBeFocused() const
 {
     return false;
 }

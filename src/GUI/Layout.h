@@ -21,7 +21,7 @@ public:
     
     
     
-    Layout(Type type);
+    Layout(const sf::RenderWindow &window, Type type);
     
     void setPadding(sf::Vector2f padding);
     void setMargin(float margin);
@@ -36,7 +36,8 @@ public:
     
     
     
-    bool canBeFocused() override;
+    bool canBeFocused() const override;
+    bool readyToPassFocus() override; 
     
     
     

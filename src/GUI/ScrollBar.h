@@ -24,7 +24,8 @@ public:
         Vertical
     };
     
-    ScrollBar(Theme theme, Type type, unsigned int range);
+    ScrollBar(const sf::RenderWindow &window,
+              Theme theme, Type type, unsigned int range);
     
     
     
@@ -41,7 +42,8 @@ public:
     
     
     
-    bool canBeFocused() override;
+    bool canBeFocused() const override;
+    bool readyToPassFocus() override; 
     
     
     
@@ -56,9 +58,11 @@ protected:
     
 private:
     
-    bool            isSliderContainsPoint(sf::Vector2f point) const;
+    bool            isSliderContainsPoint(sf::Vector2i pixel_point) const;
     sf::Vector2f    getSliderRelativePosition() const;
     unsigned int    toSliderValue(float slider_position) const;
+    
+    void            addSliderValue(int value);
     
     
     

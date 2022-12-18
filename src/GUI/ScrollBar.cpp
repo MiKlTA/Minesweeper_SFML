@@ -9,8 +9,16 @@
 
 
 
-ScrollBar::ScrollBar(Theme theme, Type type, unsigned int range)
-    : m_type(type),
+ScrollBar::ScrollBar(const sf::RenderWindow &window, Theme theme, Type type, unsigned int range)
+    : Widget(window),
+      
+      m_slider_default(window),
+      m_slider_hovered(window),
+      m_slider_pressed(window),
+      m_horisontal_bar(window),
+      m_vertical_bar(window),
+      
+      m_type(type),
       
       m_range(range)
 {
@@ -89,9 +97,14 @@ void ScrollBar::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 
 
-bool ScrollBar::canBeFocused()
+bool ScrollBar::canBeFocused() const
 {
     return true;
+}
+
+bool ScrollBar::readyToPassFocus()
+{
+    return m_slider_value == 0 || m_slider_value == m_range;
 }
 
 
@@ -99,7 +112,7 @@ bool ScrollBar::canBeFocused()
 // protected:
 
 
-
+#include <iostream>
 void ScrollBar::onEvent_(const sf::Event &event)
 {
     switch (getState())
@@ -107,9 +120,9 @@ void ScrollBar::onEvent_(const sf::Event &event)
     case State::Default:
         
         if (event.type == sf::Event::MouseMoved &&
-                (containsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))
+                (containsPoint({event.mouseMove.x, event.mouseMove.y})
                  ||
-                 isSliderContainsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y)))
+                 isSliderContainsPoint({event.mouseMove.x, event.mouseMove.y}))
                 )
         {
             setState(State::Hovered);
@@ -120,35 +133,21 @@ void ScrollBar::onEvent_(const sf::Event &event)
         
         if (event.type == sf::Event::MouseButtonPressed
                 && event.mouseButton.button == GUIKeyManager::button("left")
-                && isSliderContainsPoint(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
+                && isSliderContainsPoint({event.mouseButton.x, event.mouseButton.y}))
         {
             setState(State::Pressed);
         }
         else if (event.type == sf::Event::MouseMoved && 
-                 (!containsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))
+                 (!containsPoint({event.mouseMove.x, event.mouseMove.y})
                   &&
-                  !isSliderContainsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))
+                  !isSliderContainsPoint({event.mouseMove.x, event.mouseMove.y})
                   ))
         {
             setState(State::Default);
         }
         else if (event.type == sf::Event::MouseWheelScrolled)
         {
-            float k;
-            switch (m_type)
-            {
-            case Type::Horisontal:
-                k = 1;
-                break;
-            case Type::Vertical:
-                k = -1;
-                break;
-            }
-            int new_sider_value = m_slider_value;
-            new_sider_value += std::round(k * event.mouseWheelScroll.delta);
-            new_sider_value = std::min(new_sider_value, int(m_range));
-            new_sider_value = std::max(new_sider_value, 0);
-            m_slider_value = static_cast<unsigned int>(new_sider_value);
+            addSliderValue(std::round(event.mouseWheelScroll.delta));
         }
         
         break;
@@ -157,7 +156,7 @@ void ScrollBar::onEvent_(const sf::Event &event)
         if (event.type == sf::Event::MouseButtonReleased
                 && event.mouseButton.button == GUIKeyManager::button("left"))
         {
-            if (isSliderContainsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y)))
+            if (isSliderContainsPoint({event.mouseButton.x, event.mouseButton.y}))
             {
                 setState(State::Hovered);
             }
@@ -172,10 +171,12 @@ void ScrollBar::onEvent_(const sf::Event &event)
             switch (m_type)
             {
             case Type::Horisontal:
-                delta = event.mouseMove.x - getPosition().x;
+                delta = mapPixelToCoords({event.mouseMove.x, event.mouseMove.y}).x
+                        - getPosition().x;
                 break;
             case Type::Vertical:
-                delta = event.mouseMove.y - getPosition().y;
+                delta = mapPixelToCoords({event.mouseMove.x, event.mouseMove.y}).y
+                        - getPosition().y;
                 break;
             }
             m_slider_value = toSliderValue(delta);
@@ -184,7 +185,33 @@ void ScrollBar::onEvent_(const sf::Event &event)
         break;
     case State::Focused:
         
-        
+        if (event.type == sf::Event::KeyPressed)
+        {
+            switch (m_type)
+            {
+            case Type::Horisontal:
+                if (event.key.code == GUIKeyManager::key("right"))
+                {
+                    addSliderValue(1);
+                }
+                else if (event.key.code == GUIKeyManager::key("left"))
+                {
+                    addSliderValue(-1);
+                }
+                break;
+            case Type::Vertical:
+                if (event.key.code == GUIKeyManager::key("down"))
+                {
+                    addSliderValue(-1);
+                }
+                else if (event.key.code == GUIKeyManager::key("up"))
+                {
+                    addSliderValue(1);
+                }
+                break;
+            }
+            
+        }
         
         break;
     }
@@ -211,8 +238,10 @@ void ScrollBar::onStateChange(State new_state)
 
 
 
-bool ScrollBar::isSliderContainsPoint(sf::Vector2f point) const
+bool ScrollBar::isSliderContainsPoint(sf::Vector2i pixel_point) const
 {
+    sf::Vector2f point(mapPixelToCoords(pixel_point));
+    
     sf::Vector2f size(m_slider_default.getSize());
     size = size * 2.f;
     const sf::Vector2f position = getSliderRelativePosition() + getPosition();
@@ -237,7 +266,7 @@ sf::Vector2f ScrollBar::getSliderRelativePosition() const
     case Type::Vertical:
         x = getSize().x / 2.f
                 - m_slider_default.getSize().x / 2.f;
-        y = getSliderValue() * getSize().y / float(getRange())
+        y = (getRange() - getSliderValue()) * getSize().y / float(getRange())
                 - m_slider_default.getSize().y / 2.f;
         break;
     }
@@ -253,11 +282,24 @@ unsigned int ScrollBar::toSliderValue(float slider_position) const
     {
     case Horisontal:
         bar_size = getSize().x;
+        if (slider_position > bar_size) slider_position = bar_size;
+        return std::round(m_range * slider_position / bar_size);
         break;
     case Vertical:
         bar_size = getSize().y;
+        if (slider_position > bar_size) slider_position = bar_size;
+        return std::round(m_range * (1.f - slider_position / bar_size));
         break;
     }
-    if (slider_position > bar_size) slider_position = bar_size;
-    return std::round(m_range * slider_position / bar_size);
+}
+
+
+
+void ScrollBar::addSliderValue(int value)
+{
+    int new_sider_value = m_slider_value;
+    new_sider_value += value;
+    new_sider_value = std::min(new_sider_value, int(m_range));
+    new_sider_value = std::max(new_sider_value, 0);
+    m_slider_value = static_cast<unsigned int>(new_sider_value);
 }

@@ -32,7 +32,8 @@ public:
     
     
     
-    Button(Theme theme, std::wstring text, CallbackType callback);
+    Button(const sf::RenderWindow &window,
+           Theme theme, std::wstring text, CallbackType callback);
     
     
     
@@ -40,7 +41,7 @@ public:
     
     
     
-    bool canBeFocused() override;
+    bool canBeFocused() const override;
     
     
     

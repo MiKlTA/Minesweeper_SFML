@@ -2,8 +2,8 @@
 
 
 
-Widget::Widget()
-    : m_window_size(0, 0),
+Widget::Widget(const sf::RenderWindow &window)
+    : m_window(window),
       
       m_state(Default)
 {
@@ -52,10 +52,11 @@ void Widget::scale(sf::Vector2f scale)
 
 
 
-bool Widget::containsPoint(sf::Vector2f point) const
+bool Widget::containsPoint(sf::Vector2i pixel_point) const
 {
-    return (point.x - m_position.x < m_size.x) && (point.y - m_position.y < m_size.y)
-            && point.x > m_position.x && point.y > m_position.y;
+    sf::Vector2f world_point = mapPixelToCoords(pixel_point);
+    return (world_point.x - m_position.x < m_size.x) && (world_point.y - m_position.y < m_size.y)
+            && world_point.x > m_position.x && world_point.y > m_position.y;
 }
 
 sf::Vector2f Widget::getPosition() const
@@ -75,30 +76,16 @@ sf::Vector2f Widget::getSize() const
 
 void Widget::onEvent(const sf::Event &event)
 {
-    if (event.type == sf::Event::Resized)
-    {
-        if (m_window_size.x == 0 || m_window_size.y == 0)
-        {
-            m_window_size.x = event.size.width;
-            m_window_size.y = event.size.height;
-        }
-        else
-        {
-            float k_x = event.size.width / float(m_window_size.x);
-            float k_y = event.size.height / float(m_window_size.y);
-            
-            m_size.x *= k_x;
-            m_size.y *= k_y;
-            
-            m_position.x *= k_x;
-            m_position.y *= k_y;
-            
-            m_window_size.x = event.size.width;
-            m_window_size.y = event.size.height;
-        }
-    }
+    // ...
     
     onEvent_(event);
+}
+
+
+
+bool Widget::readyToPassFocus()
+{
+    return true;
 }
 
 
@@ -111,6 +98,17 @@ const sf::Transform & Widget::getTransform() const
 {
     return m_transform;
 }
+
+sf::Vector2f Widget::mapPixelToCoords(sf::Vector2i point) const
+{
+    return m_window.mapPixelToCoords(point);
+}
+
+sf::Vector2i Widget::mapCoordsToPixel(sf::Vector2f point) const
+{
+    return m_window.mapCoordsToPixel(point);
+}
+
 
 
 // private:

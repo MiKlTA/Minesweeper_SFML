@@ -6,9 +6,16 @@
 
 
 
-Button::Button(Theme theme, std::wstring text, CallbackType callback)
-    : m_text(Text::Alignment::Centre, text),
-      m_callback(callback)
+Button::Button(const sf::RenderWindow &window,
+               Theme theme, std::wstring text, CallbackType callback)
+    : Widget(window),
+      
+      m_text(window, Text::Alignment::Centre, text),
+      m_callback(callback),
+      
+      m_button_default(window),
+      m_button_hovered(window),
+      m_button_pressed(window)
 {
     switch (theme)
     {
@@ -59,7 +66,7 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 
 
-bool Button::canBeFocused()
+bool Button::canBeFocused() const
 {
     return true;
 }
@@ -76,7 +83,7 @@ void Button::onEvent_(const sf::Event &event)
     {
     case State::Default:
         
-        if (containsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y)))
+        if (containsPoint({event.mouseMove.x, event.mouseMove.y}))
         {
            setState(State::Hovered); 
         }
@@ -94,7 +101,7 @@ void Button::onEvent_(const sf::Event &event)
     case State::Hovered:
         
         if (event.type == sf::Event::MouseMoved
-                && !containsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y)))
+            && !containsPoint({event.mouseMove.x, event.mouseMove.y}))
         {
            setState(State::Default); 
         }
@@ -109,7 +116,7 @@ void Button::onEvent_(const sf::Event &event)
         if (event.type == sf::Event::MouseButtonReleased
                     && event.mouseButton.button == GUIKeyManager::button("left"))
         {
-            if (containsPoint(sf::Vector2f(event.mouseMove.x, event.mouseMove.y)))
+            if (containsPoint({event.mouseMove.x, event.mouseMove.y}))
             {
                 setState(State::Default);
             }

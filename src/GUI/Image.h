@@ -11,7 +11,7 @@ class Image : public Widget
 {
 public:
     
-    Image();
+    Image(const sf::RenderWindow &window);
     
     
     
@@ -24,7 +24,7 @@ public:
     
     
     
-    bool canBeFocused() override;
+    bool canBeFocused() const override;
     
     
     

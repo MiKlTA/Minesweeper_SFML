@@ -11,7 +11,7 @@ class AnimatedImage : public Widget
 {
 public:
     
-    AnimatedImage(std::string animation_name,
+    AnimatedImage(const sf::RenderWindow &window, std::string animation_name,
                   sf::Vector2u frame_size, unsigned int frames_count, unsigned int row,
                   float delay_sec);
     
@@ -30,7 +30,7 @@ public:
     
     
     
-    bool canBeFocused() override;
+    bool canBeFocused() const override;
     
     
     

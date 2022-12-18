@@ -4,8 +4,10 @@
 
 
 
-Text::Text(Alignment alignment, std::wstring text)
-    : m_alignment(alignment)
+Text::Text(const sf::RenderWindow &window, Alignment alignment, std::wstring text)
+    : Widget(window),
+      
+      m_alignment(alignment)
 {
     m_text = sf::Text(text, *ResourceManager::getFont("font"));
     m_spacing = 16.f;
@@ -71,7 +73,7 @@ void Text::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 
 
-bool Text::canBeFocused()
+bool Text::canBeFocused() const
 {
     return false;
 }

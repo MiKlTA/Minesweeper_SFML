@@ -4,7 +4,8 @@
 
 
 
-Image::Image()
+Image::Image(const sf::RenderWindow &window)
+    : Widget(window)
 {
     
 }
@@ -33,7 +34,7 @@ void Image::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 
 
-bool Image::canBeFocused()
+bool Image::canBeFocused() const
 {
     return false;
 }

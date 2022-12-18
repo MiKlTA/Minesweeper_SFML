@@ -37,25 +37,34 @@ int main(int, char *argv[])
     GUIKeyManager::attachKey("backspace", sf::Keyboard::Backspace);
     GUIKeyManager::attachButton("left", sf::Mouse::Left);
     
-    Button b1(Button::Theme::Blue, L"Превед", [](){std::cout << "Hello world!" << std::endl;});
-    Button b2(Button::Theme::Red, L"Медвед", [](){std::cout << "Goodbye world!" << std::endl;});
-    Button b3(Button::Theme::Blue, L"Кнопка", [](){std::cout << "adsada" << std::endl;});
-    Button b4(Button::Theme::Red, L"Акпонк", [](){std::cout << "yiyuiyuiu" << std::endl;});
+    
+    
+    sf::RenderWindow window(sf::VideoMode(1280, 721), "My window", sf::Style::Default);
+    window.setPosition({0, 0});
+    window.setSize({1280, 720});
+    window.setView(sf::View({640, 360}, {1280, 720}));
+    
+    
+    
+    Button b1(window, Button::Theme::Blue, L"Превед", [](){std::cout << "Hello world!" << std::endl;});
+    Button b2(window, Button::Theme::Red, L"Медвед", [](){std::cout << "Goodbye world!" << std::endl;});
+    Button b3(window, Button::Theme::Blue, L"Кнопка", [](){std::cout << "adsada" << std::endl;});
+    Button b4(window, Button::Theme::Red, L"Акпонк", [](){std::cout << "yiyuiyuiu" << std::endl;});
     b2.scale({1.5f, 1.f});
     
-    Image i1;
+    Image i1(window);
 //    i1.setImage("duckcarrier");
     i1.setPosition({86.f, 86.f});
     i1.scale({0.3f, 0.3f});
     
-    Text t;
+    Text t(window);
     t.setString(L"ывауℤ∜∀∫☔♥☆и");
     
-    InputField input(InputField::Theme::Blue);
+    InputField input(window, InputField::Theme::Blue);
     
-    ScrollBar sb(ScrollBar::Theme::White, ScrollBar::Type::Vertical, 128);
+    ScrollBar sb(window, ScrollBar::Theme::White, ScrollBar::Type::Horisontal, 31);
     
-    AnimatedImage ai("player", {48, 48}, 6, 4, 0.2f);
+    AnimatedImage ai(window, "player", {48, 48}, 6, 4, 0.2f);
     ai.setRepeatAnimation(false);
     
     
@@ -63,11 +72,11 @@ int main(int, char *argv[])
     
     Layout::need_draw_border = true;
     
-    Layout l(Layout::Horizontal);
+    Layout l(window, Layout::Horizontal);
     l.setPosition({50.f, 50.f});
     
-    Layout l1(Layout::Vertical);
-    Layout l2(Layout::Vertical);
+    Layout l1(window, Layout::Horizontal);
+    Layout l2(window, Layout::Vertical);
     
     l1.addWidget(&b1);
     l1.addWidget(&b2);
@@ -81,12 +90,6 @@ int main(int, char *argv[])
     l.addWidget(&l1);
     l.addWidget(&l2);
     l.addWidget(&sb);
-    
-    
-    sf::RenderWindow window(sf::VideoMode(1280, 721), "My window", sf::Style::Default);
-    window.setPosition({0, 0});
-    window.setSize({1280, 720});
-    window.setView(sf::View({640, 360}, {1280, 720}));
     
     sf::Clock clock;
     while (window.isOpen())
@@ -118,6 +121,7 @@ int main(int, char *argv[])
             }
         }
         
+        t.setString(std::to_wstring(sb.getSliderValue()));
         window.clear();
         window.draw(l);
         window.display();
