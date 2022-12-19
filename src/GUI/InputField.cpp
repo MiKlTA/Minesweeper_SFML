@@ -24,7 +24,7 @@ InputField::InputField(const sf::RenderWindow &window, Theme theme, Text::Alignm
         m_field_default.setImage("blue_input_field_default");
         m_field_active.setImage("blue_input_field_active");
         m_text.setColor(sf::Color::Cyan);
-        m_text_padding = {16.f, 16.f};
+        m_text_padding = {16.f, 0.f};
         
         m_max_text_length = 256;
         break;
@@ -165,15 +165,16 @@ void InputField::recalcTextPosition(sf::Vector2f new_field_position)
     switch (m_alignment)
     {
     case Text::Alignment::Left:
-        position += m_text_padding;
+        position.x += m_text_padding.x;
+        position.y += getSize().y / 2.f - m_text.getSize().y;
         break;
     case Text::Alignment::Right:
-        position.y += m_text_padding.y;
         position.x += getSize().x - m_text_padding.x;
+        position.y += getSize().y / 2.f - m_text.getSize().y;
         break;
     case Text::Alignment::Centre:
-        position.y += m_text_padding.y;
         position.x += getSize().x / 2.f;
+        position.y += getSize().y / 2.f - m_text.getSize().y;
         break;
     }
     

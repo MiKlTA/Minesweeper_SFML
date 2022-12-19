@@ -104,6 +104,10 @@ bool Layout::isPassEvent(const sf::Event &event)
             }
         }
     }
+    if (m_focused_widget != m_contains.end())
+    {
+        isPass &= (*m_focused_widget)->isPassEvent(event);
+    }
     return isPass;
 }
 

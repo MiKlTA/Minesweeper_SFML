@@ -65,7 +65,7 @@ private:
     Text::Alignment m_alignment;
     Image           m_field_default;
     Image           m_field_active;
-    sf::Vector2f    m_text_padding;
+    float    m_text_padding;
     sf::Vector2f    m_text_shift;
 };
 

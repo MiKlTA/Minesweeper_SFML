@@ -39,10 +39,9 @@ int main(int, char *argv[])
     
     
     
-    sf::RenderWindow window(sf::VideoMode(1280, 721), "My window", sf::Style::Default);
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "My window", sf::Style::Default);
     window.setPosition({0, 0});
-    window.setSize({1280, 720});
-    window.setView(sf::View({640, 360}, {1280, 720}));
+    window.setView(sf::View({320, 180}, {640, 360}));
     
     
     
@@ -75,7 +74,7 @@ int main(int, char *argv[])
     
     
     
-    Layout::need_draw_border = true;
+    Layout::need_draw_border = false;
     
     Layout l(window, Layout::Vertical);
     l.setMargin(10.f);
@@ -84,6 +83,7 @@ int main(int, char *argv[])
     
     Layout l1(window, Layout::Horizontal);
     Layout l2(window, Layout::Vertical);
+    Layout l3(window, Layout::Horizontal);
     l1.setMargin(10.f);
     l1.setPadding({5.f, 5.f});
     l2.setMargin(10.f);
@@ -98,9 +98,11 @@ int main(int, char *argv[])
     l2.addWidget(&input);
     l2.addWidget(&ai);
     
+    l3.addWidget(&l2);
+    l3.addWidget(&sb);
+    
     l.addWidget(&l1);
-    l.addWidget(&l2);
-    l.addWidget(&sb);
+    l.addWidget(&l3);
     
     sf::Clock clock;
     while (window.isOpen())
@@ -123,6 +125,9 @@ int main(int, char *argv[])
                     break;
                 case sf::Keyboard::P:
                     ai.startAnimation();
+                    break;
+                case sf::Keyboard::C:
+                    window.close();
                     break;
                 default:
                     break;
