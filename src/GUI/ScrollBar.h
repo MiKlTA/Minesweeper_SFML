@@ -43,7 +43,7 @@ public:
     
     
     bool canBeFocused() const override;
-    bool readyToPassFocus() override; 
+    bool isPassEvent(const sf::Event &event) override;
     
     
     

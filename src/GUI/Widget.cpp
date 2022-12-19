@@ -83,7 +83,7 @@ void Widget::onEvent(const sf::Event &event)
 
 
 
-bool Widget::readyToPassFocus()
+bool Widget::isPassEvent(const sf::Event &event)
 {
     return true;
 }

@@ -30,7 +30,7 @@ Button::Button(const sf::RenderWindow &window,
         m_button_pressed.setImage("red_button_pressed");
         break;
     }
-    m_text_padding = {0.f, 16.f};
+    m_text_padding = {0.f, 8.f};
     
     m_sadding = float(m_button_default.getSize().y) - m_button_pressed.getSize().y;
     
@@ -39,6 +39,14 @@ Button::Button(const sf::RenderWindow &window,
     setSize(sf::Vector2f(m_button_default.getSize()));
     
     m_text.setColor(sf::Color(150, 40, 10));
+}
+
+
+
+void Button::setCharacterSize(unsigned int character_size)
+{
+    m_text.setCharacterSize(character_size);
+    locateText(getState(), getPosition());
 }
 
 
@@ -157,6 +165,8 @@ void Button::onSizeChange(sf::Vector2f new_size)
         m_sadding *= k.y;
         m_text_padding.x *= k.x;
         m_text_padding.y *= k.y;
+        
+        m_text.scale(k);
     }
 }
 

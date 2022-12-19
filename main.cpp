@@ -50,7 +50,12 @@ int main(int, char *argv[])
     Button b2(window, Button::Theme::Red, L"Медвед", [](){std::cout << "Goodbye world!" << std::endl;});
     Button b3(window, Button::Theme::Blue, L"Кнопка", [](){std::cout << "adsada" << std::endl;});
     Button b4(window, Button::Theme::Red, L"Акпонк", [](){std::cout << "yiyuiyuiu" << std::endl;});
-    b2.scale({1.5f, 1.f});
+    b1.scale({0.5f, 0.5f});
+    b1.setCharacterSize(16);
+    b2.scale({1.0f, 1.0f});
+    b3.scale({1.0f, 1.0f});
+    b4.scale({0.5f, 0.5f});
+    b4.setCharacterSize(16);
     
     Image i1(window);
 //    i1.setImage("duckcarrier");
@@ -62,7 +67,7 @@ int main(int, char *argv[])
     
     InputField input(window, InputField::Theme::Blue);
     
-    ScrollBar sb(window, ScrollBar::Theme::White, ScrollBar::Type::Horisontal, 31);
+    ScrollBar sb(window, ScrollBar::Theme::White, ScrollBar::Type::Vertical, 31);
     
     AnimatedImage ai(window, "player", {48, 48}, 6, 4, 0.2f);
     ai.setRepeatAnimation(false);
@@ -72,11 +77,17 @@ int main(int, char *argv[])
     
     Layout::need_draw_border = true;
     
-    Layout l(window, Layout::Horizontal);
-    l.setPosition({50.f, 50.f});
+    Layout l(window, Layout::Vertical);
+    l.setMargin(10.f);
+    l.setPadding({5.f, 5.f});
+    l.setPosition({10.f, 10.f});
     
     Layout l1(window, Layout::Horizontal);
     Layout l2(window, Layout::Vertical);
+    l1.setMargin(10.f);
+    l1.setPadding({5.f, 5.f});
+    l2.setMargin(10.f);
+    l2.setPadding({5.f, 5.f});
     
     l1.addWidget(&b1);
     l1.addWidget(&b2);

@@ -68,23 +68,43 @@ bool Layout::canBeFocused() const
     return true;
 }
 
-bool Layout::readyToPassFocus()
+bool Layout::isPassEvent(const sf::Event &event)
 {
-    bool isReady;
+    bool isPass = true;
     if (!m_contains.empty())
     {
-        isReady = m_focused_widget == getPrevFocusableWidget(m_contains.end());
-        isReady |= m_focused_widget == m_contains.begin();
-        if (!(*m_contains.begin())->canBeFocused())
+        if (m_type == Type::Horizontal)
         {
-            isReady |= m_focused_widget == getNextFocusableWidget(m_contains.begin());
+            if (event.key.code == GUIKeyManager::key("right"))
+            {
+                isPass = m_focused_widget == getPrevFocusableWidget(m_contains.end());
+            }
+            else if (event.key.code == GUIKeyManager::key("left"))
+            {
+                isPass = m_focused_widget == m_contains.begin();
+                if (!(*m_contains.begin())->canBeFocused())
+                {
+                    isPass |= m_focused_widget == getNextFocusableWidget(m_contains.begin());
+                }
+            }
+        }
+        else // m_type == Type::Vertical
+        {
+            if (event.key.code == GUIKeyManager::key("down"))
+            {
+                isPass = m_focused_widget == getPrevFocusableWidget(m_contains.end());
+            }
+            else if (event.key.code == GUIKeyManager::key("up"))
+            {
+                isPass = m_focused_widget == m_contains.begin();
+                if (!(*m_contains.begin())->canBeFocused())
+                {
+                    isPass |= m_focused_widget == getNextFocusableWidget(m_contains.begin());
+                }
+            }
         }
     }
-    else
-    {
-        isReady = true;
-    }
-    return isReady;
+    return isPass;
 }
 
 
@@ -95,15 +115,11 @@ bool Layout::readyToPassFocus()
 
 void Layout::onEvent_(const sf::Event &event)
 {
-    for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
-    {
-        (*widget_iter)->onEvent(event);
-    }
-    
+    bool canIPassEvent = true;
     bool focused_widget_ready = true;
     if (m_focused_widget != m_contains.end())
     {
-        focused_widget_ready = (*m_focused_widget)->readyToPassFocus();
+        focused_widget_ready = (*m_focused_widget)->isPassEvent(event);
     }
     if (getState() == State::Focused)
     {
@@ -114,10 +130,12 @@ void Layout::onEvent_(const sf::Event &event)
                 if (event.key.code == GUIKeyManager::key("right"))
                 {
                     setFocusOnNextWidget();
+                    canIPassEvent = false;
                 }
                 else if (event.key.code == GUIKeyManager::key("left"))
                 {
                     setFocusOnPrevWidget();
+                    canIPassEvent = false;
                 }
             }
             else // m_type == Type::Vertical
@@ -125,16 +143,26 @@ void Layout::onEvent_(const sf::Event &event)
                 if (event.key.code == GUIKeyManager::key("down"))
                 {
                     setFocusOnNextWidget();
+                    canIPassEvent = false;
                 }
                 else if (event.key.code == GUIKeyManager::key("up"))
                 {
                     setFocusOnPrevWidget();
+                    canIPassEvent = false;
                 }
             }
         }
         else if (event.type == sf::Event::MouseButtonPressed)
         {
             setState(State::Default);
+        }
+    }
+    
+    if (canIPassEvent)
+    {
+        for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
+        {
+            (*widget_iter)->onEvent(event);
         }
     }
 }
@@ -164,8 +192,8 @@ void Layout::onStateChange(State new_state)
         if (m_focused_widget == m_contains.end())
         {
             m_focused_widget = getNextFocusableWidgetFromBegin();
-            (*m_focused_widget)->setState(State::Focused);
         }
+        (*m_focused_widget)->setState(State::Focused);
     }
     else
     {
@@ -174,7 +202,6 @@ void Layout::onStateChange(State new_state)
         if (m_focused_widget != m_contains.end())
         {
             (*m_focused_widget)->setState(State::Default);
-            m_focused_widget = m_contains.end();
         }
     }
 }

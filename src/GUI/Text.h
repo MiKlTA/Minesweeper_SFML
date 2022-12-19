@@ -55,7 +55,6 @@ private:
    sf::Text m_text;
    
    Alignment    m_alignment;
-   float        m_spacing;
     
 };
 

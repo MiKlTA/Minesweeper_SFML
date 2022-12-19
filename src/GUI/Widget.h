@@ -51,7 +51,7 @@ public:
     
     
     virtual bool canBeFocused() const = 0;
-    virtual bool readyToPassFocus();
+    virtual bool isPassEvent(const sf::Event &event);
     
     
     

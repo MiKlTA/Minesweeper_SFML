@@ -102,9 +102,34 @@ bool ScrollBar::canBeFocused() const
     return true;
 }
 
-bool ScrollBar::readyToPassFocus()
+bool ScrollBar::isPassEvent(const sf::Event &event)
 {
-    return m_slider_value == 0 || m_slider_value == m_range;
+    bool isPass = true;
+    
+    switch (m_type)
+    {
+    case Type::Horisontal:
+        if (event.key.code == GUIKeyManager::key("right"))
+        {
+            isPass = m_slider_value == m_range;
+        }
+        else if (event.key.code == GUIKeyManager::key("left"))
+        {
+            isPass = m_slider_value == 0;
+        }
+        break;
+    case Type::Vertical:
+        if (event.key.code == GUIKeyManager::key("down"))
+        {
+            isPass = m_slider_value == 0;
+        }
+        else if (event.key.code == GUIKeyManager::key("up"))
+        {
+            isPass = m_slider_value == m_range;
+        }
+        break;
+    }
+    return isPass;
 }
 
 
