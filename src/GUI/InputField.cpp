@@ -24,7 +24,7 @@ InputField::InputField(const sf::RenderWindow &window, Theme theme, Text::Alignm
         m_field_default.setImage("blue_input_field_default");
         m_field_active.setImage("blue_input_field_active");
         m_text.setColor(sf::Color::Cyan);
-        m_text_padding = {16.f, 0.f};
+        m_text_padding = 16.f;
         
         m_max_text_length = 256;
         break;
@@ -143,8 +143,7 @@ void InputField::onSizeChange(sf::Vector2f new_size)
     {
         sf::Vector2f k = {new_size.x / getSize().x, new_size.y / getSize().y};
         
-        m_text_padding.x *= k.x;
-        m_text_padding.y *= k.y;
+        m_text_padding *= k.x;
     }
 }
 
@@ -165,11 +164,11 @@ void InputField::recalcTextPosition(sf::Vector2f new_field_position)
     switch (m_alignment)
     {
     case Text::Alignment::Left:
-        position.x += m_text_padding.x;
+        position.x += m_text_padding;
         position.y += getSize().y / 2.f - m_text.getSize().y;
         break;
     case Text::Alignment::Right:
-        position.x += getSize().x - m_text_padding.x;
+        position.x += getSize().x - m_text_padding;
         position.y += getSize().y / 2.f - m_text.getSize().y;
         break;
     case Text::Alignment::Centre:
@@ -188,7 +187,7 @@ bool InputField::canPushSymbol(wchar_t symbol)
     bool canPush;
     m_text.append(symbol);
     
-    canPush = m_text.getSize().x + 2.f * m_text_padding.x < getSize().x;
+    canPush = m_text.getSize().x + 2.f * m_text_padding < getSize().x;
     
     m_text.pop_back();
     

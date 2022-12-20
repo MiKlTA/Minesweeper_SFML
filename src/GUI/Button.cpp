@@ -32,7 +32,7 @@ Button::Button(const sf::RenderWindow &window,
     }
     m_text_padding = {0.f, 8.f};
     
-    m_sadding = float(m_button_default.getSize().y) - m_button_pressed.getSize().y;
+    m_sagging = float(m_button_default.getSize().y) - m_button_pressed.getSize().y;
     
     
     
@@ -64,7 +64,7 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const
         target.draw(m_button_hovered, states);
         break;
     case Widget::Pressed:
-        states.transform.translate(0, m_sadding);
+        states.transform.translate(0, m_sagging);
         target.draw(m_button_pressed, states);
         break;
     }
@@ -103,26 +103,30 @@ void Button::onEvent_(const sf::Event &event)
                 && event.key.code == GUIKeyManager::key("enter"))
         {
             setState(State::Pressed);
+            m_press_event_type = PressEvents::Key;
         }
         
         break;
     case State::Hovered:
         
         if (event.type == sf::Event::MouseMoved
-            && !containsPoint({event.mouseMove.x, event.mouseMove.y}))
+                && !containsPoint({event.mouseMove.x, event.mouseMove.y}))
         {
            setState(State::Default); 
         }
-        else if (event.type == sf::Event::MouseButtonPressed)
+        else if (event.type == sf::Event::MouseButtonPressed
+                 && event.mouseButton.button == GUIKeyManager::button("left"))
         {
             setState(State::Pressed);
+            m_press_event_type = PressEvents::Mouse;
         }
         
         break;
     case State::Pressed:
         
         if (event.type == sf::Event::MouseButtonReleased
-                    && event.mouseButton.button == GUIKeyManager::button("left"))
+                && event.mouseButton.button == GUIKeyManager::button("left")
+                && m_press_event_type == PressEvents::Mouse)
         {
             if (containsPoint({event.mouseMove.x, event.mouseMove.y}))
             {
@@ -135,7 +139,8 @@ void Button::onEvent_(const sf::Event &event)
             m_callback();
         }
         else if (event.type == sf::Event::KeyReleased
-                 && event.key.code == GUIKeyManager::key("enter"))
+                 && event.key.code == GUIKeyManager::key("enter")
+                 && m_press_event_type == PressEvents::Key)
         {
             setState(State::Focused);
             m_callback();
@@ -157,17 +162,19 @@ void Button::onSizeChange(sf::Vector2f new_size)
         m_button_default.setSize(new_size);
         m_button_hovered.setSize(new_size);
         sf::Vector2f new_size_pressed(new_size);
-        new_size_pressed.y -= m_sadding * new_size.y / getSize().y;
+        new_size_pressed.y -= m_sagging * new_size.y / getSize().y;
         m_button_pressed.setSize(new_size_pressed);
         
         sf::Vector2f k = {new_size.x / getSize().x, new_size.y / getSize().y};
         
-        m_sadding *= k.y;
+        m_sagging *= k.y;
         m_text_padding.x *= k.x;
         m_text_padding.y *= k.y;
         
         m_text.scale(k);
     }
+    
+    locateText(getState(), getPosition());
 }
 
 void Button::onStateChange(State new_state)
@@ -188,7 +195,7 @@ void Button::locateText(State new_state, sf::Vector2f position)
     
     if (new_state == State::Pressed)
     {
-        text_position.y += m_sadding;
+        text_position.y += m_sagging;
     }
     
     m_text.setPosition(text_position);

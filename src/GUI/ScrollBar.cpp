@@ -268,7 +268,6 @@ bool ScrollBar::isSliderContainsPoint(sf::Vector2i pixel_point) const
     sf::Vector2f point(mapPixelToCoords(pixel_point));
     
     sf::Vector2f size(m_slider_default.getSize());
-    size = size * 2.f;
     const sf::Vector2f position = getSliderRelativePosition() + getPosition();
     return (point.x > position.x && point.x < position.x + size.x)
             &&

@@ -60,6 +60,14 @@ protected:
     
 private:
     
+    enum PressEvents
+    {
+        Mouse,
+        Key
+    };
+    
+    
+    
     void locateText(State new_state, sf::Vector2f position);
     
     
@@ -71,8 +79,10 @@ private:
     Image           m_button_default;
     Image           m_button_hovered;
     Image           m_button_pressed;
-    float           m_sadding;
+    float           m_sagging;
     sf::Vector2f    m_text_padding;
+    
+    PressEvents     m_press_event_type;
 };
 
 

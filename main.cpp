@@ -20,6 +20,15 @@
 #include "src/GUI/Text.h"
 #include "src/GUI/InputField.h"
 #include "src/GUI/ScrollBar.h"
+#include "src/GUI/CheckBox.h"
+
+
+
+template <typename VecType>
+void printVector(const VecType &vector)
+{
+    std::cout << vector.x << ' ' << vector.y << std::endl;
+}
 
 
 
@@ -57,9 +66,12 @@ int main(int, char *argv[])
     b4.setCharacterSize(16);
     
     Image i1(window);
-//    i1.setImage("duckcarrier");
+    i1.setImage("duckcarrier");
     i1.setPosition({86.f, 86.f});
     i1.scale({0.3f, 0.3f});
+    
+    AnimatedImage ai(window, "player", {48, 48}, 6, 4, 0.2f);
+    ai.setRepeatAnimation(false);
     
     Text t(window);
     t.setString(L"ывауℤ∜∀∫☔♥☆и");
@@ -68,13 +80,12 @@ int main(int, char *argv[])
     
     ScrollBar sb(window, ScrollBar::Theme::White, ScrollBar::Type::Vertical, 31);
     
-    AnimatedImage ai(window, "player", {48, 48}, 6, 4, 0.2f);
-    ai.setRepeatAnimation(false);
+    CheckBox cb(window);
     
     
     
     
-    Layout::need_draw_border = false;
+    Layout::need_draw_border = true;
     
     Layout l(window, Layout::Vertical);
     l.setMargin(10.f);
@@ -84,6 +95,7 @@ int main(int, char *argv[])
     Layout l1(window, Layout::Horizontal);
     Layout l2(window, Layout::Vertical);
     Layout l3(window, Layout::Horizontal);
+    Layout l4(window, Layout::Vertical);
     l1.setMargin(10.f);
     l1.setPadding({5.f, 5.f});
     l2.setMargin(10.f);
@@ -94,12 +106,15 @@ int main(int, char *argv[])
     l1.addWidget(&t);
     l2.addWidget(&b3);
     l2.addWidget(&b4);
-    l2.addWidget(&i1);
     l2.addWidget(&input);
     l2.addWidget(&ai);
     
+    l4.addWidget(&sb);
+    l4.addWidget(&cb);
+    
     l3.addWidget(&l2);
-    l3.addWidget(&sb);
+    l3.addWidget(&i1);
+    l3.addWidget(&l4);
     
     l.addWidget(&l1);
     l.addWidget(&l3);
@@ -132,6 +147,11 @@ int main(int, char *argv[])
                 default:
                     break;
                 }
+            case sf::Event::MouseMoved:
+                
+                // printVector(window.mapPixelToCoords(event.mouseMove.x, event.mouseMove.y));
+                
+                break;
             default:
                 break;
             }
