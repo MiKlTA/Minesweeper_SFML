@@ -3,6 +3,8 @@
 
 
 
+#include <functional>
+
 #include "Widget.h"
 
 #include "Image.h"
@@ -12,6 +14,8 @@
 class ScrollBar : public Widget
 {
 public:
+    
+    using OnValueChangeCallbackType = std::function<void(unsigned int)>;
     
     enum Theme
     {
@@ -26,6 +30,10 @@ public:
     
     ScrollBar(const sf::RenderWindow &window,
               Theme theme, Type type, unsigned int range);
+    
+    
+    
+    void setOnValueChangeCallback(OnValueChangeCallbackType callback);
     
     
     
@@ -50,9 +58,6 @@ public:
 protected:
     
     void onEvent_(const sf::Event &event) override;
-    void onSizeChange(sf::Vector2f new_size) override;
-    void onPositionChange(sf::Vector2f new_position) override;
-    void onStateChange(State new_state) override;
     
     
     
@@ -76,7 +81,9 @@ private:
     Type        m_type;
     
     unsigned int    m_range;
-    unsigned int    m_slider_value; 
+    unsigned int    m_slider_value;
+    
+    OnValueChangeCallbackType m_onValueChange;
 };
 
 

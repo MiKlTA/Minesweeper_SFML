@@ -21,6 +21,7 @@
 #include "src/GUI/InputField.h"
 #include "src/GUI/ScrollBar.h"
 #include "src/GUI/CheckBox.h"
+#include "src/GUI/ProgressBar.h"
 
 
 
@@ -74,11 +75,17 @@ int main(int, char *argv[])
     ai.setRepeatAnimation(false);
     
     Text t(window);
-    t.setString(L"ывауℤ∜∀∫☔♥☆и");
+    t.setString(L"ыℤ∜∀∫");
     
     InputField input(window, InputField::Theme::Blue);
     
+    ProgressBar pb(window, ProgressBar::Type::Horisontal, 10, 5.f);
+    pb.setProgressValue(0.69f);
+    
     ScrollBar sb(window, ScrollBar::Theme::White, ScrollBar::Type::Vertical, 31);
+    sb.setOnValueChangeCallback([&pb](unsigned int value){
+        pb.setProgressValue(value / float(31));
+    });
     
     CheckBox cb(window);
     
@@ -104,6 +111,7 @@ int main(int, char *argv[])
     l1.addWidget(&b1);
     l1.addWidget(&b2);
     l1.addWidget(&t);
+    l1.addWidget(&pb);
     l2.addWidget(&b3);
     l2.addWidget(&b4);
     l2.addWidget(&input);

@@ -47,6 +47,13 @@ ScrollBar::ScrollBar(const sf::RenderWindow &window, Theme theme, Type type, uns
 
 
 
+void ScrollBar::setOnValueChangeCallback(OnValueChangeCallbackType callback)
+{
+    m_onValueChange = callback;
+}
+
+
+
 void ScrollBar::setRange(unsigned int range)
 {
     m_range = range;
@@ -173,6 +180,7 @@ void ScrollBar::onEvent_(const sf::Event &event)
         else if (event.type == sf::Event::MouseWheelScrolled)
         {
             addSliderValue(std::round(event.mouseWheelScroll.delta));
+            m_onValueChange(m_slider_value);
         }
         
         break;
@@ -205,6 +213,7 @@ void ScrollBar::onEvent_(const sf::Event &event)
                 break;
             }
             m_slider_value = toSliderValue(delta);
+            m_onValueChange(m_slider_value);
         }
         
         break;
@@ -218,20 +227,24 @@ void ScrollBar::onEvent_(const sf::Event &event)
                 if (event.key.code == GUIKeyManager::key("right"))
                 {
                     addSliderValue(1);
+                    m_onValueChange(m_slider_value);
                 }
                 else if (event.key.code == GUIKeyManager::key("left"))
                 {
                     addSliderValue(-1);
+                    m_onValueChange(m_slider_value);
                 }
                 break;
             case Type::Vertical:
                 if (event.key.code == GUIKeyManager::key("down"))
                 {
                     addSliderValue(-1);
+                    m_onValueChange(m_slider_value);
                 }
                 else if (event.key.code == GUIKeyManager::key("up"))
                 {
                     addSliderValue(1);
+                    m_onValueChange(m_slider_value);
                 }
                 break;
             }
@@ -240,21 +253,6 @@ void ScrollBar::onEvent_(const sf::Event &event)
         
         break;
     }
-}
-
-void ScrollBar::onSizeChange(sf::Vector2f new_size)
-{
-    
-}
-
-void ScrollBar::onPositionChange(sf::Vector2f new_position)
-{
-    
-}
-
-void ScrollBar::onStateChange(State new_state)
-{
-    
 }
 
 
