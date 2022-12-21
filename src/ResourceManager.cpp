@@ -21,7 +21,7 @@ const sf::Texture * ResourceManager::getTexture(std::string name)
     if (iter == m_textures.end())
     {
         sf::Texture *texture = new sf::Texture;
-        texture->loadFromFile(m_path + name + ".png");
+        texture->loadFromFile(m_path + "resources\\sprites\\" + name + ".png");
         iter = m_textures.emplace(name, texture).first;
     }
     (*iter).second->setSmooth(false);
@@ -34,7 +34,7 @@ const sf::Font * ResourceManager::getFont(std::string name)
     if (iter == m_fonts.end())
     {
         sf::Font *font = new sf::Font;
-        font->loadFromFile(m_path + name + ".ttf");
+        font->loadFromFile(m_path + "resources\\fonts\\" + name + ".ttf");
         iter = m_fonts.emplace(name, font).first;
     }
     return (*iter).second;

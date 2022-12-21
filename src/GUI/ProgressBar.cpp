@@ -57,9 +57,12 @@ void ProgressBar::draw(sf::RenderTarget &target, sf::RenderStates states) const
         break;
     case Type::Vertical:
         
+        states.transform.translate({getSize().x / 2.f - element_size.x / 2.f, m_padding});
+        
         for (unsigned int i = 0; i < progress(); ++i)
         {
-            target.draw(m_progress_element);
+            target.draw(m_progress_element, states);
+            states.transform.translate({0.f, m_elements_interval + element_size.y});
         }
         break;
     }
@@ -115,7 +118,10 @@ void ProgressBar::recalcProgressElementSize(sf::Vector2f widget_size)
         break;
     }
     
-    m_progress_element.scale(scale);
+    if (scale.x > 0 && scale.y > 0)
+    {
+        m_progress_element.scale(scale);
+    }
 }
 
 unsigned int ProgressBar::progress() const

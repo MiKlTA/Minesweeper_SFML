@@ -7,6 +7,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
+#include "SFML/Audio.hpp"
 
 
 
@@ -79,7 +80,7 @@ int main(int, char *argv[])
     
     InputField input(window, InputField::Theme::Blue);
     
-    ProgressBar pb(window, ProgressBar::Type::Horisontal, 10, 5.f);
+    ProgressBar pb(window, ProgressBar::Type::Horisontal, 10, 2.f);
     pb.setProgressValue(0.69f);
     
     ScrollBar sb(window, ScrollBar::Theme::White, ScrollBar::Type::Vertical, 31);
