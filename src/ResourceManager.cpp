@@ -24,6 +24,7 @@ const sf::Texture * ResourceManager::getTexture(std::string name)
         texture->loadFromFile(m_path + name + ".png");
         iter = m_textures.emplace(name, texture).first;
     }
+    (*iter).second->setSmooth(false);
     return (*iter).second;
 }
 

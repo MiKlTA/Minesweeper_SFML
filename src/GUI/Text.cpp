@@ -11,11 +11,7 @@ Text::Text(const sf::RenderWindow &window, Alignment alignment, std::wstring tex
 {
     m_text = sf::Text(text, *ResourceManager::getFont("font"));
     
-    m_text.setCharacterSize(32);
-    
-    
-    
-    computeSize();
+    setCharacterSize(32);
 }
 
 
@@ -31,6 +27,7 @@ void Text::setString(std::wstring text)
 void Text::setCharacterSize(unsigned int size)
 {
     m_text.setCharacterSize(size);
+    const_cast<sf::Texture&>(m_text.getFont()->getTexture(size)).setSmooth(false);
     computeSize();
 }
 
