@@ -6,6 +6,7 @@
 #include "Config.h"
 #include "Core.h"
 #include "ResourceManager.h"
+#include "KeyManager.h"
 
 #include "SFML/Graphics.hpp"
 
@@ -17,7 +18,8 @@ class Game
 {
 public:
     
-    Game(Config *config, Core *core, ResourceManager *resource_manager);
+    Game(Config *config, Core *core,
+         ResourceManager *resource_manager, KeyManager *key_manager);
     ~Game();
     
     

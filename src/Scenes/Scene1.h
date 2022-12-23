@@ -1,5 +1,5 @@
-#ifndef H_MAIN_MENU
-#define H_MAIN_MENU
+#ifndef H_MAIN_MENU1
+#define H_MAIN_MENU1
 
 
 
@@ -12,11 +12,11 @@
 
 
 
-class MainMenu : public Scene
+class Scene1 : public Scene
 {
 public:
     
-    MainMenu(Core *core, ResourceManager *resource_manager, KeyManager *key_manager, sf::RenderWindow *window);
+    Scene1(Core *core, ResourceManager *resource_manager, KeyManager *key_manager, sf::RenderWindow *window);
     
     
     

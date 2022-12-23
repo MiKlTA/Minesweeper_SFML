@@ -5,7 +5,7 @@
 
 
 
-Button::Button(KeyManager *key_manager, ResourceManager *resource_manager,
+Button::Button(ResourceManager *resource_manager, KeyManager *key_manager,
                const sf::RenderWindow &window,
                Theme theme, std::wstring text, CallbackType callback)
     : Widget(window),
@@ -41,6 +41,7 @@ Button::Button(KeyManager *key_manager, ResourceManager *resource_manager,
     setSize(sf::Vector2f(m_button_default.getSize()));
     
     m_text.setColor(sf::Color(150, 40, 10));
+    locateText(getState(), getPosition());
 }
 
 

@@ -30,10 +30,11 @@ int main(int, char *argv[])
     Core *core = new Core;
     
     std::string path = std::experimental::filesystem::path(argv[0]).parent_path().string();
-    path += '\\';
+    path += "\\";
     ResourceManager *resource_manager = new ResourceManager(path);
+    KeyManager *key_manager = new KeyManager;
     
-    Game game(config, core, resource_manager);
+    Game game(config, core, resource_manager, key_manager);
     game.run();
     
     return 0;

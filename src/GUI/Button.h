@@ -35,7 +35,7 @@ public:
     
     
     
-    Button(KeyManager *key_manager, ResourceManager *resource_manager,
+    Button(ResourceManager *resource_manager, KeyManager *key_manager,
             const sf::RenderWindow &window,
             Theme theme, std::wstring text, CallbackType callback);
     

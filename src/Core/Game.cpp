@@ -1,10 +1,11 @@
 #include "Game.h"
 
 #include "../Scenes/MainMenu.h"
+#include "../Scenes/Scene1.h"
 
 
 
-Game::Game(Config *config, Core *core, ResourceManager *resource_manager)
+Game::Game(Config *config, Core *core, ResourceManager *resource_manager, KeyManager *key_manager)
     : m_config(config),
       m_core(core),
       m_resource_manager(resource_manager)
@@ -17,7 +18,8 @@ Game::Game(Config *config, Core *core, ResourceManager *resource_manager)
     m_window->setPosition({0, 0});
     m_window->setView(sf::View(m_config->viewSize() / 2.f, m_config->viewSize()));
     
-    m_core->addScene("MainMenu", new MainMenu(core, resource_manager, m_window));
+    m_core->addScene("MainMenu", new MainMenu(core, resource_manager, key_manager, m_window));
+    m_core->addScene("Scene1", new Scene1(core, resource_manager, key_manager, m_window));
     m_core->setScene("MainMenu");
 }
 
