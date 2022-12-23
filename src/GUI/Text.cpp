@@ -1,15 +1,18 @@
 #include "Text.h"
 
-#include "../ResourceManager.h"
+#include "../Core/ResourceManager.h"
 
 
 
-Text::Text(const sf::RenderWindow &window, Alignment alignment, std::wstring text)
+Text::Text(
+        ResourceManager *resource_manager,
+        const sf::RenderWindow &window,
+        Alignment alignment, std::wstring text)
     : Widget(window),
       
       m_alignment(alignment)
 {
-    m_text = sf::Text(text, *ResourceManager::getFont("font"));
+    m_text = sf::Text(text, *resource_manager->getFont("font"));
     
     setCharacterSize(32);
 }

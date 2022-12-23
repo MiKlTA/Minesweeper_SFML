@@ -10,6 +10,8 @@
 
 
 
+class KeyManager;
+
 class InputField : public Widget
 {
 public:
@@ -19,8 +21,9 @@ public:
         Blue
     };
     
-    InputField(const sf::RenderWindow &window, 
-               Theme theme, Text::Alignment alignment = Text::Alignment::Left);
+    InputField(ResourceManager *resource_manager, KeyManager *key_manager,
+            const sf::RenderWindow &window, 
+            Theme theme, Text::Alignment alignment = Text::Alignment::Left);
     
     
     
@@ -53,6 +56,10 @@ private:
     void recalcTextPosition(sf::Vector2f new_field_position);
     
     bool canPushSymbol(wchar_t symbol);
+    
+    
+    
+    KeyManager *m_key_manager;
     
     
     

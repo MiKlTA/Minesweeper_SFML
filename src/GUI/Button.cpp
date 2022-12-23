@@ -1,21 +1,23 @@
 #include "Button.h"
 
-#include "GUIKeyManager.h"
-
-#include "../ResourceManager.h"
-
+#include "../Core/ResourceManager.h"
+#include "../Core/KeyManager.h"
 
 
-Button::Button(const sf::RenderWindow &window,
+
+Button::Button(KeyManager *key_manager, ResourceManager *resource_manager,
+               const sf::RenderWindow &window,
                Theme theme, std::wstring text, CallbackType callback)
     : Widget(window),
       
-      m_text(window, Text::Alignment::Centre, text),
+      m_key_manager(key_manager),
+      
+      m_text(resource_manager, window, Text::Alignment::Centre, text),
       m_callback(callback),
       
-      m_button_default(window),
-      m_button_hovered(window),
-      m_button_pressed(window)
+      m_button_default(resource_manager, window),
+      m_button_hovered(resource_manager, window),
+      m_button_pressed(resource_manager, window)
 {
     switch (theme)
     {
@@ -100,7 +102,7 @@ void Button::onEvent_(const sf::Event &event)
     case State::Focused:
         
         if (event.type == sf::Event::KeyPressed
-                && event.key.code == GUIKeyManager::key("enter"))
+                && event.key.code == m_key_manager->key("enter"))
         {
             setState(State::Pressed);
             m_press_event_type = PressEvents::Key;
@@ -115,7 +117,7 @@ void Button::onEvent_(const sf::Event &event)
            setState(State::Default); 
         }
         else if (event.type == sf::Event::MouseButtonPressed
-                 && event.mouseButton.button == GUIKeyManager::button("left"))
+                 && event.mouseButton.button == m_key_manager->button("left"))
         {
             setState(State::Pressed);
             m_press_event_type = PressEvents::Mouse;
@@ -125,7 +127,7 @@ void Button::onEvent_(const sf::Event &event)
     case State::Pressed:
         
         if (event.type == sf::Event::MouseButtonReleased
-                && event.mouseButton.button == GUIKeyManager::button("left")
+                && event.mouseButton.button == m_key_manager->button("left")
                 && m_press_event_type == PressEvents::Mouse)
         {
             if (containsPoint({event.mouseMove.x, event.mouseMove.y}))
@@ -139,7 +141,7 @@ void Button::onEvent_(const sf::Event &event)
             m_callback();
         }
         else if (event.type == sf::Event::KeyReleased
-                 && event.key.code == GUIKeyManager::key("enter")
+                 && event.key.code == m_key_manager->key("enter")
                  && m_press_event_type == PressEvents::Key)
         {
             setState(State::Focused);

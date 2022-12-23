@@ -26,8 +26,9 @@ public:
     
     
     
-    ProgressBar(const sf::RenderWindow &window, Type type,
-                unsigned int elements_count, float elements_interval);
+    ProgressBar(ResourceManager *resource_manager,
+            const sf::RenderWindow &window, Type type,
+            unsigned int elements_count, float elements_interval);
     
     
     

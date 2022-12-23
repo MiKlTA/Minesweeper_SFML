@@ -1,22 +1,27 @@
 #include "InputField.h"
 
-#include "../ResourceManager.h"
-#include "GUIKeyManager.h"
+#include "../Core/ResourceManager.h"
+#include "../Core/KeyManager.h"
 
 
 
-InputField::InputField(const sf::RenderWindow &window, Theme theme, Text::Alignment alignment)
+InputField::InputField(
+        ResourceManager *resource_manager, KeyManager *key_manager,
+        const sf::RenderWindow &window,
+        Theme theme, Text::Alignment alignment)
     : Widget(window),
       
-      m_text(window, alignment),
+      m_key_manager(key_manager),
+      
+      m_text(resource_manager, window, alignment),
       
       m_only_numbers(false),
       
       m_theme(theme),
       m_alignment(alignment),
       
-      m_field_default(window),
-      m_field_active(window)
+      m_field_default(resource_manager, window),
+      m_field_active(resource_manager, window)
 {
     switch (theme)
     {
@@ -88,7 +93,7 @@ void InputField::onEvent_(const sf::Event &event)
     case State::Default:
     case State::Hovered:
         if (event.type == sf::Event::MouseButtonPressed
-                && event.mouseButton.button == GUIKeyManager::button("left")
+                && event.mouseButton.button == m_key_manager->button("left")
                 && containsPoint({event.mouseButton.x, event.mouseButton.y})
                 )
         {
@@ -108,14 +113,14 @@ void InputField::onEvent_(const sf::Event &event)
         
         if (event.type == sf::Event::KeyPressed)
             {
-                if (event.key.code == GUIKeyManager::key("backspace"))
+                if (event.key.code == m_key_manager->key("backspace"))
                 {
                     m_text.pop_back();
                     recalcTextPosition(getPosition());
                 }
             }
         else if (event.type == sf::Event::TextEntered
-                 && !sf::Keyboard::isKeyPressed(GUIKeyManager::key("backspace")))
+                 && !sf::Keyboard::isKeyPressed(m_key_manager->key("backspace")))
         {
             wchar_t symbol = static_cast<wchar_t>(event.text.unicode);
             

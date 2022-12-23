@@ -1,16 +1,18 @@
 #include "CheckBox.h"
 
-#include "GUIKeyManager.h"
-
-#include "../ResourceManager.h"
-
+#include "../Core/ResourceManager.h"
+#include "../Core/KeyManager.h"
 
 
-CheckBox::CheckBox(const sf::RenderWindow &window)
+
+CheckBox::CheckBox(ResourceManager *resource_manager, KeyManager *key_manager,
+                   const sf::RenderWindow &window)
     : Widget(window),
       
-      m_box(window),
-      m_checkmark(window),
+      m_key_manager(key_manager),
+      
+      m_box(resource_manager, window),
+      m_checkmark(resource_manager, window),
       
       m_is_checked(false)
 {
@@ -70,7 +72,7 @@ void CheckBox::onEvent_(const sf::Event &event)
     case State::Hovered:
         
         if (event.type == sf::Event::MouseButtonPressed
-                && event.mouseButton.button == GUIKeyManager::button("left"))
+                && event.mouseButton.button == m_key_manager->button("left"))
         {
             setState(State::Pressed);
             m_press_event = PressEvents::Mouse;
@@ -85,7 +87,7 @@ void CheckBox::onEvent_(const sf::Event &event)
     case State::Focused:
         
         if (event.type == sf::Event::KeyPressed
-                && event.key.code == GUIKeyManager::key("enter"))
+                && event.key.code == m_key_manager->key("enter"))
         {
             setState(State::Pressed);
             m_press_event = PressEvents::Key;
@@ -95,7 +97,7 @@ void CheckBox::onEvent_(const sf::Event &event)
     case State::Pressed:
         
         if (event.type == sf::Event::MouseButtonReleased
-                && event.mouseButton.button == GUIKeyManager::button("left")
+                && event.mouseButton.button == m_key_manager->button("left")
                 && m_press_event == PressEvents::Mouse)
         {
             if (containsPoint({event.mouseButton.x, event.mouseButton.y}))
@@ -109,7 +111,7 @@ void CheckBox::onEvent_(const sf::Event &event)
             m_is_checked = !m_is_checked;
         }
         else if (event.type == sf::Event::KeyReleased
-                 && event.key.code == GUIKeyManager::key("enter")
+                 && event.key.code == m_key_manager->key("enter")
                  && m_press_event == PressEvents::Key)
         {
             setState(State::Focused);

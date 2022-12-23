@@ -1,11 +1,13 @@
 #include "Image.h"
 
-#include "../ResourceManager.h"
+#include "../Core/ResourceManager.h"
 
 
 
-Image::Image(const sf::RenderWindow &window)
-    : Widget(window)
+Image::Image(ResourceManager *resource_manager, const sf::RenderWindow &window)
+    : Widget(window),
+      
+      m_resource_manager(resource_manager)
 {
     
 }
@@ -14,7 +16,7 @@ Image::Image(const sf::RenderWindow &window)
 
 void Image::setImage(std::string image_name)
 {
-    m_image = sf::Sprite(*ResourceManager::getTexture(image_name));
+    m_image = sf::Sprite(*m_resource_manager->getTexture(image_name));
     setSize(sf::Vector2f(m_image.getTexture()->getSize()));
 }
 

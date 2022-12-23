@@ -14,6 +14,9 @@
 
 
 
+class ResourceManager;
+class KeyManager;
+
 class Button : public Widget
 {
 private:
@@ -32,8 +35,9 @@ public:
     
     
     
-    Button(const sf::RenderWindow &window,
-           Theme theme, std::wstring text, CallbackType callback);
+    Button(KeyManager *key_manager, ResourceManager *resource_manager,
+            const sf::RenderWindow &window,
+            Theme theme, std::wstring text, CallbackType callback);
     
     
     
@@ -69,6 +73,10 @@ private:
     
     
     void locateText(State new_state, sf::Vector2f position);
+    
+    
+    
+    KeyManager *m_key_manager;
     
     
     

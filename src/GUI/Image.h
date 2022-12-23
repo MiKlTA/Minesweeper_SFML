@@ -7,11 +7,13 @@
 
 
 
+class ResourceManager;
+
 class Image : public Widget
 {
 public:
     
-    Image(const sf::RenderWindow &window);
+    Image(ResourceManager *resource_manager, const sf::RenderWindow &window);
     
     
     
@@ -35,6 +37,10 @@ protected:
     
     
 private:
+    
+    ResourceManager *m_resource_manager;
+    
+    
     
     sf::Sprite m_image;
 };

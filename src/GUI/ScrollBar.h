@@ -11,6 +11,8 @@
 
 
 
+class KeyManager;
+
 class ScrollBar : public Widget
 {
 public:
@@ -28,8 +30,9 @@ public:
         Vertical
     };
     
-    ScrollBar(const sf::RenderWindow &window,
-              Theme theme, Type type, unsigned int range);
+    ScrollBar(ResourceManager *resource_manager, KeyManager *key_manager,
+            const sf::RenderWindow &window,
+            Theme theme, Type type, unsigned int range);
     
     
     
@@ -68,6 +71,10 @@ private:
     unsigned int    toSliderValue(float slider_position) const;
     
     void            addSliderValue(int value);
+    
+    
+    
+    KeyManager *m_key_manager;
     
     
     

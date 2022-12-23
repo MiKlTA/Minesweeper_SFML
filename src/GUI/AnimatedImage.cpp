@@ -1,17 +1,18 @@
 #include "AnimatedImage.h"
 
-#include "../ResourceManager.h"
+#include "../Core/ResourceManager.h"
 
 
 
 
 AnimatedImage::AnimatedImage(
+        ResourceManager *resource_manager,
         const sf::RenderWindow &window, std::string animation_name,
         sf::Vector2u frame_size, unsigned int frames_count, unsigned int row,
         float delay_sec)
     : Widget(window),
       
-      m_spritesheet(ResourceManager::getTexture(animation_name)),
+      m_spritesheet(resource_manager->getTexture(animation_name)),
       
       m_frame_size(frame_size),
       m_frames_count(frames_count),

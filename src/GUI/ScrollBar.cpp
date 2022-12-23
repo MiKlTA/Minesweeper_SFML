@@ -1,7 +1,7 @@
 #include "ScrollBar.h"
 
-#include "../ResourceManager.h"
-#include "GUIKeyManager.h"
+#include "../Core/ResourceManager.h"
+#include "../Core/KeyManager.h"
 
 
 
@@ -9,14 +9,19 @@
 
 
 
-ScrollBar::ScrollBar(const sf::RenderWindow &window, Theme theme, Type type, unsigned int range)
+ScrollBar::ScrollBar(
+        ResourceManager *resource_manager, KeyManager *key_manager,
+        const sf::RenderWindow &window,
+        Theme theme, Type type, unsigned int range)
     : Widget(window),
       
-      m_slider_default(window),
-      m_slider_hovered(window),
-      m_slider_pressed(window),
-      m_horisontal_bar(window),
-      m_vertical_bar(window),
+      m_key_manager(key_manager),
+      
+      m_slider_default(resource_manager, window),
+      m_slider_hovered(resource_manager, window),
+      m_slider_pressed(resource_manager, window),
+      m_horisontal_bar(resource_manager, window),
+      m_vertical_bar(resource_manager, window),
       
       m_type(type),
       
@@ -116,21 +121,21 @@ bool ScrollBar::isPassEvent(const sf::Event &event)
     switch (m_type)
     {
     case Type::Horisontal:
-        if (event.key.code == GUIKeyManager::key("right"))
+        if (event.key.code == m_key_manager->key("right"))
         {
             isPass = m_slider_value == m_range;
         }
-        else if (event.key.code == GUIKeyManager::key("left"))
+        else if (event.key.code == m_key_manager->key("left"))
         {
             isPass = m_slider_value == 0;
         }
         break;
     case Type::Vertical:
-        if (event.key.code == GUIKeyManager::key("down"))
+        if (event.key.code == m_key_manager->key("down"))
         {
             isPass = m_slider_value == 0;
         }
-        else if (event.key.code == GUIKeyManager::key("up"))
+        else if (event.key.code == m_key_manager->key("up"))
         {
             isPass = m_slider_value == m_range;
         }
@@ -164,7 +169,7 @@ void ScrollBar::onEvent_(const sf::Event &event)
     case State::Hovered:
         
         if (event.type == sf::Event::MouseButtonPressed
-                && event.mouseButton.button == GUIKeyManager::button("left")
+                && event.mouseButton.button == m_key_manager->button("left")
                 && isSliderContainsPoint({event.mouseButton.x, event.mouseButton.y}))
         {
             setState(State::Pressed);
@@ -187,7 +192,7 @@ void ScrollBar::onEvent_(const sf::Event &event)
     case State::Pressed:
         
         if (event.type == sf::Event::MouseButtonReleased
-                && event.mouseButton.button == GUIKeyManager::button("left"))
+                && event.mouseButton.button == m_key_manager->button("left"))
         {
             if (isSliderContainsPoint({event.mouseButton.x, event.mouseButton.y}))
             {
@@ -224,24 +229,24 @@ void ScrollBar::onEvent_(const sf::Event &event)
             switch (m_type)
             {
             case Type::Horisontal:
-                if (event.key.code == GUIKeyManager::key("right"))
+                if (event.key.code == m_key_manager->key("right"))
                 {
                     addSliderValue(1);
                     m_onValueChange(m_slider_value);
                 }
-                else if (event.key.code == GUIKeyManager::key("left"))
+                else if (event.key.code == m_key_manager->key("left"))
                 {
                     addSliderValue(-1);
                     m_onValueChange(m_slider_value);
                 }
                 break;
             case Type::Vertical:
-                if (event.key.code == GUIKeyManager::key("down"))
+                if (event.key.code == m_key_manager->key("down"))
                 {
                     addSliderValue(-1);
                     m_onValueChange(m_slider_value);
                 }
-                else if (event.key.code == GUIKeyManager::key("up"))
+                else if (event.key.code == m_key_manager->key("up"))
                 {
                     addSliderValue(1);
                     m_onValueChange(m_slider_value);

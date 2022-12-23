@@ -2,15 +2,23 @@
 
 
 
-std::string ResourceManager::m_path;
-std::map<std::string, sf::Texture*> ResourceManager::m_textures;
-std::map<std::string, sf::Font*> ResourceManager::m_fonts;
-
-
-
-void ResourceManager::init(std::string path)
+ResourceManager::ResourceManager(std::string path)
+    : m_path(path)
 {
-    m_path = path;
+    
+}
+
+ResourceManager::~ResourceManager()
+{
+    for (auto texture : m_textures)
+    {
+        delete texture.second;
+    }
+    
+    for (auto font : m_fonts)
+    {
+        delete font.second;
+    }
 }
 
 

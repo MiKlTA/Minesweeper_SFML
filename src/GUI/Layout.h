@@ -9,6 +9,8 @@
 
 
 
+class KeyManager;
+
 class Layout : public Widget
 {
 public:
@@ -21,7 +23,7 @@ public:
     
     
     
-    Layout(const sf::RenderWindow &window, Type type);
+    Layout(KeyManager *key_manager, const sf::RenderWindow &window, Type type);
     
     void setPadding(sf::Vector2f padding);
     void setMargin(float margin);
@@ -75,6 +77,10 @@ private:
     void setFocusOnPrevWidget();
     
     bool haveTargetsForFocus();
+    
+    
+    
+    KeyManager *m_key_manager;
     
     
     

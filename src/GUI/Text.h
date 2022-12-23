@@ -7,6 +7,8 @@
 
 
 
+class ResourceManager;
+
 class Text : public Widget
 {
 public:
@@ -18,7 +20,9 @@ public:
         Right
     };
     
-    Text(const sf::RenderWindow &window, Alignment alignment = Left, std::wstring text = L"");
+    Text(ResourceManager *resource_manager,
+         const sf::RenderWindow &window,
+         Alignment alignment = Left, std::wstring text = L"");
     
     
     

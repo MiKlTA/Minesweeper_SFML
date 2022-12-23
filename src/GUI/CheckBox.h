@@ -9,13 +9,16 @@
 
 
 
+class KeyManager;
+
 class CheckBox : public Widget
 {
 public:
     
     
     
-    CheckBox(const sf::RenderWindow &window);
+    CheckBox(ResourceManager *resource_manager, KeyManager *key_manager,
+             const sf::RenderWindow &window);
     
     
     
@@ -48,6 +51,10 @@ private:
     };
     
     void locateCheckmark(sf::Vector2f box_position);
+    
+    
+    
+    KeyManager *m_key_manager;
     
     
     

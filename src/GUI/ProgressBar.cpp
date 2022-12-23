@@ -1,17 +1,17 @@
 #include "ProgressBar.h"
 
-#include "../ResourceManager.h"
+#include "../Core/ResourceManager.h"
 
 #include <cmath>
 
 
 
-ProgressBar::ProgressBar(
+ProgressBar::ProgressBar(ResourceManager *resource_manager,
         const sf::RenderWindow &window, Type type,
         unsigned int elements_count, float elements_interval)
     : Widget(window),
       
-      m_bar(window),
+      m_bar(resource_manager, window),
       
       m_type(type),
       
@@ -20,7 +20,7 @@ ProgressBar::ProgressBar(
 {
     m_bar.setImage("bar");
     
-    m_progress_element.setTexture(*ResourceManager::getTexture("progress_element"));
+    m_progress_element.setTexture(*resource_manager->getTexture("progress_element"));
     
     m_padding = 16.f;
     

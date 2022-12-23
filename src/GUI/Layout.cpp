@@ -1,6 +1,6 @@
 #include "Layout.h"
 
-#include "GUIKeyManager.h"
+#include "../Core/KeyManager.h"
 
 
 
@@ -8,8 +8,10 @@ bool Layout::need_draw_border = false;
 
 
 
-Layout::Layout(const sf::RenderWindow &window, Type type)
+Layout::Layout(KeyManager *key_manager, const sf::RenderWindow &window, Type type)
     : Widget(window),
+      
+      m_key_manager(key_manager),
       
       m_focused_widget(m_contains.end()),
       
@@ -75,11 +77,11 @@ bool Layout::isPassEvent(const sf::Event &event)
     {
         if (m_type == Type::Horizontal)
         {
-            if (event.key.code == GUIKeyManager::key("right"))
+            if (event.key.code == m_key_manager->key("right"))
             {
                 isPass = m_focused_widget == getPrevFocusableWidget(m_contains.end());
             }
-            else if (event.key.code == GUIKeyManager::key("left"))
+            else if (event.key.code == m_key_manager->key("left"))
             {
                 isPass = m_focused_widget == m_contains.begin();
                 if (!(*m_contains.begin())->canBeFocused())
@@ -90,11 +92,11 @@ bool Layout::isPassEvent(const sf::Event &event)
         }
         else // m_type == Type::Vertical
         {
-            if (event.key.code == GUIKeyManager::key("down"))
+            if (event.key.code == m_key_manager->key("down"))
             {
                 isPass = m_focused_widget == getPrevFocusableWidget(m_contains.end());
             }
-            else if (event.key.code == GUIKeyManager::key("up"))
+            else if (event.key.code == m_key_manager->key("up"))
             {
                 isPass = m_focused_widget == m_contains.begin();
                 if (!(*m_contains.begin())->canBeFocused())
@@ -131,12 +133,12 @@ void Layout::onEvent_(const sf::Event &event)
         {
             if (m_type == Type::Horizontal)
             {
-                if (event.key.code == GUIKeyManager::key("right"))
+                if (event.key.code == m_key_manager->key("right"))
                 {
                     setFocusOnNextWidget();
                     canIPassEvent = false;
                 }
-                else if (event.key.code == GUIKeyManager::key("left"))
+                else if (event.key.code == m_key_manager->key("left"))
                 {
                     setFocusOnPrevWidget();
                     canIPassEvent = false;
@@ -144,12 +146,12 @@ void Layout::onEvent_(const sf::Event &event)
             }
             else // m_type == Type::Vertical
             {
-                if (event.key.code == GUIKeyManager::key("down"))
+                if (event.key.code == m_key_manager->key("down"))
                 {
                     setFocusOnNextWidget();
                     canIPassEvent = false;
                 }
-                else if (event.key.code == GUIKeyManager::key("up"))
+                else if (event.key.code == m_key_manager->key("up"))
                 {
                     setFocusOnPrevWidget();
                     canIPassEvent = false;

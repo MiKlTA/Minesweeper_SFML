@@ -10,7 +10,7 @@
 
 
 
-class GUIKeyManager
+class KeyManager
 {
 public:
     
@@ -22,20 +22,24 @@ public:
     
     
     
-    static void attachKey(std::string name, Key key);
-    static void attachButton(std::string name, Button button);
+    KeyManager();
     
     
     
-    static Key key(std::string name);
-    static Button button(std::string name);
+    void attachKey(std::string name, Key key);
+    void attachButton(std::string name, Button button);
+    
+    
+    
+    Key key(std::string name);
+    Button button(std::string name);
     
     
     
 private:
     
-    static KeysContainer    m_attached_keys;
-    static ButtonsContainer m_attached_buttons;
+    KeysContainer    m_attached_keys;
+    ButtonsContainer m_attached_buttons;
 };
 
 

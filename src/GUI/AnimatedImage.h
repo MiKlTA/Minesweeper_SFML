@@ -7,11 +7,14 @@
 
 
 
+class ResourceManager;
+
 class AnimatedImage : public Widget
 {
 public:
     
-    AnimatedImage(const sf::RenderWindow &window, std::string animation_name,
+    AnimatedImage(ResourceManager *resource_manager,
+                  const sf::RenderWindow &window, std::string animation_name,
                   sf::Vector2u frame_size, unsigned int frames_count, unsigned int row,
                   float delay_sec);
     
