@@ -31,8 +31,8 @@ public:
     
     
     
-    Key key(std::string name);
-    Button button(std::string name);
+    Key key(std::string name) const;
+    Button button(std::string name) const;
     
     
     

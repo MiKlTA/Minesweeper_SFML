@@ -13,7 +13,7 @@ class Config
 {
 public:
     
-    virtual sf::Vector2u windowSize() {return {1280, 720};}
+    virtual sf::Vector2u windowSize() {return {640, 360};}
     virtual sf::Vector2f viewSize() {return {640.f, 360.f};}
     virtual std::string windowName() {return "Minesweeper";}
     

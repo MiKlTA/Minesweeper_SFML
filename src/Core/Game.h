@@ -24,7 +24,18 @@ public:
     
     
     
+    sf::Vector2f getViewSize() const;
+    
+    
+    
+    ResourceManager * getResourceManager();
+    KeyManager * getKeyManager();
+    const sf::RenderWindow * getWindow();
+    
+    
+    
     void run();
+    void quit();
     
     
     
@@ -33,6 +44,7 @@ private:
     Config             *m_config;
     Core               *m_core;
     ResourceManager    *m_resource_manager;
+    KeyManager         *m_key_manager;
     
     sf::RenderWindow   *m_window;
     sf::Clock           m_clock;

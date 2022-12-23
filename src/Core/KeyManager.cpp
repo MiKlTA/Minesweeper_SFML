@@ -38,7 +38,7 @@ void KeyManager::attachButton(std::string name, Button button)
 
 
 
-KeyManager::Key KeyManager::key(std::string name)
+KeyManager::Key KeyManager::key(std::string name) const
 {
     auto iter = m_attached_keys.find(name);
     if (iter != m_attached_keys.end())
@@ -48,7 +48,7 @@ KeyManager::Key KeyManager::key(std::string name)
     return static_cast<KeyManager::Key>(-1);
 }
 
-KeyManager::Button KeyManager::button(std::string name)
+KeyManager::Button KeyManager::button(std::string name) const
 {
     auto iter = m_attached_buttons.find(name);
     if (iter != m_attached_buttons.end())

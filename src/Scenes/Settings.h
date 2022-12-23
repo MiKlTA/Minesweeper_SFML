@@ -1,20 +1,18 @@
-#ifndef H_MAIN_MENU
-#define H_MAIN_MENU
+#ifndef H_SETTINGS
+#define H_SETTINGS
 
 
 
+#include "../Core/Core.h"
 #include "../Core/Game.h"
 
-#include "../GUI/Button.h"
-#include "../GUI/Image.h"
 
 
-
-class MainMenu : public Scene
+class Settings : public Scene
 {
 public:
     
-    MainMenu(Core *core, Game *game);
+    Settings(Core *core, Game *game);
     
     
     
@@ -32,15 +30,8 @@ public:
     
 private:
     
-    Image *m_background;
-    
-    Button *m_continue_game;
-    Button *m_new_game;
-    Button *m_settings;
-    Button *m_exit;
-    
 };
 
 
 
-#endif // H_MAIN_MENU
+#endif // H_SETTINGS

@@ -29,19 +29,20 @@ public:
     
     enum Theme
     {
-        Blue,
-        Red
+        Default
     };
     
     
     
     Button(ResourceManager *resource_manager, KeyManager *key_manager,
             const sf::RenderWindow &window,
-            Theme theme, std::wstring text, CallbackType callback);
+            Theme theme, std::wstring text);
     
     
     
     void setCharacterSize(unsigned int character_size);
+    
+    void setCallback(CallbackType callback);
     
     
     

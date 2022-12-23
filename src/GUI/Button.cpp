@@ -7,13 +7,12 @@
 
 Button::Button(ResourceManager *resource_manager, KeyManager *key_manager,
                const sf::RenderWindow &window,
-               Theme theme, std::wstring text, CallbackType callback)
+               Theme theme, std::wstring text)
     : Widget(window),
       
       m_key_manager(key_manager),
       
       m_text(resource_manager, window, Text::Alignment::Centre, text),
-      m_callback(callback),
       
       m_button_default(resource_manager, window),
       m_button_hovered(resource_manager, window),
@@ -21,15 +20,10 @@ Button::Button(ResourceManager *resource_manager, KeyManager *key_manager,
 {
     switch (theme)
     {
-    case Theme::Blue:
-        m_button_default.setImage("blue_button_default");
-        m_button_hovered.setImage("blue_button_hovered");
-        m_button_pressed.setImage("blue_button_pressed");
-        break;
-    case Theme::Red:
-        m_button_default.setImage("red_button_default");
-        m_button_hovered.setImage("red_button_hovered");
-        m_button_pressed.setImage("red_button_pressed");
+    case Theme::Default:
+        m_button_default.setImage("button_default");
+        m_button_hovered.setImage("button_hovered");
+        m_button_pressed.setImage("button_pressed");
         break;
     }
     m_text_padding = {0.f, 8.f};
@@ -50,6 +44,11 @@ void Button::setCharacterSize(unsigned int character_size)
 {
     m_text.setCharacterSize(character_size);
     locateText(getState(), getPosition());
+}
+
+void Button::setCallback(CallbackType callback)
+{
+    m_callback = callback;
 }
 
 

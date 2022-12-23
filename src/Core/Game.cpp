@@ -1,14 +1,17 @@
 #include "Game.h"
 
 #include "../Scenes/MainMenu.h"
-#include "../Scenes/Scene1.h"
+#include "../Scenes/Settings.h"
+#include "../Scenes/GameScene.h"
 
 
 
-Game::Game(Config *config, Core *core, ResourceManager *resource_manager, KeyManager *key_manager)
+Game::Game(Config *config, Core *core,
+           ResourceManager *resource_manager, KeyManager *key_manager)
     : m_config(config),
       m_core(core),
-      m_resource_manager(resource_manager)
+      m_resource_manager(resource_manager),
+      m_key_manager(key_manager)
 {
     m_window = new sf::RenderWindow(
                 sf::VideoMode(m_config->windowSize().x, m_config->windowSize().y),
@@ -18,14 +21,39 @@ Game::Game(Config *config, Core *core, ResourceManager *resource_manager, KeyMan
     m_window->setPosition({0, 0});
     m_window->setView(sf::View(m_config->viewSize() / 2.f, m_config->viewSize()));
     
-    m_core->addScene("MainMenu", new MainMenu(core, resource_manager, key_manager, m_window));
-    m_core->addScene("Scene1", new Scene1(core, resource_manager, key_manager, m_window));
+    m_core->addScene("MainMenu", new MainMenu(core, this));
+    m_core->addScene("Settings", new Settings(core, this));
+    m_core->addScene("GameScene", new GameScene(core, this));
     m_core->setScene("MainMenu");
 }
 
 Game::~Game()
 {
     delete m_window;
+}
+
+
+
+sf::Vector2f Game::getViewSize() const
+{
+    return m_window->getView().getSize();
+}
+
+
+
+ResourceManager * Game::getResourceManager()
+{
+    return m_resource_manager;
+}
+
+KeyManager *Game::getKeyManager()
+{
+    return m_key_manager;
+}
+
+const sf::RenderWindow * Game::getWindow()
+{
+    return m_window;
 }
 
 
@@ -63,4 +91,9 @@ void Game::run()
         m_window->display();
         prev_time = m_clock.getElapsedTime().asSeconds();
     }
+}
+
+void Game::quit()
+{
+    m_window->close();
 }

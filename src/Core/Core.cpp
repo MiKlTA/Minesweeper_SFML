@@ -49,8 +49,8 @@ Scene * Core::goBack()
     }
     else
     {
-        m_current_scene = m_scenes_buffer.back();
         m_scenes_buffer.pop_back();
+        m_current_scene = m_scenes_buffer.back();
         return m_current_scene;
     }
 }
