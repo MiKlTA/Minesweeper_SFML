@@ -14,6 +14,8 @@ Button::Button(ResourceManager *resource_manager, KeyManager *key_manager,
       
       m_text(resource_manager, window, Text::Alignment::Centre, text),
       
+      m_callback([](){}),
+      
       m_button_default(resource_manager, window),
       m_button_hovered(resource_manager, window),
       m_button_pressed(resource_manager, window)
@@ -26,7 +28,7 @@ Button::Button(ResourceManager *resource_manager, KeyManager *key_manager,
         m_button_pressed.setImage("button_pressed");
         break;
     }
-    m_text_padding = {0.f, 8.f};
+    m_text_padding = {0.f, -2.f};
     
     m_sagging = float(m_button_default.getSize().y) - m_button_pressed.getSize().y;
     
@@ -35,7 +37,7 @@ Button::Button(ResourceManager *resource_manager, KeyManager *key_manager,
     setSize(sf::Vector2f(m_button_default.getSize()));
     
     m_text.setColor(sf::Color(150, 40, 10));
-    locateText(getState(), getPosition());
+    locateText(getState(), getSize(), getPosition());
 }
 
 
@@ -43,7 +45,7 @@ Button::Button(ResourceManager *resource_manager, KeyManager *key_manager,
 void Button::setCharacterSize(unsigned int character_size)
 {
     m_text.setCharacterSize(character_size);
-    locateText(getState(), getPosition());
+    locateText(getState(), getSize(), getPosition());
 }
 
 void Button::setCallback(CallbackType callback)
@@ -154,7 +156,7 @@ void Button::onEvent_(const sf::Event &event)
 
 void Button::onPositionChange(sf::Vector2f new_position)
 {
-    locateText(getState(), new_position);
+    locateText(getState(), getSize(), new_position);
 }
 
 void Button::onSizeChange(sf::Vector2f new_size)
@@ -174,14 +176,14 @@ void Button::onSizeChange(sf::Vector2f new_size)
         m_text_padding.y *= k.y;
         
         m_text.scale(k);
+        
+        locateText(getState(), new_size, getPosition());
     }
-    
-    locateText(getState(), getPosition());
 }
 
 void Button::onStateChange(State new_state)
 {
-    locateText(new_state, getPosition());
+    locateText(new_state, getSize(), getPosition());
 }
 
 
@@ -190,10 +192,11 @@ void Button::onStateChange(State new_state)
 
 
 
-void Button::locateText(State new_state, sf::Vector2f position)
+void Button::locateText(State new_state, sf::Vector2f new_size, sf::Vector2f new_position)
 {
-    sf::Vector2f text_position(position + m_text_padding);
-    text_position.x += getSize().x / 2.f;
+    sf::Vector2f text_position(new_position + m_text_padding);
+    text_position.x += new_size.x / 2.f;
+    text_position.y += new_size.y / 2.f - m_text.getSize().y / 2.f;
     
     if (new_state == State::Pressed)
     {

@@ -73,7 +73,7 @@ private:
     
     
     
-    void locateText(State new_state, sf::Vector2f position);
+    void locateText(State new_state, sf::Vector2f new_size, sf::Vector2f new_position);
     
     
     

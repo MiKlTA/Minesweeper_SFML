@@ -96,7 +96,7 @@ void Text::computeTextPosition(sf::Vector2f new_position)
     computeSize();
     
     sf::Vector2f position(new_position);
-    position.y -= getSize().y / 2.f;
+    position.y -= getSize().y;
     
     switch (m_alignment)
     {
@@ -115,7 +115,7 @@ void Text::computeTextPosition(sf::Vector2f new_position)
 
 void Text::computeSize()
 {
-    sf::Vector2f size(m_text.getLocalBounds().width, m_text.getCharacterSize() / 2);
+    sf::Vector2f size(m_text.getLocalBounds().width, m_text.getCharacterSize() / 2.f);
     
     setSize(size);
 }
