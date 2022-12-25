@@ -36,10 +36,6 @@ public:
     
     
     
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-    
-    
-    
     bool canBeFocused() const override;
     
     
@@ -48,6 +44,10 @@ protected:
     
     void onSizeChange(sf::Vector2f new_size) override;
     void onPositionChange(sf::Vector2f new_position) override;
+    
+    
+    
+    void draw_(sf::RenderTarget &target, sf::RenderStates states) const override;
     
     
     

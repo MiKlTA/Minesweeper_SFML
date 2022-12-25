@@ -30,6 +30,7 @@ public:
     void move(sf::Vector2f delta);
     
     void setState(State state);
+    void setHide(bool hidden);
     
     void setSize(sf::Vector2f size);
     void scale(sf::Vector2f scale);
@@ -41,6 +42,7 @@ public:
     sf::Vector2f getPosition() const;
     
     State getState() const;
+    bool isHidden() const;
     
     sf::Vector2f getSize() const;
     
@@ -52,6 +54,10 @@ public:
     
     virtual bool canBeFocused() const = 0;
     virtual bool isPassEvent(const sf::Event &event);
+    
+    
+    
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override; 
     
     
     
@@ -69,6 +75,10 @@ protected:
     
     
     
+    virtual void draw_(sf::RenderTarget &target, sf::RenderStates states) const = 0; 
+    
+    
+    
 private:
     
     void updateTransform();
@@ -77,7 +87,8 @@ private:
     
     const sf::RenderWindow &m_window;
     
-    State m_state;
+    State   m_state;
+    bool    m_is_hidden;
     
     sf::Vector2f m_position;
     sf::Vector2f m_size;

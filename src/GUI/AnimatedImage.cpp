@@ -52,17 +52,6 @@ void AnimatedImage::setRepeatAnimation(bool need_repeat)
 
 
 
-void AnimatedImage::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    sf::IntRect rectangle = calcTextureRect();
-    sf::Sprite frame(*m_spritesheet, rectangle);
-    
-    states.transform *= getTransform();
-    target.draw(frame, states);
-}
-
-
-
 bool AnimatedImage::canBeFocused() const
 {
     return false;
@@ -76,7 +65,18 @@ bool AnimatedImage::canBeFocused() const
 
 void AnimatedImage::onSizeChange(sf::Vector2f new_size)
 {
-    // !!!
+    // TODO: ...
+}
+
+
+
+void AnimatedImage::draw_(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    sf::IntRect rectangle = calcTextureRect();
+    sf::Sprite frame(*m_spritesheet, rectangle);
+    
+    states.transform *= getTransform();
+    target.draw(frame, states);
 }
 
 

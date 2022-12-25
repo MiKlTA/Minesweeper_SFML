@@ -54,27 +54,6 @@ std::wstring InputField::getText() const
 
 
 
-void InputField::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    states.transform *= getTransform();
-    
-    switch (getState())
-    {
-    case State::Default:
-    case State::Hovered:
-        target.draw(m_field_default, states);
-        break;
-    case State::Focused:
-    case State::Pressed:
-        target.draw(m_field_active, states);
-        break;
-    }
-    
-    target.draw(m_text);
-}
-
-
-
 bool InputField::canBeFocused() const
 {
     return true;
@@ -155,6 +134,27 @@ void InputField::onSizeChange(sf::Vector2f new_size)
 void InputField::onPositionChange(sf::Vector2f new_position)
 {
     recalcTextPosition(new_position);
+}
+
+
+
+void InputField::draw_(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    states.transform *= getTransform();
+    
+    switch (getState())
+    {
+    case State::Default:
+    case State::Hovered:
+        target.draw(m_field_default, states);
+        break;
+    case State::Focused:
+    case State::Pressed:
+        target.draw(m_field_active, states);
+        break;
+    }
+    
+    target.draw(m_text);
 }
 
 

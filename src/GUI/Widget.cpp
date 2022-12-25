@@ -5,7 +5,8 @@
 Widget::Widget(const sf::RenderWindow &window)
     : m_window(window),
       
-      m_state(Default)
+      m_state(Default),
+      m_is_hidden(false)
 {
     
 }
@@ -38,6 +39,13 @@ void Widget::setState(State state)
     m_state = state;
 }
 
+void Widget::setHide(bool hidden)
+{
+    m_is_hidden = hidden;
+}
+
+
+
 void Widget::setSize(sf::Vector2f size)
 {
     onSizeChange(size);
@@ -69,6 +77,11 @@ Widget::State Widget::getState() const
     return m_state;
 }
 
+bool Widget::isHidden() const
+{
+    return m_is_hidden;
+}
+
 sf::Vector2f Widget::getSize() const
 {
     return m_size;
@@ -78,7 +91,10 @@ void Widget::onEvent(const sf::Event &event)
 {
     // ...
     
-    onEvent_(event);
+    if (!m_is_hidden)
+    {
+        onEvent_(event);
+    }
 }
 
 
@@ -86,6 +102,16 @@ void Widget::onEvent(const sf::Event &event)
 bool Widget::isPassEvent(const sf::Event &event)
 {
     return true;
+}
+
+
+
+void Widget::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    if (!m_is_hidden)
+    {
+        draw_(target, states);
+    }
 }
 
 

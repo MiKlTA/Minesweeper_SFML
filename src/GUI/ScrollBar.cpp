@@ -78,37 +78,6 @@ unsigned int ScrollBar::getRange() const
 
 
 
-void ScrollBar::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    states.transform *= getTransform();
-    if (m_type == Type::Horisontal)
-    {
-        target.draw(m_horisontal_bar, states);
-    }
-    else // m_type == Type::Vertical
-    {
-        target.draw(m_vertical_bar, states);
-    }
-    
-    states.transform.translate(getSliderRelativePosition());
-    
-    switch (getState())
-    {
-    case State::Default:
-        target.draw(m_slider_default, states);
-        break;
-    case State::Hovered:
-    case State::Focused:
-        target.draw(m_slider_hovered, states);
-        break;
-    case State::Pressed:
-        target.draw(m_slider_pressed, states);
-        break;
-    }
-}
-
-
-
 bool ScrollBar::canBeFocused() const
 {
     return true;
@@ -149,7 +118,7 @@ bool ScrollBar::isPassEvent(const sf::Event &event)
 // protected:
 
 
-#include <iostream>
+
 void ScrollBar::onEvent_(const sf::Event &event)
 {
     switch (getState())
@@ -256,6 +225,37 @@ void ScrollBar::onEvent_(const sf::Event &event)
             
         }
         
+        break;
+    }
+}
+
+
+
+void ScrollBar::draw_(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    states.transform *= getTransform();
+    if (m_type == Type::Horisontal)
+    {
+        target.draw(m_horisontal_bar, states);
+    }
+    else // m_type == Type::Vertical
+    {
+        target.draw(m_vertical_bar, states);
+    }
+    
+    states.transform.translate(getSliderRelativePosition());
+    
+    switch (getState())
+    {
+    case State::Default:
+        target.draw(m_slider_default, states);
+        break;
+    case State::Hovered:
+    case State::Focused:
+        target.draw(m_slider_hovered, states);
+        break;
+    case State::Pressed:
+        target.draw(m_slider_pressed, states);
         break;
     }
 }

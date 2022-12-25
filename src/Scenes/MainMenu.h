@@ -3,8 +3,11 @@
 
 
 
+#include "../PopupGameSettings.h"
+
 #include "../Core/Game.h"
 
+#include "../GUI/Layout.h"
 #include "../GUI/Button.h"
 #include "../GUI/Image.h"
 
@@ -32,12 +35,25 @@ public:
     
 private:
     
+    static void configureButton(Button *button);
+    
+    
+    
+    Layout *m_layout;
+    
     Image *m_background;
     
     Button *m_continue_game;
     Button *m_new_game;
     Button *m_settings;
     Button *m_exit;
+    
+    
+    
+    Button *m_go_back;
+    Button *m_start_game;
+    
+    PopupGameSettings *m_game_settings;
     
 };
 

@@ -49,10 +49,6 @@ public:
     
     
     
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-    
-    
-    
     bool canBeFocused() const override;
     bool isPassEvent(const sf::Event &event) override;
     
@@ -61,6 +57,10 @@ public:
 protected:
     
     void onEvent_(const sf::Event &event) override;
+    
+    
+    
+    void draw_(sf::RenderTarget &target, sf::RenderStates states) const override;
     
     
     

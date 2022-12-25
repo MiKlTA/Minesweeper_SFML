@@ -28,14 +28,6 @@ void Image::setRectangle(const sf::IntRect &rectangle)
 
 
 
-void Image::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    states.transform *= getTransform();
-    target.draw(m_image, states);
-}
-
-
-
 bool Image::canBeFocused() const
 {
     return false;
@@ -53,4 +45,12 @@ void Image::onSizeChange(sf::Vector2f new_size)
     {
         m_image.scale(new_size.x / getSize().x, new_size.y / getSize().y);
     }
+}
+
+
+
+void Image::draw_(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    states.transform *= getTransform();
+    target.draw(m_image, states);
 }

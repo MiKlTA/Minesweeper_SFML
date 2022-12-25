@@ -49,22 +49,6 @@ void Layout::addWidget(Widget *widget)
 
 
 
-void Layout::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    states.transform *= m_transform;
-    for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
-    {
-        target.draw(**widget_iter, states);
-    }
-    
-    if (need_draw_border)
-    {
-        target.draw(m_border, states);
-    }
-}
-
-
-
 bool Layout::canBeFocused() const
 {
     return true;
@@ -209,6 +193,22 @@ void Layout::onStateChange(State new_state)
         {
             (*m_focused_widget)->setState(State::Default);
         }
+    }
+}
+
+
+
+void Layout::draw_(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    states.transform *= m_transform;
+    for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
+    {
+        target.draw(**widget_iter, states);
+    }
+    
+    if (need_draw_border)
+    {
+        target.draw(m_border, states);
     }
 }
 

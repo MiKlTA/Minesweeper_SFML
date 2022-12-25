@@ -18,6 +18,7 @@ Game::Game(Config *config, Core *core,
                 m_config->windowName(),
                 sf::Style::Default
                 );
+    m_window->setVerticalSyncEnabled(true);
     m_window->setPosition({0, 0});
     m_window->setView(sf::View(m_config->viewSize() / 2.f, m_config->viewSize()));
     
@@ -96,4 +97,12 @@ void Game::run()
 void Game::quit()
 {
     m_window->close();
+}
+
+
+
+
+void Game::goToCentre(Widget *widget) const
+{
+    widget->setPosition(getViewSize() / 2.f - widget->getSize() / 2.f);
 }

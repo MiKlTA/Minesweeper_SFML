@@ -65,17 +65,20 @@ std::wstring Text::getString() const
 
 
 
-
-void Text::draw(sf::RenderTarget &target, sf::RenderStates states) const
+bool Text::canBeFocused() const
 {
-    target.draw(m_text, states);
+    return false;
 }
 
 
 
-bool Text::canBeFocused() const
+// protected:
+
+
+
+void Text::draw_(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    return false;
+    target.draw(m_text, states);
 }
 
 

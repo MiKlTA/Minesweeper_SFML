@@ -31,20 +31,6 @@ bool CheckBox::isChecked() const
 
 
 
-
-void CheckBox::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    states.transform *= getTransform();
-    target.draw(m_box, states);
-    
-    if (m_is_checked)
-    {
-        target.draw(m_checkmark);
-    }
-}
-
-
-
 bool CheckBox::canBeFocused() const
 {
     return true;
@@ -137,6 +123,19 @@ void CheckBox::onSizeChange(sf::Vector2f new_size)
         m_checkmark.scale(k);
     }
     locateCheckmark(getPosition());
+}
+
+
+
+void CheckBox::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    states.transform *= getTransform();
+    target.draw(m_box, states);
+    
+    if (m_is_checked)
+    {
+        target.draw(m_checkmark);
+    }
 }
 
 

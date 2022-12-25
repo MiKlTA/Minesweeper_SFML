@@ -36,7 +36,30 @@ void ProgressBar::setProgressValue(float value)
 
 
 
-void ProgressBar::draw(sf::RenderTarget &target, sf::RenderStates states) const
+bool ProgressBar::canBeFocused() const
+{
+    return false;
+}
+
+
+
+// protected:
+
+
+
+void ProgressBar::onSizeChange(sf::Vector2f new_size)
+{
+    recalcProgressElementSize(new_size);
+}
+
+void ProgressBar::onPositionChange(sf::Vector2f new_position)
+{
+    m_bar.setPosition(new_position);
+}
+
+
+
+void ProgressBar::draw_(sf::RenderTarget &target, sf::RenderStates states) const
 {
     const sf::Vector2f element_size(m_progress_element.getGlobalBounds().width,
                                     m_progress_element.getGlobalBounds().height);
@@ -66,29 +89,6 @@ void ProgressBar::draw(sf::RenderTarget &target, sf::RenderStates states) const
         }
         break;
     }
-}
-
-
-
-bool ProgressBar::canBeFocused() const
-{
-    return false;
-}
-
-
-
-// protected:
-
-
-
-void ProgressBar::onSizeChange(sf::Vector2f new_size)
-{
-    recalcProgressElementSize(new_size);
-}
-
-void ProgressBar::onPositionChange(sf::Vector2f new_position)
-{
-    m_bar.setPosition(new_position);
 }
 
 

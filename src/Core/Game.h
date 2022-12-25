@@ -3,6 +3,8 @@
 
 
 
+#include "../GUI/Widget.h"
+
 #include "Config.h"
 #include "Core.h"
 #include "ResourceManager.h"
@@ -36,6 +38,10 @@ public:
     
     void run();
     void quit();
+    
+    
+    
+    void goToCentre(Widget *widget) const;
     
     
     

@@ -55,29 +55,6 @@ void Button::setCallback(CallbackType callback)
 
 
 
-void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    states.transform *= getTransform();
-    switch (getState())
-    {
-    case Widget::Default:
-        target.draw(m_button_default, states);
-        break;
-    case Widget::Hovered:
-    case Widget::Focused:
-        target.draw(m_button_hovered, states);
-        break;
-    case Widget::Pressed:
-        states.transform.translate(0, m_sagging);
-        target.draw(m_button_pressed, states);
-        break;
-    }
-    
-    target.draw(m_text);
-}
-
-
-
 bool Button::canBeFocused() const
 {
     return true;
@@ -184,6 +161,29 @@ void Button::onSizeChange(sf::Vector2f new_size)
 void Button::onStateChange(State new_state)
 {
     locateText(new_state, getSize(), getPosition());
+}
+
+
+
+void Button::draw_(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    states.transform *= getTransform();
+    switch (getState())
+    {
+    case Widget::Default:
+        target.draw(m_button_default, states);
+        break;
+    case Widget::Hovered:
+    case Widget::Focused:
+        target.draw(m_button_hovered, states);
+        break;
+    case Widget::Pressed:
+        states.transform.translate(0, m_sagging);
+        target.draw(m_button_pressed, states);
+        break;
+    }
+    
+    target.draw(m_text);
 }
 
 
