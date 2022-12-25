@@ -19,13 +19,8 @@ class KeyManager;
 
 class Button : public Widget
 {
-private:
-    
-    using CallbackType = std::function<void(void)>;
-    
-    
-    
 public:
+    using CallbackType = std::function<void(void)>;
     
     enum Theme
     {
