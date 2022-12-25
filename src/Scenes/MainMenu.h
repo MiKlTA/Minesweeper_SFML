@@ -10,6 +10,7 @@
 #include "../GUI/Layout.h"
 #include "../GUI/Button.h"
 #include "../GUI/Image.h"
+#include "../GUI/PopupYouSure.h"
 
 
 
@@ -50,10 +51,8 @@ private:
     
     
     
-    Button *m_go_back;
-    Button *m_start_game;
-    
-    PopupGameSettings *m_game_settings;
+    PopupYouSure *m_popup_im_sure;
+    PopupGameSettings *m_popup_game_settings;
     
 };
 

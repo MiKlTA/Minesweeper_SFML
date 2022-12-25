@@ -21,11 +21,27 @@ public:
         Vertical
     };
     
+    enum Alignment
+    {
+        Left,
+        Centre,
+        Right
+    };
+    
+    struct PaddingType
+    {
+        float left;
+        float top;
+        float right;
+        float bottom;
+    };
     
     
-    Layout(KeyManager *key_manager, const sf::RenderWindow &window, Type type);
     
-    void setPadding(sf::Vector2f padding);
+    Layout(KeyManager *key_manager, const sf::RenderWindow &window,
+           Type type, Alignment alignment);
+    
+    void setPadding(PaddingType padding);
     void setMargin(float margin);
     
     
@@ -60,13 +76,14 @@ private:
     
     using ListIterator = std::list<Widget *>::iterator;
     
-    sf::Vector2f padding() const; // Spacing inside widgets
+    PaddingType padding() const; // Spacing inside widgets
     float margin() const; // Spacing between widgets
     
     
     
+    
     void addLayoutSizeBy(Widget *widget);
-    void calcPositionWidget(Widget *widget);
+    void recalcWidgetsPositions();
     
     
     
@@ -92,7 +109,8 @@ private:
     ListIterator        m_focused_widget;
     
     Type            m_type;
-    sf::Vector2f    m_padding;
+    Alignment       m_alignment;
+    PaddingType     m_padding;
     float           m_margin;
 };
 

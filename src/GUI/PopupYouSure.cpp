@@ -14,7 +14,7 @@ PopupYouSure::PopupYouSure(ResourceManager *resource_manager, KeyManager *key_ma
       m_background(resource_manager, window),
       
       m_title(resource_manager, window,
-             Text::Alignment::Centre, L"Are you sure?"),
+             Text::Alignment::Left, L"Are you sure?"),
       
       m_go_back(resource_manager, key_manager, window,
                 Button::Theme::Default, L"Back"),
@@ -28,11 +28,8 @@ PopupYouSure::PopupYouSure(ResourceManager *resource_manager, KeyManager *key_ma
     m_layout_vertical.addWidget(&m_layout_horisontal);
     
     m_go_back.setCallback([this](){
-        this->setHide(!this->isHidden());
+        this->setHide(true);
     });
-    
-    
-    
     
     m_background.setImage("popup_you_sure");
     m_background.setSize(m_layout_vertical.getSize());
@@ -41,11 +38,6 @@ PopupYouSure::PopupYouSure(ResourceManager *resource_manager, KeyManager *key_ma
 }
 
 
-
-void PopupYouSure::setGoBackCallback(Button::CallbackType callback_back)
-{
-    m_go_back.setCallback(callback_back);
-}
 
 void PopupYouSure::setImSureCallback(Button::CallbackType callback_Im_sure)
 {

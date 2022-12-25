@@ -8,7 +8,8 @@ bool Layout::need_draw_border = false;
 
 
 
-Layout::Layout(KeyManager *key_manager, const sf::RenderWindow &window, Type type)
+Layout::Layout(KeyManager *key_manager, const sf::RenderWindow &window,
+               Type type, Alignment alignment)
     : Widget(window),
       
       m_key_manager(key_manager),
@@ -16,7 +17,8 @@ Layout::Layout(KeyManager *key_manager, const sf::RenderWindow &window, Type typ
       m_focused_widget(m_contains.end()),
       
       m_type(type),
-      m_padding(20.f, 20.f),
+      m_alignment(alignment),
+      m_padding({20.f, 20.f, 20.f, 20.f}),
       m_margin(50.f)
 {
     m_border.setFillColor(sf::Color::Transparent);
@@ -26,7 +28,7 @@ Layout::Layout(KeyManager *key_manager, const sf::RenderWindow &window, Type typ
 
 
 
-void Layout::setPadding(sf::Vector2f padding)
+void Layout::setPadding(PaddingType padding)
 {
     m_padding = padding;
 }
@@ -40,11 +42,11 @@ void Layout::setMargin(float margin)
 
 void Layout::addWidget(Widget *widget)
 {
-    calcPositionWidget(widget);
-    
     addLayoutSizeBy(widget);
     
     m_contains.push_back(widget);
+    
+    recalcWidgetsPositions();
 }
 
 
@@ -218,7 +220,7 @@ void Layout::draw_(sf::RenderTarget &target, sf::RenderStates states) const
 
 
 
-sf::Vector2f Layout::padding() const
+Layout::PaddingType Layout::padding() const
 {
     return m_padding;
 }
@@ -234,7 +236,8 @@ void Layout::addLayoutSizeBy(Widget *widget)
 {
     if (m_contains.empty())
     {
-        setSize(2.f*padding());
+        setSize({padding().left + padding().right,
+                padding().top + padding().bottom});
     }
     
     float new_width;
@@ -247,11 +250,13 @@ void Layout::addLayoutSizeBy(Widget *widget)
         {
             new_width += margin();
         }
-        new_height = std::max(getSize().y, widget->getSize().y + 2.f*padding().y);
+        new_height = std::max(getSize().y,
+                              widget->getSize().y + padding().top + padding().bottom);
     }
     else // m_type == Type::Vertical
     {
-        new_width = std::max(getSize().x, widget->getSize().x + 2.f*padding().x);
+        new_width = std::max(getSize().x,
+                             widget->getSize().x + padding().left + padding().right);
         new_height = getSize().y + widget->getSize().y;
         if (!m_contains.empty())
         {
@@ -262,25 +267,39 @@ void Layout::addLayoutSizeBy(Widget *widget)
     setSize({new_width, new_height});
 }
 
-void Layout::calcPositionWidget(Widget *widget)
+void Layout::recalcWidgetsPositions()
 {
-    if (m_contains.empty())
+    float max_widget_size;
+    sf::Vector2f prev_widget_position(getPosition());
+    prev_widget_position += {padding().left, padding().top};
+    sf::Vector2f prev_widget_size(0.f, 0.f);
+    if (m_type == Type::Horizontal)
     {
-        widget->move(getPosition() + padding());
+        max_widget_size = getSize().y - padding().top - padding().bottom;
+        for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
+        {
+            Widget *widget = *widget_iter;
+            widget->setPosition({prev_widget_position.x + prev_widget_size.x,
+                                getPosition().y + padding().top
+                                 + (max_widget_size - widget->getSize().y) / 2.f});
+            prev_widget_position = widget->getPosition();
+            prev_widget_position.x += margin();
+            prev_widget_size = widget->getSize();
+        }
     }
-    else
+    else // m_type == Type::Vertical
     {
-        Widget *prev_widget = *std::prev(m_contains.end());
-        sf::Vector2f shift;
-        if (m_type == Type::Horizontal)
+        max_widget_size = getSize().x - padding().left - padding().right;
+        for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
         {
-            shift = sf::Vector2f(prev_widget->getSize().x + margin(), 0.f);
+            Widget *widget = *widget_iter;
+            widget->setPosition({getPosition().x + padding().left
+                                 + (max_widget_size - widget->getSize().x) / 2.f,
+                                 prev_widget_position.y + prev_widget_size.y});
+            prev_widget_position = widget->getPosition();
+            prev_widget_position.y += margin();
+            prev_widget_size = widget->getSize();
         }
-        else // m_type == Type::Vertical
-        {
-            shift = sf::Vector2f(0.f, prev_widget->getSize().y + margin());
-        }
-        widget->setPosition(prev_widget->getPosition() + shift);
     }
 }
 

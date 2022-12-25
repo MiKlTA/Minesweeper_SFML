@@ -22,7 +22,6 @@ public:
     
     
     
-    void setGoBackCallback(Button::CallbackType callback_back);
     void setImSureCallback(Button::CallbackType callback_Im_sure);
     
     

@@ -23,23 +23,25 @@ MainMenu::MainMenu(Core *core, Game *game)
                         *game->getWindow(),
                                Button::Theme::Default, L"Exit")),
       
-      
-      m_go_back(new Button(game->getResourceManager(), game->getKeyManager(),
-                        *game->getWindow(),
-                               Button::Theme::Default, L"Back")),
-      m_start_game(new Button(game->getResourceManager(), game->getKeyManager(),
-                        *game->getWindow(),
-                               Button::Theme::Default, L"Start!")),
-      
-      m_game_settings(new PopupGameSettings(game))
+      m_popup_im_sure(new PopupYouSure(game->getResourceManager(), game->getKeyManager(),
+                                       *game->getWindow(), L"Are you sure?")),
+      m_popup_game_settings(new PopupGameSettings(game))
 {
     configureButton(m_continue_game);
+    m_continue_game->setHide(true);
     configureButton(m_new_game);
     configureButton(m_settings);
     configureButton(m_exit);
-    configureButton(m_go_back);
-    configureButton(m_start_game);
     
+    m_continue_game->setCallback([game](){
+        game->quit();
+    });
+    m_new_game->setCallback([this](){
+        m_popup_im_sure->setHide(false);
+    });
+    m_settings->setCallback([game](){
+        game->quit();
+    });
     m_exit->setCallback([game](){
         game->quit();
     });
@@ -53,18 +55,27 @@ MainMenu::MainMenu(Core *core, Game *game)
     
     game->goToCentre(m_layout);
     
-    m_game_settings->setHide(false);
+    game->goToCentre(m_popup_im_sure);
+    
+    m_popup_game_settings->setHide(true);
+    m_popup_im_sure->setHide(false);
 }
 
 
 
 void MainMenu::onEvent(const sf::Event &event)
 {
-    m_game_settings->onEvent(event);
-    if (m_game_settings->isHidden())
+    if (!m_popup_game_settings->isHidden())
+    {
+        m_popup_game_settings->onEvent(event);
+    }
+    else if (!m_popup_im_sure->isHidden())
+    {
+        m_popup_im_sure->onEvent(event);
+    }
+    else
     {
         m_layout->onEvent(event);
-        
     }
 }
 
@@ -83,7 +94,8 @@ void MainMenu::onOpen()
 void MainMenu::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     target.draw(*m_layout);
-    target.draw(*m_game_settings);
+    target.draw(*m_popup_im_sure);
+    target.draw(*m_popup_game_settings);
 }
 
 
