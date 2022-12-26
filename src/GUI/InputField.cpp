@@ -54,14 +54,14 @@ std::wstring InputField::getText() const
 
 
 
-bool InputField::canBeFocused() const
+// private:
+
+
+
+bool InputField::canBeFocused_() const
 {
     return true;
 }
-
-
-
-// private:
 
 
 

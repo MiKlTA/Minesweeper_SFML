@@ -18,7 +18,7 @@ class MainMenu : public Scene
 {
 public:
     
-    MainMenu(SceneManager *core, Game *game);
+    MainMenu(SceneManager *scene_manager, Game *game);
     
     
     
@@ -37,6 +37,10 @@ public:
 private:
     
     static void configureButton(Button *button);
+    
+    
+    
+    KeyManager *m_key_manager;
     
     
     

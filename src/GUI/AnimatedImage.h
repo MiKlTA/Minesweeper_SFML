@@ -29,11 +29,12 @@ public:
     
     
     
-    bool canBeFocused() const override;
     
     
     
 protected:
+    
+    bool canBeFocused_() const override;
     
     void onSizeChange(sf::Vector2f new_size) override;
     

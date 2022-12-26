@@ -37,11 +37,11 @@ public:
     
     
     
-    bool canBeFocused() const override;
-    
-    
-    
 protected:
+    
+    bool canBeFocused_() const override;
+    
+    
     
     void draw_(sf::RenderTarget &target, sf::RenderStates states) const override;
     

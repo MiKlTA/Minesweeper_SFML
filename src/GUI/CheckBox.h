@@ -26,11 +26,11 @@ public:
     
     
     
-    bool canBeFocused() const override;
-    
-    
-    
 protected:
+    
+    bool canBeFocused_() const override;
+    
+    
     
     void onEvent_(const sf::Event &event) override;
     void onPositionChange(sf::Vector2f new_position) override;

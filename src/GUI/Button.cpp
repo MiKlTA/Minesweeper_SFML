@@ -55,14 +55,14 @@ void Button::setCallback(CallbackType callback)
 
 
 
-bool Button::canBeFocused() const
+// protected:
+
+
+
+bool Button::canBeFocused_() const
 {
     return true;
 }
-
-
-
-// protected:
 
 
 

@@ -36,14 +36,14 @@ void ProgressBar::setProgressValue(float value)
 
 
 
-bool ProgressBar::canBeFocused() const
+// protected:
+
+
+
+bool ProgressBar::canBeFocused_() const
 {
     return false;
 }
-
-
-
-// protected:
 
 
 

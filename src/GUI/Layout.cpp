@@ -51,11 +51,6 @@ void Layout::addWidget(Widget *widget)
 
 
 
-bool Layout::canBeFocused() const
-{
-    return true;
-}
-
 bool Layout::isPassEvent(const sf::Event &event)
 {
     bool isPass = true;
@@ -102,6 +97,13 @@ bool Layout::isPassEvent(const sf::Event &event)
 
 
 // protected:
+
+
+
+bool Layout::canBeFocused_() const
+{
+    return true;
+}
 
 
 

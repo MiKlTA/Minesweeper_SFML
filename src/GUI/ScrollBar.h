@@ -49,12 +49,17 @@ public:
     
     
     
-    bool canBeFocused() const override;
     bool isPassEvent(const sf::Event &event) override;
     
     
     
 protected:
+    
+    
+    
+    bool canBeFocused_() const override;
+    
+    
     
     void onEvent_(const sf::Event &event) override;
     

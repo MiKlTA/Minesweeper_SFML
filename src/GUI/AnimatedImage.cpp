@@ -52,14 +52,14 @@ void AnimatedImage::setRepeatAnimation(bool need_repeat)
 
 
 
-bool AnimatedImage::canBeFocused() const
+// protected:
+
+
+
+bool AnimatedImage::canBeFocused_() const
 {
     return false;
 }
-
-
-
-// protected:
 
 
 

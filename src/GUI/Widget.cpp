@@ -99,6 +99,13 @@ void Widget::onEvent(const sf::Event &event)
 
 
 
+bool Widget::canBeFocused() const
+{
+    return !m_is_hidden && canBeFocused_();
+}
+
+
+
 bool Widget::isPassEvent(const sf::Event &event)
 {
     return true;

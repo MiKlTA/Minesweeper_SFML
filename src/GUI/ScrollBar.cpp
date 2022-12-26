@@ -78,11 +78,6 @@ unsigned int ScrollBar::getRange() const
 
 
 
-bool ScrollBar::canBeFocused() const
-{
-    return true;
-}
-
 bool ScrollBar::isPassEvent(const sf::Event &event)
 {
     bool isPass = true;
@@ -116,6 +111,13 @@ bool ScrollBar::isPassEvent(const sf::Event &event)
 
 
 // protected:
+
+
+
+bool ScrollBar::canBeFocused_() const
+{
+    return true;
+}
 
 
 

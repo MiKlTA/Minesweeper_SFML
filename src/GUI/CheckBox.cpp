@@ -31,14 +31,14 @@ bool CheckBox::isChecked() const
 
 
 
-bool CheckBox::canBeFocused() const
+// protected:
+
+
+
+bool CheckBox::canBeFocused_() const
 {
     return true;
 }
-
-
-
-// protected:
 
 
 

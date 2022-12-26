@@ -65,14 +65,14 @@ std::wstring Text::getString() const
 
 
 
-bool Text::canBeFocused() const
+// protected:
+
+
+
+bool Text::canBeFocused_() const
 {
     return false;
 }
-
-
-
-// protected:
 
 
 

@@ -52,7 +52,7 @@ public:
     
     
     
-    virtual bool canBeFocused() const = 0;
+    bool canBeFocused() const;
     virtual bool isPassEvent(const sf::Event &event);
     
     
@@ -62,6 +62,10 @@ public:
     
     
 protected:
+    
+    virtual bool canBeFocused_() const = 0;
+    
+    
     
     const sf::Transform & getTransform() const;
     

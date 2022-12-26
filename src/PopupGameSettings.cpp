@@ -32,13 +32,6 @@ PopupGameSettings::PopupGameSettings(Game *game)
     game->goToCentre(this);
 }
 
-
-
-bool PopupGameSettings::canBeFocused() const
-{
-    return true;
-}
-
 bool PopupGameSettings::isPassEvent(const sf::Event &event)
 {
     return false;
@@ -47,6 +40,13 @@ bool PopupGameSettings::isPassEvent(const sf::Event &event)
 
 
 // protected:
+
+
+
+bool PopupGameSettings::canBeFocused_() const
+{
+    return true;
+}
 
 
 

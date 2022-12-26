@@ -59,13 +59,6 @@ void PopupYouSure::setImSureCallback(Button::CallbackType callback_Im_sure)
     m_Im_sure->setCallback(callback_Im_sure);
 }
 
-
-
-bool PopupYouSure::canBeFocused() const
-{
-    return true;
-}
-
 bool PopupYouSure::isPassEvent(const sf::Event &event)
 {
     return false;
@@ -74,6 +67,13 @@ bool PopupYouSure::isPassEvent(const sf::Event &event)
 
 
 // protected:
+
+
+
+bool PopupYouSure::canBeFocused_() const
+{
+    return true;
+}
 
 
 

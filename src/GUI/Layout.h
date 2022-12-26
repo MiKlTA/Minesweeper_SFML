@@ -50,7 +50,6 @@ public:
     
     
     
-    bool canBeFocused() const override;
     bool isPassEvent(const sf::Event &event) override; 
     
     
@@ -60,6 +59,10 @@ public:
     
     
 protected:
+    
+    bool canBeFocused_() const override;
+    
+    
     
     void onEvent_(const sf::Event &event) override;
     void onSizeChange(sf::Vector2f new_size) override;

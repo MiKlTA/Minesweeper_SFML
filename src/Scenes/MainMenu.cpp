@@ -2,8 +2,10 @@
 
 
 
-MainMenu::MainMenu(SceneManager *core, Game *game)
-    : Scene(core),
+MainMenu::MainMenu(SceneManager *scene_manager, Game *game)
+    : Scene(scene_manager),
+      
+      m_key_manager(game->getKeyManager()),
       
       m_layout(new Layout(game->getKeyManager(), *game->getWindow(),
                           Layout::Type::Vertical, Layout::Alignment::Left)),
@@ -38,14 +40,14 @@ MainMenu::MainMenu(SceneManager *core, Game *game)
     configureButton(m_settings);
     configureButton(m_exit);
     
-    m_continue_game->setCallback([core](){
-        core->setScene("GameScene");
+    m_continue_game->setCallback([scene_manager](){
+        scene_manager->setScene("GameScene");
     });
     m_new_game->setCallback([this](){
         m_popup_im_sure->setHide(false);
     });
-    m_settings->setCallback([core](){
-        core->setScene("Settings");
+    m_settings->setCallback([scene_manager](){
+        scene_manager->setScene("Settings");
     });
     m_exit->setCallback([game](){
         game->quit();
@@ -74,18 +76,26 @@ MainMenu::MainMenu(SceneManager *core, Game *game)
 
 void MainMenu::onEvent(const sf::Event &event)
 {
+    Widget *active_widget;
+    
     if (!m_popup_game_settings->isHidden())
     {
-        m_popup_game_settings->onEvent(event);
+        active_widget = m_popup_game_settings;
     }
     else if (!m_popup_im_sure->isHidden())
     {
-        m_popup_im_sure->onEvent(event);
+        active_widget = m_popup_im_sure;
     }
     else
     {
-        m_layout->onEvent(event);
+        active_widget = m_layout;
     }
+    
+    if (event.type == sf::Event::KeyPressed)
+    {
+        active_widget->setState(Widget::State::Focused);
+    }
+    active_widget->onEvent(event);
 }
 
 void MainMenu::update(float frametime)

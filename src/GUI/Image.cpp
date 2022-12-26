@@ -28,14 +28,14 @@ void Image::setRectangle(const sf::IntRect &rectangle)
 
 
 
-bool Image::canBeFocused() const
+// protected:
+
+
+
+bool Image::canBeFocused_() const
 {
     return false;
 }
-
-
-
-// protected:
 
 
 
