@@ -6,7 +6,7 @@
 #include "../GUI/Widget.h"
 
 #include "Config.h"
-#include "Core.h"
+#include "SceneManager.h"
 #include "ResourceManager.h"
 #include "KeyManager.h"
 
@@ -20,7 +20,7 @@ class Game
 {
 public:
     
-    Game(Config *config, Core *core,
+    Game(Config *config, SceneManager *core,
          ResourceManager *resource_manager, KeyManager *key_manager);
     ~Game();
     
@@ -48,7 +48,7 @@ public:
 private:
     
     Config             *m_config;
-    Core               *m_core;
+    SceneManager               *m_core;
     ResourceManager    *m_resource_manager;
     KeyManager         *m_key_manager;
     

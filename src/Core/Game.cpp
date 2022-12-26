@@ -6,7 +6,7 @@
 
 
 
-Game::Game(Config *config, Core *core,
+Game::Game(Config *config, SceneManager *core,
            ResourceManager *resource_manager, KeyManager *key_manager)
     : m_config(config),
       m_core(core),

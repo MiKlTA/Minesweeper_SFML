@@ -27,7 +27,7 @@ int main(int, char *argv[])
 {
     Config *config = new Config;
     
-    Core *core = new Core;
+    SceneManager *core = new SceneManager;
     
     std::string path = std::experimental::filesystem::path(argv[0]).parent_path().string();
     path += "\\";

@@ -2,7 +2,7 @@
 
 
 
-MainMenu::MainMenu(Core *core, Game *game)
+MainMenu::MainMenu(SceneManager *core, Game *game)
     : Scene(core),
       
       m_layout(new Layout(game->getKeyManager(), *game->getWindow(),

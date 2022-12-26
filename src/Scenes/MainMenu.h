@@ -18,7 +18,7 @@ class MainMenu : public Scene
 {
 public:
     
-    MainMenu(Core *core, Game *game);
+    MainMenu(SceneManager *core, Game *game);
     
     
     

@@ -2,7 +2,7 @@
 
 
 
-Scene::Scene(Core *core)
+Scene::Scene(SceneManager *core)
     : m_core(core)
 {
     
