@@ -6,7 +6,7 @@ MainMenu::MainMenu(Core *core, Game *game)
     : Scene(core),
       
       m_layout(new Layout(game->getKeyManager(), *game->getWindow(),
-                          Layout::Type::Vertical)),
+                          Layout::Type::Vertical, Layout::Alignment::Left)),
       
       m_background(new Image(game->getResourceManager(), *game->getWindow())),
       
@@ -23,24 +23,29 @@ MainMenu::MainMenu(Core *core, Game *game)
                         *game->getWindow(),
                                Button::Theme::Default, L"Exit")),
       
-      m_popup_im_sure(new PopupYouSure(game->getResourceManager(), game->getKeyManager(),
-                                       *game->getWindow(), L"Are you sure?")),
       m_popup_game_settings(new PopupGameSettings(game))
 {
+    Text *im_sure_text = new Text(game->getResourceManager(), *game->getWindow(),
+                                  Text::Alignment::Left,
+                                  L"Do you want to start a new game?");
+    im_sure_text->setCharacterSize(32);
+    m_popup_im_sure = new PopupYouSure(game->getResourceManager(), game->getKeyManager(),
+                                       *game->getWindow(), im_sure_text);
+    
     configureButton(m_continue_game);
     m_continue_game->setHide(true);
     configureButton(m_new_game);
     configureButton(m_settings);
     configureButton(m_exit);
     
-    m_continue_game->setCallback([game](){
-        game->quit();
+    m_continue_game->setCallback([core](){
+        core->setScene("GameScene");
     });
     m_new_game->setCallback([this](){
         m_popup_im_sure->setHide(false);
     });
-    m_settings->setCallback([game](){
-        game->quit();
+    m_settings->setCallback([core](){
+        core->setScene("Settings");
     });
     m_exit->setCallback([game](){
         game->quit();
@@ -57,8 +62,12 @@ MainMenu::MainMenu(Core *core, Game *game)
     
     game->goToCentre(m_popup_im_sure);
     
+    m_popup_im_sure->setHide(true);
+    m_popup_im_sure->setImSureCallback([this](){
+        m_popup_im_sure->setHide(true);
+        m_popup_game_settings->setHide(false);
+    });
     m_popup_game_settings->setHide(true);
-    m_popup_im_sure->setHide(false);
 }
 
 

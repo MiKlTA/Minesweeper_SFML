@@ -18,7 +18,8 @@ class PopupYouSure : public Widget
 public:
     
     PopupYouSure(ResourceManager *resource_manager, KeyManager *key_manager,
-                 const sf::RenderWindow &window, std::wstring title);
+                 const sf::RenderWindow &window, Text *title);
+    ~PopupYouSure();
     
     
     
@@ -44,15 +45,15 @@ protected:
     
 private:
     
-    Layout m_layout_vertical;
-    Layout m_layout_horisontal;
+    Layout *m_layout_vertical;
+    Layout *m_layout_horisontal;
     
-    Image m_background;
+    Image *m_background;
     
-    Text m_title;
+    Text *m_title;
     
-    Button m_go_back;
-    Button m_Im_sure;
+    Button *m_go_back;
+    Button *m_Im_sure;
 };
 
 

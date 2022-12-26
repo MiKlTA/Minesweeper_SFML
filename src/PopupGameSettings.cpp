@@ -5,7 +5,8 @@
 PopupGameSettings::PopupGameSettings(Game *game)
     : Widget(*game->getWindow()),
       
-      m_layout(game->getKeyManager(), *game->getWindow(), Layout::Type::Vertical),
+      m_layout(game->getKeyManager(), *game->getWindow(),
+               Layout::Type::Vertical, Layout::Alignment::Left),
       
       m_background(game->getResourceManager(), *game->getWindow()),
       
@@ -20,7 +21,6 @@ PopupGameSettings::PopupGameSettings(Game *game)
     m_go_back.setCallback([this](){
         this->setHide(!this->isHidden());
     });
-    
     
     
     
