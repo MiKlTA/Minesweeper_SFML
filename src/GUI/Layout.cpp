@@ -18,8 +18,8 @@ Layout::Layout(KeyManager *key_manager, const sf::RenderWindow &window,
       
       m_type(type),
       m_alignment(alignment),
-      m_padding({20.f, 20.f, 20.f, 20.f}),
-      m_margin(50.f)
+      m_padding({10.f, 10.f, 10.f, 10.f}),
+      m_margin(10.f)
 {
     m_border.setFillColor(sf::Color::Transparent);
     m_border.setOutlineColor(sf::Color::Red);

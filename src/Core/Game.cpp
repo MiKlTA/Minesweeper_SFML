@@ -2,7 +2,7 @@
 
 
 
-Game::Game()
+Game::Game(std::string game_path)
 {
     
 }
@@ -81,6 +81,40 @@ Game::FieldSize Game::getFieldSize() const
 {
     
 }
+
+
+
+unsigned int Game::getMinTotalMinesNumber() const
+{
+    
+}
+
+unsigned int Game::getMinTotalDucksNumber() const
+{
+    return 0;
+}
+
+unsigned int Game::getMaxTotalMinesNumber() const
+{
+    
+}
+
+unsigned int Game::getMaxTotalDucksNumber() const
+{
+    
+}
+
+Game::FieldSize Game::getMinFieldSize()
+{
+    return FieldSize{1, 1};
+}
+
+Game::FieldSize Game::getMaxFieldSize()
+{
+    return FieldSize{100, 100};
+}
+
+
 
 const Game::Tile & Game::getTile(Tile::Position) const
 {

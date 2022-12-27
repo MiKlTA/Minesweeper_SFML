@@ -3,6 +3,10 @@
 
 
 
+#include <fstream>
+
+
+
 class Game
 {
 public:
@@ -32,7 +36,7 @@ public:
     
     
     
-    Game();
+    Game(std::string game_path);
     
     
     
@@ -43,6 +47,9 @@ public:
     void createField();
     void generateField();
     void destroyField();
+    
+    void saveGame();
+    void loadGame();
     
     void startGame(); // or restart
     
@@ -56,6 +63,13 @@ public:
     unsigned int getDucksNumberFound() const;
     FieldSize getFieldSize() const;
     
+    unsigned int getMinTotalMinesNumber() const;
+    unsigned int getMinTotalDucksNumber() const;
+    unsigned int getMaxTotalMinesNumber() const;
+    unsigned int getMaxTotalDucksNumber() const;
+    static FieldSize getMinFieldSize();
+    static FieldSize getMaxFieldSize();
+    
     const Tile & getTile(Tile::Position) const;
     
     bool isDefeated() const;
@@ -64,9 +78,9 @@ public:
     
 private:
     
-    bool            m_you_lose;
+    std::string     m_game_path;
     
-    FieldSize       m_field_size;
+    bool            m_you_lose;
     
     unsigned int    m_mines_total_number;
     unsigned int    m_mines_number_found;
@@ -74,6 +88,7 @@ private:
     unsigned int    m_ducks_total_number;
     unsigned int    m_ducks_number_found;
     
+    FieldSize       m_field_size;
     Tile **m_tiles;
     
 };

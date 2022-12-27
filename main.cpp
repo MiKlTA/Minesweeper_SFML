@@ -30,11 +30,10 @@ int main(int, char *argv[])
     SceneManager *scene_manager = new SceneManager;
     
     std::string path = std::experimental::filesystem::path(argv[0]).parent_path().string();
-    path += "\\";
-    ResourceManager *resource_manager = new ResourceManager(path);
+    ResourceManager *resource_manager = new ResourceManager(path + "\\");
     KeyManager *key_manager = new KeyManager;
     
-    Game *game = new Game;
+    Game *game = new Game(path);
     
     Core core(config, scene_manager, resource_manager, key_manager, game);
     core.run();

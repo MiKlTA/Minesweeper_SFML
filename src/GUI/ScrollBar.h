@@ -21,7 +21,7 @@ public:
     
     enum Theme
     {
-        White
+        Default
     };
     
     enum Type

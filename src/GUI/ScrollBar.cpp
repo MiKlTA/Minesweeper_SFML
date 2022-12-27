@@ -29,7 +29,7 @@ ScrollBar::ScrollBar(
 {
     switch (theme)
     {
-    case Theme::White:
+    case Theme::Default:
         
         m_slider_default.setImage("slider");
         m_slider_hovered.setImage("slider");
@@ -62,6 +62,7 @@ void ScrollBar::setOnValueChangeCallback(OnValueChangeCallbackType callback)
 void ScrollBar::setRange(unsigned int range)
 {
     m_range = range;
+    m_slider_value = std::min(m_slider_value, m_range);
 }
 
 
