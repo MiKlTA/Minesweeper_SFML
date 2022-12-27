@@ -13,7 +13,7 @@ class Scene : public sf::Drawable
 {
 public:
     
-    Scene(SceneManager *core);
+    Scene(SceneManager *scene_manager);
     
     
     
@@ -27,7 +27,7 @@ public:
     
 private:
     
-    SceneManager *m_core;
+    SceneManager *m_scene_manager;
 };
 
 

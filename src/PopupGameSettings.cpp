@@ -2,17 +2,17 @@
 
 
 
-PopupGameSettings::PopupGameSettings(Game *game)
-    : Widget(*game->getWindow()),
+PopupGameSettings::PopupGameSettings(Core *core)
+    : Widget(*core->getWindow()),
       
-      m_layout(game->getKeyManager(), *game->getWindow(),
+      m_layout(core->getKeyManager(), *core->getWindow(),
                Layout::Type::Vertical, Layout::Alignment::Left),
       
-      m_background(game->getResourceManager(), *game->getWindow()),
+      m_background(core->getResourceManager(), *core->getWindow()),
       
-      m_go_back(game->getResourceManager(), game->getKeyManager(), *game->getWindow(),
+      m_go_back(core->getResourceManager(), core->getKeyManager(), *core->getWindow(),
                 Button::Theme::Default, L"Back"),
-      m_start(game->getResourceManager(), game->getKeyManager(), *game->getWindow(),
+      m_start(core->getResourceManager(), core->getKeyManager(), *core->getWindow(),
                 Button::Theme::Default, L"Start!")
 {
     m_layout.addWidget(&m_go_back);
@@ -29,7 +29,7 @@ PopupGameSettings::PopupGameSettings(Game *game)
     
     setSize(m_background.getSize());
     
-    game->goToCentre(this);
+    core->goToCentre(this);
 }
 
 bool PopupGameSettings::isPassEvent(const sf::Event &event)

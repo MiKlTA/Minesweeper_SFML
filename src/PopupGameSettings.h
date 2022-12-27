@@ -3,7 +3,7 @@
 
 
 
-#include "Core/Game.h"
+#include "Core/Core.h"
 
 #include "GUI/Image.h"
 #include "GUI/Layout.h"
@@ -18,7 +18,7 @@ class PopupGameSettings : public Widget
 {
 public:
     
-    PopupGameSettings(Game *game);
+    PopupGameSettings(Core *core);
     
     
     

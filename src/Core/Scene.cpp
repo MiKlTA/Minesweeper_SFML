@@ -2,8 +2,8 @@
 
 
 
-Scene::Scene(SceneManager *core)
-    : m_core(core)
+Scene::Scene(SceneManager *scene_manager)
+    : m_scene_manager(scene_manager)
 {
     
 }

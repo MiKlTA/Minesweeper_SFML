@@ -4,7 +4,7 @@
 
 
 #include "../Core/SceneManager.h"
-#include "../Core/Game.h"
+#include "../Core/Core.h"
 
 
 
@@ -12,7 +12,7 @@ class GameScene : public Scene
 {
 public:
     
-    GameScene(SceneManager *scene_manager, Game *game);
+    GameScene(SceneManager *scene_manager, Core *core);
     
     
     

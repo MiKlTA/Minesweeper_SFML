@@ -3,16 +3,57 @@
 
 
 
+#include "../GUI/Widget.h"
+
+#include "Config.h"
+#include "SceneManager.h"
+#include "ResourceManager.h"
+#include "KeyManager.h"
+
+#include "SFML/Graphics.hpp"
+
+#include <string>
+
+
+
 class Core
 {
 public:
+    
+    Core(Config *config, SceneManager *scene_manager,
+         ResourceManager *resource_manager, KeyManager *key_manager);
+    ~Core();
+    
+    
+    
+    sf::Vector2f getViewSize() const;
+    
+    
+    
+    ResourceManager * getResourceManager();
+    KeyManager * getKeyManager();
+    const sf::RenderWindow * getWindow();
+    
+    
+    
+    void run();
+    void quit();
+    
+    
+    
+    void goToCentre(Widget *widget) const;
     
     
     
 private:
     
+    Config             *m_config;
+    SceneManager       *m_scene_manager;
+    ResourceManager    *m_resource_manager;
+    KeyManager         *m_key_manager;
     
-    
+    sf::RenderWindow   *m_window;
+    sf::Clock           m_clock;
 };
 
 

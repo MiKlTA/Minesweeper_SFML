@@ -2,7 +2,7 @@
 
 
 
-GameScene::GameScene(SceneManager *scene_manager, Game *game)
+GameScene::GameScene(SceneManager *scene_manager, Core *core)
     : Scene(scene_manager)
 {
     
