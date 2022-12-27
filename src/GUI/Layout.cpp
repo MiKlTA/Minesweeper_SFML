@@ -309,22 +309,36 @@ void Layout::recalcWidgetsPositions()
 
 Layout::ListIterator Layout::getNextFocusableWidget(ListIterator iter)
 {
-    iter = std::next(iter);
-    while (iter != m_contains.end() && !(*iter)->canBeFocused())
+    do
     {
-        iter = std::next(iter);
+        if (iter == std::prev(m_contains.end()))
+        {
+            iter = m_contains.begin();
+        }
+        else
+        {
+            iter = std::next(iter);
+        }
     }
+    while (!(*iter)->canBeFocused());
     
     return iter;
 }
 
 Layout::ListIterator Layout::getPrevFocusableWidget(ListIterator iter)
 {
-    iter = std::prev(iter);
-    while (iter != m_contains.begin() && !(*iter)->canBeFocused())
+    do
     {
-        iter = std::prev(iter);
+        if (iter == m_contains.begin())
+        {
+            iter = std::prev(m_contains.end());
+        }
+        else
+        {
+            iter = std::prev(iter);
+        }
     }
+    while (!(*iter)->canBeFocused());
     
     return iter;
 }
