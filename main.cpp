@@ -34,7 +34,9 @@ int main(int, char *argv[])
     ResourceManager *resource_manager = new ResourceManager(path);
     KeyManager *key_manager = new KeyManager;
     
-    Core core(config, scene_manager, resource_manager, key_manager);
+    Game *game = new Game;
+    
+    Core core(config, scene_manager, resource_manager, key_manager, game);
     core.run();
     
     return 0;

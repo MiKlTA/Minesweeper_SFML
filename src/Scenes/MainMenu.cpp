@@ -2,7 +2,7 @@
 
 
 
-MainMenu::MainMenu(SceneManager *scene_manager, Core *core)
+MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
     : Scene(scene_manager),
       
       m_key_manager(core->getKeyManager()),
@@ -25,7 +25,7 @@ MainMenu::MainMenu(SceneManager *scene_manager, Core *core)
                         *core->getWindow(),
                                Button::Theme::Default, L"Exit")),
       
-      m_popup_core_settings(new PopupGameSettings(core))
+      m_popup_core_settings(new PopupGameSettings(core, game))
 {
     Text *im_sure_text = new Text(core->getResourceManager(), *core->getWindow(),
                                   Text::Alignment::Left,

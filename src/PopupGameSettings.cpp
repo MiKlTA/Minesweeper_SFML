@@ -2,7 +2,7 @@
 
 
 
-PopupGameSettings::PopupGameSettings(Core *core)
+PopupGameSettings::PopupGameSettings(Core *core, Game *game)
     : Widget(*core->getWindow()),
       
       m_layout(core->getKeyManager(), *core->getWindow(),

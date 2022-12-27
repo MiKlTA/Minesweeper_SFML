@@ -5,6 +5,7 @@
 
 #include "../GUI/Widget.h"
 
+#include "Game.h"
 #include "Config.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
@@ -21,7 +22,8 @@ class Core
 public:
     
     Core(Config *config, SceneManager *scene_manager,
-         ResourceManager *resource_manager, KeyManager *key_manager);
+         ResourceManager *resource_manager, KeyManager *key_manager,
+         Game *game);
     ~Core();
     
     

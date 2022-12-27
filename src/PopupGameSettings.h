@@ -18,7 +18,7 @@ class PopupGameSettings : public Widget
 {
 public:
     
-    PopupGameSettings(Core *core);
+    PopupGameSettings(Core *core, Game *game);
     
     
     

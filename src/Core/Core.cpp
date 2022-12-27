@@ -7,7 +7,8 @@
 
 
 Core::Core(Config *config, SceneManager *scene_manager,
-           ResourceManager *resource_manager, KeyManager *key_manager)
+           ResourceManager *resource_manager, KeyManager *key_manager,
+           Game *game)
     : m_config(config),
       m_scene_manager(scene_manager),
       m_resource_manager(resource_manager),
@@ -22,9 +23,9 @@ Core::Core(Config *config, SceneManager *scene_manager,
     m_window->setPosition({0, 0});
     m_window->setView(sf::View(m_config->viewSize() / 2.f, m_config->viewSize()));
     
-    m_scene_manager->addScene("MainMenu", new MainMenu(scene_manager, this));
-    m_scene_manager->addScene("Settings", new Settings(scene_manager, this));
-    m_scene_manager->addScene("GameScene", new GameScene(scene_manager, this));
+    m_scene_manager->addScene("MainMenu", new MainMenu(this, scene_manager, game));
+    m_scene_manager->addScene("Settings", new Settings(this, scene_manager, game));
+    m_scene_manager->addScene("GameScene", new GameScene(this, scene_manager, game));
     m_scene_manager->setScene("MainMenu");
 }
 

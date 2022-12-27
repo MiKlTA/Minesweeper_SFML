@@ -12,7 +12,7 @@ class GameScene : public Scene
 {
 public:
     
-    GameScene(SceneManager *scene_manager, Core *core);
+    GameScene(Core *core, SceneManager *scene_manager, Game *game);
     
     
     
