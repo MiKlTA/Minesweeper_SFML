@@ -39,6 +39,7 @@ protected:
     
     void onEvent_(const sf::Event &event) override;
     void onPositionChange(sf::Vector2f new_position) override;
+    void onStateChange(State new_state) override;
     
     
     

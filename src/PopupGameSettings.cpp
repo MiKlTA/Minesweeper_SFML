@@ -69,6 +69,11 @@ void PopupGameSettings::onPositionChange(sf::Vector2f new_position)
     m_layout.move(delta);
 }
 
+void PopupGameSettings::onStateChange(State new_state)
+{
+    m_layout.setState(new_state);
+}
+
 
 
 void PopupGameSettings::draw_(sf::RenderTarget &target, sf::RenderStates) const

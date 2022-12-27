@@ -96,6 +96,11 @@ void PopupYouSure::onPositionChange(sf::Vector2f new_position)
     m_layout_vertical->move(delta);
 }
 
+void PopupYouSure::onStateChange(State new_state)
+{
+    m_layout_vertical->setState(new_state);
+}
+
 
 
 void PopupYouSure::draw_(sf::RenderTarget &target, sf::RenderStates) const
