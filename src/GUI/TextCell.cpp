@@ -25,6 +25,7 @@ TextCell::TextCell(ResourceManager *resource_manager, const sf::RenderWindow &wi
 void TextCell::setString(std::wstring string)
 {
     m_text.setString(string);
+    setSize(m_text.getSize());
     recalcTextPosition(getPosition());
 }
 
@@ -36,12 +37,14 @@ void TextCell::setColor(sf::Color color)
 void TextCell::append(wchar_t symbol)
 {
     m_text.append(symbol);
+    setSize(m_text.getSize());
     recalcTextPosition(getPosition());
 }
 
 void TextCell::pop_back()
 {
     m_text.pop_back();
+    setSize(m_text.getSize());
     recalcTextPosition(getPosition());
 }
 
@@ -133,15 +136,15 @@ void TextCell::recalcTextPosition(sf::Vector2f new_field_position)
     {
     case Text::Alignment::Left:
         position.x += m_text_padding;
-        position.y += getSize().y / 2.f - m_text.getSize().y;
+        position.y += getSize().y / 2.f - m_text.getSize().y / 2.f;
         break;
     case Text::Alignment::Right:
         position.x += getSize().x - m_text_padding;
-        position.y += getSize().y / 2.f - m_text.getSize().y;
+        position.y += getSize().y / 2.f - m_text.getSize().y / 2.f;
         break;
     case Text::Alignment::Centre:
         position.x += getSize().x / 2.f;
-        position.y += getSize().y / 2.f - m_text.getSize().y;
+        position.y += getSize().y / 2.f - m_text.getSize().y / 2.f;
         break;
     }
     
