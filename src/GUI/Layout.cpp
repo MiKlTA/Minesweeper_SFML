@@ -281,9 +281,23 @@ void Layout::recalcWidgetsPositions()
         for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
         {
             Widget *widget = *widget_iter;
+            float new_position_y;
+            switch (m_alignment)
+            {
+            case Alignment::Left:
+                new_position_y = getPosition().y + padding().top;
+                break;
+            case Alignment::Centre:
+                new_position_y = getPosition().y + padding().top
+                        + (max_widget_size - widget->getSize().y) / 2.f;
+                break;
+            case Alignment::Right:
+                new_position_y = getPosition().y + padding().top
+                        + (max_widget_size - widget->getSize().y);
+                break;
+            }
             widget->setPosition({prev_widget_position.x + prev_widget_size.x,
-                                getPosition().y + padding().top
-                                 + (max_widget_size - widget->getSize().y) / 2.f});
+                                new_position_y});
             prev_widget_position = widget->getPosition();
             prev_widget_position.x += margin();
             prev_widget_size = widget->getSize();
@@ -295,8 +309,22 @@ void Layout::recalcWidgetsPositions()
         for (auto widget_iter = m_contains.begin(); widget_iter != m_contains.end(); ++widget_iter)
         {
             Widget *widget = *widget_iter;
-            widget->setPosition({getPosition().x + padding().left
-                                 + (max_widget_size - widget->getSize().x) / 2.f,
+            float new_position_x;
+            switch (m_alignment)
+            {
+            case Alignment::Left:
+                new_position_x = getPosition().x + padding().left;
+                break;
+            case Alignment::Centre:
+                new_position_x = getPosition().x + padding().left
+                        + (max_widget_size - widget->getSize().x) / 2.f;
+                break;
+            case Alignment::Right:
+                new_position_x = getPosition().x + padding().left
+                        + (max_widget_size - widget->getSize().x);
+                break;
+            }
+            widget->setPosition({new_position_x,
                                  prev_widget_position.y + prev_widget_size.y});
             prev_widget_position = widget->getPosition();
             prev_widget_position.y += margin();
