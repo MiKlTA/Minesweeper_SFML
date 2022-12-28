@@ -37,6 +37,7 @@ public:
     
     
     Game(std::string game_path);
+    ~Game();
     
     
     
@@ -70,7 +71,7 @@ public:
     static FieldSize getMinFieldSize();
     static FieldSize getMaxFieldSize();
     
-    const Tile & getTile(Tile::Position) const;
+    const Tile & getTile(Tile::Position tile_position) const;
     
     bool isDefeated() const;
     
