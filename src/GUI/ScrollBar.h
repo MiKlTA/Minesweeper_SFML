@@ -4,6 +4,7 @@
 
 
 #include <functional>
+#include <cmath>
 
 #include "Widget.h"
 
@@ -32,7 +33,8 @@ public:
     
     ScrollBar(ResourceManager *resource_manager, KeyManager *key_manager,
             const sf::RenderWindow &window,
-            Theme theme, Type type, unsigned int range);
+            Theme theme, Type type,
+            unsigned int min_value, unsigned int max_value);
     
     
     
@@ -40,12 +42,14 @@ public:
     
     
     
-    void setRange(unsigned int range);
+    void setSliderValue(unsigned int slider_value);
+    void setRange(unsigned int min_value, unsigned int max_value);
     
     
     
     unsigned int getSliderValue() const;
     unsigned int getRange() const;
+    
     
     
     
@@ -92,7 +96,8 @@ private:
     
     Type        m_type;
     
-    unsigned int    m_range;
+    unsigned int    m_min_value;
+    unsigned int    m_max_value;
     unsigned int    m_slider_value;
     
     OnValueChangeCallbackType m_onValueChange;

@@ -9,10 +9,9 @@
 
 
 
-ScrollBar::ScrollBar(
-        ResourceManager *resource_manager, KeyManager *key_manager,
+ScrollBar::ScrollBar(ResourceManager *resource_manager, KeyManager *key_manager,
         const sf::RenderWindow &window,
-        Theme theme, Type type, unsigned int range)
+        Theme theme, Type type, unsigned int min_value, unsigned int max_value)
     : Widget(window),
       
       m_key_manager(key_manager),
@@ -25,7 +24,9 @@ ScrollBar::ScrollBar(
       
       m_type(type),
       
-      m_range(range)
+      m_min_value(min_value),
+      m_max_value(max_value),
+      m_slider_value(min_value)
 {
     switch (theme)
     {
@@ -59,10 +60,18 @@ void ScrollBar::setOnValueChangeCallback(OnValueChangeCallbackType callback)
 
 
 
-void ScrollBar::setRange(unsigned int range)
+void ScrollBar::setSliderValue(unsigned int slider_value)
 {
-    m_range = range;
-    m_slider_value = std::min(m_slider_value, m_range);
+    m_slider_value = std::min(m_max_value, std::max(slider_value, m_min_value));
+    
+    m_onValueChange(m_slider_value);
+}
+
+void ScrollBar::setRange(unsigned int min_value, unsigned int max_value)
+{
+    m_min_value = min_value;
+    m_max_value = max_value;
+    m_slider_value = std::min(max_value, std::max(m_slider_value, min_value));
 }
 
 
@@ -74,7 +83,7 @@ unsigned int ScrollBar::getSliderValue() const
 
 unsigned int ScrollBar::getRange() const
 {
-    return m_range;
+    return m_max_value - m_min_value;
 }
 
 
@@ -88,21 +97,21 @@ bool ScrollBar::isPassEvent(const sf::Event &event)
     case Type::Horisontal:
         if (event.key.code == m_key_manager->key("right"))
         {
-            isPass = m_slider_value == m_range;
+            isPass = m_slider_value == m_max_value;
         }
         else if (event.key.code == m_key_manager->key("left"))
         {
-            isPass = m_slider_value == 0;
+            isPass = m_slider_value == m_min_value;
         }
         break;
     case Type::Vertical:
         if (event.key.code == m_key_manager->key("down"))
         {
-            isPass = m_slider_value == 0;
+            isPass = m_slider_value == m_min_value;
         }
         else if (event.key.code == m_key_manager->key("up"))
         {
-            isPass = m_slider_value == m_range;
+            isPass = m_slider_value == m_max_value;
         }
         break;
     }
@@ -157,7 +166,6 @@ void ScrollBar::onEvent_(const sf::Event &event)
         else if (event.type == sf::Event::MouseWheelScrolled)
         {
             addSliderValue(std::round(event.mouseWheelScroll.delta));
-            m_onValueChange(m_slider_value);
         }
         
         break;
@@ -189,8 +197,7 @@ void ScrollBar::onEvent_(const sf::Event &event)
                         - getPosition().y;
                 break;
             }
-            m_slider_value = toSliderValue(delta);
-            m_onValueChange(m_slider_value);
+            setSliderValue(toSliderValue(delta));
         }
         
         break;
@@ -204,24 +211,20 @@ void ScrollBar::onEvent_(const sf::Event &event)
                 if (event.key.code == m_key_manager->key("right"))
                 {
                     addSliderValue(1);
-                    m_onValueChange(m_slider_value);
                 }
                 else if (event.key.code == m_key_manager->key("left"))
                 {
                     addSliderValue(-1);
-                    m_onValueChange(m_slider_value);
                 }
                 break;
             case Type::Vertical:
                 if (event.key.code == m_key_manager->key("down"))
                 {
                     addSliderValue(-1);
-                    m_onValueChange(m_slider_value);
                 }
                 else if (event.key.code == m_key_manager->key("up"))
                 {
                     addSliderValue(1);
-                    m_onValueChange(m_slider_value);
                 }
                 break;
             }
@@ -288,7 +291,7 @@ sf::Vector2f ScrollBar::getSliderRelativePosition() const
     switch (m_type)
     {
     case Type::Horisontal:
-        x = getSliderValue() * getSize().x / float(getRange())
+        x = (getSliderValue() - m_min_value) * getSize().x / float(getRange())
                 - m_slider_default.getSize().x / 2.f;
         y = getSize().y / 2.f
                 - m_slider_default.getSize().y / 2.f;
@@ -296,7 +299,8 @@ sf::Vector2f ScrollBar::getSliderRelativePosition() const
     case Type::Vertical:
         x = getSize().x / 2.f
                 - m_slider_default.getSize().x / 2.f;
-        y = (getRange() - getSliderValue()) * getSize().y / float(getRange())
+        y = (getRange() - (getSliderValue() - m_min_value))
+                * getSize().y / float(getRange())
                 - m_slider_default.getSize().y / 2.f;
         break;
     }
@@ -313,12 +317,12 @@ unsigned int ScrollBar::toSliderValue(float slider_position) const
     case Horisontal:
         bar_size = getSize().x;
         if (slider_position > bar_size) slider_position = bar_size;
-        return std::round(m_range * slider_position / bar_size);
+        return std::round(getRange() * slider_position / bar_size) + m_min_value;
         break;
     case Vertical:
         bar_size = getSize().y;
         if (slider_position > bar_size) slider_position = bar_size;
-        return std::round(m_range * (1.f - slider_position / bar_size));
+        return std::round(getRange() * (1.f - slider_position / bar_size)) + m_min_value;
         break;
     }
 }
@@ -329,7 +333,7 @@ void ScrollBar::addSliderValue(int value)
 {
     int new_sider_value = m_slider_value;
     new_sider_value += value;
-    new_sider_value = std::min(new_sider_value, int(m_range));
-    new_sider_value = std::max(new_sider_value, 0);
-    m_slider_value = static_cast<unsigned int>(new_sider_value);
+    new_sider_value = std::min(new_sider_value, int(m_max_value));
+    new_sider_value = std::max(new_sider_value, int(m_min_value));
+    setSliderValue(static_cast<unsigned int>(new_sider_value));
 }
