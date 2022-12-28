@@ -6,7 +6,7 @@
 #include "Widget.h"
 
 #include "Image.h"
-#include "Text.h"
+#include "TextCell.h"
 
 
 
@@ -22,8 +22,8 @@ public:
     };
     
     InputField(ResourceManager *resource_manager, KeyManager *key_manager,
-            const sf::RenderWindow &window, 
-            Theme theme, Text::Alignment alignment = Text::Alignment::Left);
+               const sf::RenderWindow &window,
+               Theme theme, Text::Alignment alignment = Text::Alignment::Left);
     
     
     
@@ -53,17 +53,11 @@ protected:
     
 private:
     
-    void recalcTextPosition(sf::Vector2f new_field_position);
-    
-    bool canPushSymbol(wchar_t symbol);
-    
-    
-    
     KeyManager *m_key_manager;
     
     
     
-    Text m_text;
+    TextCell m_text;
     
     bool m_only_numbers;
     unsigned int m_max_text_length;
