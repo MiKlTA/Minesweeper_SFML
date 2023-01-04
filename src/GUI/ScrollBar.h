@@ -18,7 +18,7 @@ class ScrollBar : public Widget
 {
 public:
     
-    using OnValueChangeCallbackType = std::function<void(unsigned int)>;
+    using OnValueChangeCallbackType = std::function<void(void)>;
     
     enum Theme
     {
@@ -49,7 +49,7 @@ public:
     
     unsigned int getSliderValue() const;
     unsigned int getRange() const;
-    
+    unsigned int getSencetivity() const; // roughly, the smallest scrollbar change
     
     
     

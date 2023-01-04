@@ -15,6 +15,7 @@ Layout::Layout(KeyManager *key_manager, const sf::RenderWindow &window,
       m_key_manager(key_manager),
       
       m_focused_widget(m_contains.end()),
+      m_can_be_focused(false),
       
       m_type(type),
       m_alignment(alignment),
@@ -42,6 +43,10 @@ void Layout::setMargin(float margin)
 
 void Layout::addWidget(Widget *widget)
 {
+    m_can_be_focused |= widget->canBeFocused();
+    
+    
+    
     addLayoutSizeBy(widget);
     
     m_contains.push_back(widget);
@@ -102,7 +107,7 @@ bool Layout::isPassEvent(const sf::Event &event)
 
 bool Layout::canBeFocused_() const
 {
-    return true;
+    return m_can_be_focused;
 }
 
 

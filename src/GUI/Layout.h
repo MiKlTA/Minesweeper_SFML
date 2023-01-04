@@ -110,6 +110,7 @@ private:
     
     std::list<Widget *> m_contains;
     ListIterator        m_focused_widget;
+    bool                m_can_be_focused;
     
     Type            m_type;
     Alignment       m_alignment;

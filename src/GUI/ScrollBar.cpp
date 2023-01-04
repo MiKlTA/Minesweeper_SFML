@@ -64,7 +64,7 @@ void ScrollBar::setSliderValue(unsigned int slider_value)
 {
     m_slider_value = std::min(m_max_value, std::max(slider_value, m_min_value));
     
-    m_onValueChange(m_slider_value);
+    m_onValueChange();
 }
 
 void ScrollBar::setRange(unsigned int min_value, unsigned int max_value)
@@ -84,6 +84,19 @@ unsigned int ScrollBar::getSliderValue() const
 unsigned int ScrollBar::getRange() const
 {
     return m_max_value - m_min_value;
+}
+
+unsigned int ScrollBar::getSencetivity() const
+{
+    const unsigned int ideal_range = 50;
+    if (getRange() < ideal_range)
+    {
+        return 1;
+    }
+    else
+    {
+        return getRange() / ideal_range;
+    }
 }
 
 
@@ -165,7 +178,7 @@ void ScrollBar::onEvent_(const sf::Event &event)
         }
         else if (event.type == sf::Event::MouseWheelScrolled)
         {
-            addSliderValue(std::round(event.mouseWheelScroll.delta));
+            addSliderValue(getSencetivity() * std::round(event.mouseWheelScroll.delta));
         }
         
         break;
@@ -210,21 +223,21 @@ void ScrollBar::onEvent_(const sf::Event &event)
             case Type::Horisontal:
                 if (event.key.code == m_key_manager->key("right"))
                 {
-                    addSliderValue(1);
+                    addSliderValue(getSencetivity());
                 }
                 else if (event.key.code == m_key_manager->key("left"))
                 {
-                    addSliderValue(-1);
+                    addSliderValue(-getSencetivity());
                 }
                 break;
             case Type::Vertical:
                 if (event.key.code == m_key_manager->key("down"))
                 {
-                    addSliderValue(-1);
+                    addSliderValue(-getSencetivity());
                 }
                 else if (event.key.code == m_key_manager->key("up"))
                 {
-                    addSliderValue(1);
+                    addSliderValue(getSencetivity());
                 }
                 break;
             }
@@ -288,10 +301,20 @@ sf::Vector2f ScrollBar::getSliderRelativePosition() const
     float x;
     float y;
     
+    float range;
+    if (getRange() == 0)
+    {
+        range = 1.f;
+    }
+    else
+    {
+        range = getRange();
+    }
+    
     switch (m_type)
     {
     case Type::Horisontal:
-        x = (getSliderValue() - m_min_value) * getSize().x / float(getRange())
+        x = (getSliderValue() - m_min_value) * getSize().x / range
                 - m_slider_default.getSize().x / 2.f;
         y = getSize().y / 2.f
                 - m_slider_default.getSize().y / 2.f;
@@ -300,7 +323,7 @@ sf::Vector2f ScrollBar::getSliderRelativePosition() const
         x = getSize().x / 2.f
                 - m_slider_default.getSize().x / 2.f;
         y = (getRange() - (getSliderValue() - m_min_value))
-                * getSize().y / float(getRange())
+                * getSize().y / range
                 - m_slider_default.getSize().y / 2.f;
         break;
     }
