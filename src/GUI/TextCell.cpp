@@ -8,7 +8,7 @@ TextCell::TextCell(ResourceManager *resource_manager, const sf::RenderWindow &wi
                    Text::Alignment alignment, std::wstring text)
     : Widget(window),
       
-      m_text(resource_manager, window, alignment),
+      m_text(resource_manager, window, alignment, text),
       
       m_only_numbers(false),
       m_max_text_length(42000),
@@ -25,7 +25,7 @@ TextCell::TextCell(ResourceManager *resource_manager, const sf::RenderWindow &wi
 void TextCell::setString(std::wstring string)
 {
     m_text.setString(string);
-    setSize(m_text.getSize());
+    
     recalcTextPosition(getPosition());
 }
 
@@ -37,14 +37,14 @@ void TextCell::setColor(sf::Color color)
 void TextCell::append(wchar_t symbol)
 {
     m_text.append(symbol);
-    setSize(m_text.getSize());
+    
     recalcTextPosition(getPosition());
 }
 
 void TextCell::pop_back()
 {
     m_text.pop_back();
-    setSize(m_text.getSize());
+    
     recalcTextPosition(getPosition());
 }
 
