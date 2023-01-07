@@ -19,8 +19,8 @@ Layout::Layout(KeyManager *key_manager, const sf::RenderWindow &window,
       
       m_type(type),
       m_alignment(alignment),
-      m_padding({10.f, 10.f, 10.f, 10.f}),
-      m_margin(10.f)
+      m_padding({0.f, 0.f, 0.f, 0.f}),
+      m_margin(0.f)
 {
     m_border.setFillColor(sf::Color::Transparent);
     m_border.setOutlineColor(sf::Color::Red);
@@ -37,6 +37,16 @@ void Layout::setPadding(PaddingType padding)
 void Layout::setMargin(float margin)
 {
     m_margin = margin;
+}
+
+Layout::PaddingType Layout::getPadding() const
+{
+    return m_padding;
+}
+
+float Layout::getMargin() const
+{
+    return m_margin;
 }
 
 
