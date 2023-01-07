@@ -8,7 +8,7 @@ MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
       m_key_manager(core->getKeyManager()),
       
       m_layout(new Layout(core->getKeyManager(), *core->getWindow(),
-                          Layout::Type::Vertical, Layout::Alignment::Left)),
+                          Layout::Type::Vertical, Layout::Alignment::Centre)),
       
       m_background(new Image(core->getResourceManager(), *core->getWindow())),
       
@@ -25,7 +25,7 @@ MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
                         *core->getWindow(),
                                Button::Theme::Default, L"Exit")),
       
-      m_popup_core_settings(new PopupGameSettings(core, game))
+      m_popup_core_settings(new PopupGameSettings(core, scene_manager, game))
 {
     Text *im_sure_text = new Text(core->getResourceManager(), *core->getWindow(),
                                   Text::Alignment::Left,
@@ -69,7 +69,7 @@ MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
         m_popup_im_sure->setHide(true);
         m_popup_core_settings->setHide(false);
     });
-    m_popup_core_settings->setHide(true);
+    m_popup_core_settings->setHide(false);
 }
 
 

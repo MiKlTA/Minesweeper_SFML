@@ -8,7 +8,7 @@
 #include "GUI/Layout.h"
 
 #include "GUI/Image.h"
-#include "GUI/Text.h"
+#include "GUI/TextCell.h"
 
 #include "GUI/Button.h"
 #include "GUI/ScrollBar.h"
@@ -22,11 +22,16 @@ class PopupGameSettings : public Widget
 {
 public:
     
-    PopupGameSettings(Core *core, Game *game);
+    PopupGameSettings(Core *core, SceneManager *scene_manager, Game *game);
     
     
     
     bool isPassEvent(const sf::Event &event) override; 
+    
+    
+    
+    static void alignLayoutRelativeTo(const Layout *sample, Layout *target,
+                                      float sample_element_heignt, float target_element_height);
     
     
     
@@ -48,9 +53,21 @@ protected:
     
 private:
     
+    void updateLabels();
+    void updateGame();
+    void updateMineScrollbar();
+    void updateDuckScrollbar();
+    
+    
+    
+    Game  *m_game;
+    
     Layout m_main_layout;
+    
     Layout m_scrollbars_layout;
     Layout m_labels_layout;
+    Layout m_icons_layout;
+    
     Layout m_main_horisontal_layout;
     Layout m_buttons_layout;
     
@@ -63,10 +80,15 @@ private:
     ScrollBar   m_mines_count;
     ScrollBar   m_ducks_count;
     
-    Text        m_field_width_label;
-    Text        m_field_height_label;
-    Text        m_mines_count_label;
-    Text        m_ducks_count_label;
+    TextCell    m_field_width_label;
+    TextCell    m_field_height_label;
+    TextCell    m_mines_count_label;
+    TextCell    m_ducks_count_label;
+    
+    Image       m_width_image;
+    Image       m_height_image;
+    Image       m_mine_image;
+    Image       m_duck_image;
     
     Button m_go_back;
     Button m_start;

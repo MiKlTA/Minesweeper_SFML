@@ -7,7 +7,7 @@ PopupYouSure::PopupYouSure(ResourceManager *resource_manager, KeyManager *key_ma
     : Widget(window),
       
       m_layout_vertical(new Layout(key_manager, window,
-                        Layout::Type::Vertical, Layout::Alignment::Left)),
+                        Layout::Type::Vertical, Layout::Alignment::Centre)),
       m_layout_horisontal(new Layout(key_manager, window,
                         Layout::Type::Horizontal, Layout::Alignment::Left)),
       

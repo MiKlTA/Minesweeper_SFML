@@ -15,7 +15,7 @@ Game::Game(std::string game_path)
       m_ducks_total_number(),
       m_ducks_number_found(0),
       
-      m_field_size(),
+      m_field_size(getMinFieldSize()),
       
       m_tiles(nullptr)
 {
@@ -137,18 +137,18 @@ unsigned int Game::getMinTotalDucksNumber() const
 unsigned int Game::getMaxTotalMinesNumber() const
 {
     const int field_area = m_field_size.x * m_field_size.y;
-    return field_area - std::round(field_area / 9.f) - getTotalDucksNumber();
+    return std::max<int>(field_area - std::round(field_area / 9.f) - getTotalDucksNumber(), 0);
 }
 
 unsigned int Game::getMaxTotalDucksNumber() const
 {
     const int field_area = m_field_size.x * m_field_size.y;
-    return field_area - std::round(field_area / 9.f) - getTotalMinesNumber();
+    return std::max<int>(field_area - std::round(field_area / 9.f) - getTotalMinesNumber(), 0);
 }
 
 Game::FieldSize Game::getMinFieldSize()
 {
-    return FieldSize{1, 1};
+    return FieldSize{2, 2};
 }
 
 Game::FieldSize Game::getMaxFieldSize()

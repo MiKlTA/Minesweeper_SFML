@@ -44,6 +44,9 @@ public:
     void setPadding(PaddingType padding);
     void setMargin(float margin);
     
+    PaddingType getPadding() const;
+    float getMargin() const;
+    
     
     
     void addWidget(Widget *widget);

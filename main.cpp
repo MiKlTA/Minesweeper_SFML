@@ -12,6 +12,7 @@
 
 
 #include "src/Core/Core.h"
+#include "src/GUI/Layout.h"
 
 
 
@@ -35,6 +36,7 @@ int main(int, char *argv[])
     
     Game *game = new Game(path);
     
+    // Layout::need_draw_border = true;
     Core core(config, scene_manager, resource_manager, key_manager, game);
     core.run();
     
