@@ -48,15 +48,15 @@ private:
     
     Image *m_background;
     
-    Button *m_continue_core;
-    Button *m_new_core;
+    Button *m_continue_game;
+    Button *m_new_game;
     Button *m_settings;
     Button *m_exit;
     
     
     
     PopupYouSure *m_popup_im_sure;
-    PopupGameSettings *m_popup_core_settings;
+    PopupGameSettings *m_popup_game_settings;
     
 };
 

@@ -12,10 +12,10 @@ MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
       
       m_background(new Image(core->getResourceManager(), *core->getWindow())),
       
-      m_continue_core(new Button(core->getResourceManager(), core->getKeyManager(),
+      m_continue_game(new Button(core->getResourceManager(), core->getKeyManager(),
                                  *core->getWindow(),
                                  Button::Theme::Default, L"Continue")),
-      m_new_core(new Button(core->getResourceManager(), core->getKeyManager(),
+      m_new_game(new Button(core->getResourceManager(), core->getKeyManager(),
                             *core->getWindow(),
                                Button::Theme::Default, L"New core")),
       m_settings(new Button(core->getResourceManager(), core->getKeyManager(),
@@ -25,7 +25,7 @@ MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
                         *core->getWindow(),
                                Button::Theme::Default, L"Exit")),
       
-      m_popup_core_settings(new PopupGameSettings(core, scene_manager, game))
+      m_popup_game_settings(new PopupGameSettings(core, scene_manager, game))
 {
     Text *im_sure_text = new Text(core->getResourceManager(), *core->getWindow(),
                                   Text::Alignment::Left,
@@ -34,16 +34,16 @@ MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
     m_popup_im_sure = new PopupYouSure(core->getResourceManager(), core->getKeyManager(),
                                        *core->getWindow(), im_sure_text);
     
-    configureButton(m_continue_core);
-    m_continue_core->setHide(true);
-    configureButton(m_new_core);
+    configureButton(m_continue_game);
+    m_continue_game->setHide(true);
+    configureButton(m_new_game);
     configureButton(m_settings);
     configureButton(m_exit);
     
-    m_continue_core->setCallback([scene_manager](){
+    m_continue_game->setCallback([scene_manager](){
         scene_manager->setScene("GameScene");
     });
-    m_new_core->setCallback([this](){
+    m_new_game->setCallback([this](){
         m_popup_im_sure->setHide(false);
     });
     m_settings->setCallback([scene_manager](){
@@ -55,8 +55,8 @@ MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
     
     m_layout->setMargin(16.f);
     
-    m_layout->addWidget(m_continue_core);
-    m_layout->addWidget(m_new_core);
+    m_layout->addWidget(m_continue_game);
+    m_layout->addWidget(m_new_game);
     m_layout->addWidget(m_settings);
     m_layout->addWidget(m_exit);
     
@@ -67,9 +67,9 @@ MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
     m_popup_im_sure->setHide(true);
     m_popup_im_sure->setImSureCallback([this](){
         m_popup_im_sure->setHide(true);
-        m_popup_core_settings->setHide(false);
+        m_popup_game_settings->setHide(false);
     });
-    m_popup_core_settings->setHide(false);
+    m_popup_game_settings->setHide(true);
 }
 
 
@@ -78,9 +78,9 @@ void MainMenu::onEvent(const sf::Event &event)
 {
     Widget *active_widget;
     
-    if (!m_popup_core_settings->isHidden())
+    if (!m_popup_game_settings->isHidden())
     {
-        active_widget = m_popup_core_settings;
+        active_widget = m_popup_game_settings;
     }
     else if (!m_popup_im_sure->isHidden())
     {
@@ -114,7 +114,7 @@ void MainMenu::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
     target.draw(*m_layout);
     target.draw(*m_popup_im_sure);
-    target.draw(*m_popup_core_settings);
+    target.draw(*m_popup_game_settings);
 }
 
 

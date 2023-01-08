@@ -6,6 +6,12 @@
 #include "../Core/SceneManager.h"
 #include "../Core/Core.h"
 
+#include "../GUI/Layout.h"
+#include "../GUI/Image.h"
+#include "../GUI/TextCell.h"
+
+#include "../GameWidget.h"
+
 
 
 class GameScene : public Scene
@@ -30,8 +36,14 @@ public:
     
 private:
     
+    GameWidget m_game_widget;
     
+    Image m_background;
     
+    Layout m_main_layout;
+    
+    TextCell m_time;
+    TextCell m_mines;
 };
 
 

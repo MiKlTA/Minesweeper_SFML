@@ -26,7 +26,7 @@ Core::Core(Config *config, SceneManager *scene_manager,
     m_scene_manager->addScene("MainMenu", new MainMenu(this, scene_manager, game));
     m_scene_manager->addScene("Settings", new Settings(this, scene_manager, game));
     m_scene_manager->addScene("GameScene", new GameScene(this, scene_manager, game));
-    m_scene_manager->setScene("MainMenu");
+    m_scene_manager->setScene("GameScene");
 }
 
 Core::~Core()

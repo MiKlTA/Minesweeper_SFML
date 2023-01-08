@@ -34,6 +34,11 @@ void TextCell::setColor(sf::Color color)
     m_text.setColor(color);
 }
 
+void TextCell::setCharacterSize(unsigned int size)
+{
+    m_text.setCharacterSize(size);
+}
+
 void TextCell::append(wchar_t symbol)
 {
     m_text.append(symbol);
@@ -59,6 +64,8 @@ void TextCell::setTextShift(sf::Vector2f text_shift)
 {
     m_text_shift = text_shift;
 }
+
+
 
 void TextCell::setMaxTextLength(unsigned int max_text_length)
 {

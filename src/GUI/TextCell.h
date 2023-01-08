@@ -20,6 +20,8 @@ public:
     
     void setString(std::wstring string);
     void setColor(sf::Color color);
+    void setCharacterSize(unsigned int size);
+    
     void append(wchar_t symbol);
     void pop_back();
     
