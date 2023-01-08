@@ -10,7 +10,10 @@ GameWidget::GameWidget(Core *core, Game *game)
       
       m_padding(0.f, 0.f),
       
-      m_focus_position(0, 0)
+      m_focus_position(0, 0),
+      
+      m_tile_brush(*core->getResourceManager()->getTexture("tiles")),
+      m_content_brush(*core->getResourceManager()->getTexture("content"))
 {
    
 }
@@ -19,7 +22,7 @@ GameWidget::GameWidget(Core *core, Game *game)
 
 void GameWidget::refresh()
 {
-    // ...
+    
 }
 
 
@@ -78,6 +81,8 @@ void GameWidget::onEvent_(const sf::Event &event)
 void GameWidget::draw_(sf::RenderTarget &target, sf::RenderStates) const
 {
     // ...
+    
+    target.draw(m_content_brush);
 }
 
 
@@ -85,3 +90,40 @@ void GameWidget::draw_(sf::RenderTarget &target, sf::RenderStates) const
 // private:
 
 
+
+void GameWidget::setNumberTexRect(int number)
+{
+    m_content_brush.setTextureRect({(2 + number) * 16, 0, 16, 16});
+}
+
+void GameWidget::setMineTexRect()
+{
+    m_content_brush.setTextureRect({0, 0, 16, 16});
+}
+
+void GameWidget::setDuckTexRect()
+{
+    m_content_brush.setTextureRect({16, 0, 16, 16});
+}
+
+void GameWidget::setFlagTexRect()
+{
+    m_content_brush.setTextureRect({2 * 16, 0, 16, 16});
+}
+
+
+
+void GameWidget::setClosedTileTexRect()
+{
+    m_tile_brush.setTextureRect({0, 0, 24, 24});
+}
+
+void GameWidget::setHoveredTIleTexRect()
+{
+    m_tile_brush.setTextureRect({24, 0, 24, 24});
+}
+
+void GameWidget::setOpenedTileTexRect()
+{
+    m_tile_brush.setTextureRect({2 * 24, 0, 24, 24});
+}
