@@ -86,9 +86,11 @@ PopupGameSettings::PopupGameSettings(Core *core, SceneManager *scene_manager,
     m_width_image.scale({2.f, 2.f});
     m_height_image.setImage("height");
     m_height_image.scale({2.f, 2.f});
-    m_mine_image.setImage("mine");
+    m_mine_image.setImage("content");
+    m_mine_image.setRectangle({0, 0, 16, 16});
     m_mine_image.scale({2.f, 2.f});
-    m_duck_image.setImage("duck");
+    m_duck_image.setImage("content");
+    m_mine_image.setRectangle({16, 0, 16, 16});
     m_duck_image.scale({2.f, 2.f});
     
     float icons_layout_margin = 16.f;
