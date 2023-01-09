@@ -48,7 +48,7 @@ void GameScene::update(float frametime)
 
 void GameScene::onOpen()
 {
-    m_game_widget.refresh();
+    m_game_widget.newGame();
 }
 
 

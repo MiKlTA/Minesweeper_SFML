@@ -17,7 +17,8 @@ public:
     
     
     
-    void refresh();
+    void restartGame();
+    void newGame();
     
     
     
@@ -47,8 +48,14 @@ private:
     sf::IntRect getFlagTexRect() const;
     
     sf::IntRect getClosedTileTexRect() const;
-    sf::IntRect getHoveredTIleTexRect() const;
+    sf::IntRect getHoveredTileTexRect() const;
     sf::IntRect getOpenedTileTexRect() const;
+    
+    
+    
+    void recomputeRealSizeAndLocation();
+    
+    Game::Tile::Position getTilePosition(sf::Vector2i pixel_point, bool &tile_exist);
     
     
     
@@ -57,10 +64,12 @@ private:
     KeyManager      *m_key_manager;
     Config          *m_config;
     
-    sf::Vector2f m_padding;
-    sf::Vector2f m_real_size;
+    sf::Vector2f    m_padding;
+    sf::Vector2f    m_real_size;
+    float           m_scale;
     
-    sf::Vector2u m_focus_position;
+    Game::Tile::Position    m_focus_position;
+    Game::Tile::Position    m_pressed_position;
 };
 
 
