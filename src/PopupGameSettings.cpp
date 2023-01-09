@@ -2,8 +2,7 @@
 
 
 
-PopupGameSettings::PopupGameSettings(Core *core, SceneManager *scene_manager,
-                                     Game *game)
+PopupGameSettings::PopupGameSettings(Core *core, Game *game)
     : Widget(*core->getWindow()),
       
       m_game(game),
@@ -70,9 +69,9 @@ PopupGameSettings::PopupGameSettings(Core *core, SceneManager *scene_manager,
     m_go_back.setCallback([this](){
         this->setHide(!this->isHidden());
     });
-    m_start.setCallback([scene_manager]()
+    m_start.setCallback([core]()
     {
-       scene_manager->setScene("GameScene");
+       core->getSceneManager()->setScene("GameScene");
     });
     
     m_buttons_layout.setPadding({35.f, 0.f, 35.f, 30.f});

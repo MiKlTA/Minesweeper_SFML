@@ -33,6 +33,7 @@ public:
     
     
     Config * getConfig();
+    SceneManager * getSceneManager();
     ResourceManager * getResourceManager();
     KeyManager * getKeyManager();
     const sf::RenderWindow * getWindow();

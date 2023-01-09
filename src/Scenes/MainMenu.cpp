@@ -2,8 +2,8 @@
 
 
 
-MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
-    : Scene(scene_manager),
+MainMenu::MainMenu(Core *core, Game *game)
+    : Scene(core->getSceneManager()),
       
       m_key_manager(core->getKeyManager()),
       
@@ -17,7 +17,7 @@ MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
                                  Button::Theme::Default, L"Continue")),
       m_new_game(new Button(core->getResourceManager(), core->getKeyManager(),
                             *core->getWindow(),
-                               Button::Theme::Default, L"New core")),
+                               Button::Theme::Default, L"New game")),
       m_settings(new Button(core->getResourceManager(), core->getKeyManager(),
                             *core->getWindow(),
                                Button::Theme::Default, L"Settings")),
@@ -25,11 +25,11 @@ MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
                         *core->getWindow(),
                                Button::Theme::Default, L"Exit")),
       
-      m_popup_game_settings(new PopupGameSettings(core, scene_manager, game))
+      m_popup_game_settings(new PopupGameSettings(core, game))
 {
     Text *im_sure_text = new Text(core->getResourceManager(), *core->getWindow(),
                                   Text::Alignment::Left,
-                                  L"Do you want to start a new core?");
+                                  L"Do you want to start a new game?");
     im_sure_text->setCharacterSize(32);
     m_popup_im_sure = new PopupYouSure(core->getResourceManager(), core->getKeyManager(),
                                        *core->getWindow(), im_sure_text);
@@ -40,14 +40,14 @@ MainMenu::MainMenu(Core *core, SceneManager *scene_manager, Game *game)
     configureButton(m_settings);
     configureButton(m_exit);
     
-    m_continue_game->setCallback([scene_manager](){
-        scene_manager->setScene("GameScene");
+    m_continue_game->setCallback([core](){
+        core->getSceneManager()->setScene("GameScene");
     });
     m_new_game->setCallback([this](){
         m_popup_im_sure->setHide(false);
     });
-    m_settings->setCallback([scene_manager](){
-        scene_manager->setScene("Settings");
+    m_settings->setCallback([core](){
+        core->getSceneManager()->setScene("Settings");
     });
     m_exit->setCallback([core](){
         core->quit();

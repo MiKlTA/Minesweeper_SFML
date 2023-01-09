@@ -22,7 +22,7 @@ class PopupGameSettings : public Widget
 {
 public:
     
-    PopupGameSettings(Core *core, SceneManager *scene_manager, Game *game);
+    PopupGameSettings(Core *core, Game *game);
     
     
     

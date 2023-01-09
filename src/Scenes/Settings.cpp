@@ -2,8 +2,8 @@
 
 
 
-Settings::Settings(Core *core, SceneManager *scene_manager, Game *game)
-    : Scene(scene_manager)
+Settings::Settings(Core *core, Game *game)
+    : Scene(core->getSceneManager())
 {
     
 }

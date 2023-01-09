@@ -23,9 +23,9 @@ Core::Core(Config *config, SceneManager *scene_manager,
     m_window->setPosition({0, 0});
     m_window->setView(sf::View(m_config->viewSize() / 2.f, m_config->viewSize()));
     
-    m_scene_manager->addScene("MainMenu", new MainMenu(this, scene_manager, game));
-    m_scene_manager->addScene("Settings", new Settings(this, scene_manager, game));
-    m_scene_manager->addScene("GameScene", new GameScene(this, scene_manager, game));
+    m_scene_manager->addScene("MainMenu", new MainMenu(this, game));
+    m_scene_manager->addScene("Settings", new Settings(this, game));
+    m_scene_manager->addScene("GameScene", new GameScene(this, game));
     m_scene_manager->setScene("GameScene");
 }
 
@@ -46,6 +46,11 @@ sf::Vector2f Core::getViewSize() const
 Config * Core::getConfig()
 {
     return m_config;
+}
+
+SceneManager * Core::getSceneManager()
+{
+    return m_scene_manager;
 }
 
 ResourceManager * Core::getResourceManager()

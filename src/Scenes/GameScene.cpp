@@ -2,8 +2,8 @@
 
 
 
-GameScene::GameScene(Core *core, SceneManager *scene_manager, Game *game)
-    : Scene(scene_manager),
+GameScene::GameScene(Core *core, Game *game)
+    : Scene(core->getSceneManager()),
       
       m_game_widget(core, game),
       

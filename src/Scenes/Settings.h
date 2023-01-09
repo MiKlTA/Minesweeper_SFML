@@ -12,7 +12,7 @@ class Settings : public Scene
 {
 public:
     
-    Settings(Core *core, SceneManager *scene_manager, Game *game);
+    Settings(Core *core, Game *game);
     
     
     
