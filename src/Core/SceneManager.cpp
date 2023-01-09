@@ -33,6 +33,8 @@ void SceneManager::setScene(std::string scene_name)
     if (scene != nullptr)
     {
         m_current_scene = scene;
+        m_current_scene->onOpen();
+        
         m_scenes_buffer.push_back(scene);
         if (m_scenes_buffer.size() > m_scenes_buffer_size)
         {
