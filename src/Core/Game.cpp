@@ -200,6 +200,18 @@ void Game::checkTile(Tile::Position tile_position)
                     }
                 });
             }
+            else
+            {
+                processTileNeighbors(opening_tile_position,
+                                     [this, &requiring_to_open](Tile::Position tile_position){
+                    if (!tile(tile_position).is_open
+                            && tile(tile_position).type == Tile::Type::Empty
+                            && tile(tile_position).neighbors == 0)
+                    {
+                        requiring_to_open.push(tile_position);
+                    }
+                });
+            }
         }
     }
 }
