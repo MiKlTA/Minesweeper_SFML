@@ -33,6 +33,7 @@ protected:
     
     
     void onEvent_(const sf::Event &event) override;
+    void onStateChange(State new_state) override;
     
     
     
@@ -59,6 +60,14 @@ private:
     
     
     
+    enum PressEvents
+    {
+        Mouse,
+        Key
+    };
+    
+    
+    
     Game            *m_game;
     ResourceManager *m_resource_manager;
     KeyManager      *m_key_manager;
@@ -70,6 +79,7 @@ private:
     
     Game::Tile::Position    m_focus_position;
     Game::Tile::Position    m_pressed_position;
+    PressEvents             m_press_event_type;
 };
 
 

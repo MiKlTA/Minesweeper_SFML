@@ -88,20 +88,37 @@ void GameWidget::onEvent_(const sf::Event &event)
         Game::Tile::Position tile_position;
         tile_position = getTilePosition({event.mouseMove.x, event.mouseMove.y}, have_focused_tile);
         
-        if (have_focused_tile && getState() != State::Pressed)
+        if (have_focused_tile)
         {
-            setState(State::Hovered);
-            m_focus_position = tile_position;
+            if (getState() == State::Default
+                    || getState() == State::Hovered)
+            {
+                setState(State::Hovered);
+                m_focus_position = tile_position;
+            }
+        }
+        else
+        {
+            if (getState() == State::Hovered)
+            {
+                setState(State::Default);
+            }
         }
         
         break;
     }
     case sf::Event::MouseButtonPressed:
         
+        if (getState() == State::Focused)
+        {
+            setState(State::Default);
+        }
+        
         if (event.mouseButton.button == m_key_manager->button("left")
                 && getState() == State::Hovered)
         {
             setState(State::Pressed);
+            m_press_event_type = PressEvents::Mouse;
             m_pressed_position = m_focus_position;
         }
         else if (event.mouseButton.button == m_key_manager->button("right")
@@ -113,7 +130,8 @@ void GameWidget::onEvent_(const sf::Event &event)
         break;
     case sf::Event::MouseButtonReleased:
         
-        if (event.mouseButton.button == m_key_manager->button("left"))
+        if (event.mouseButton.button == m_key_manager->button("left")
+                && m_press_event_type == PressEvents::Mouse)
         {
             bool have_focused_tile;
             getTilePosition({event.mouseButton.x, event.mouseButton.y}, have_focused_tile);
@@ -132,9 +150,65 @@ void GameWidget::onEvent_(const sf::Event &event)
                 m_game->checkTile(m_focus_position);
             }
         }
+        break;
+    case sf::Event::KeyPressed:
+        
+        if (getState() != State::Pressed)
+        {
+            setState(State::Focused);
+        }
+        
+        if (event.key.code == m_key_manager->key("left"))
+        {
+            m_focus_position.x = m_focus_position.x + m_game->getFieldSize().x - 1;
+        }
+        else if (event.key.code == m_key_manager->key("up"))
+        {
+            m_focus_position.y = m_focus_position.y + m_game->getFieldSize().y - 1;
+        }
+        else if (event.key.code == m_key_manager->key("right"))
+        {
+            m_focus_position.x = m_focus_position.x + 1;
+        }
+        else if (event.key.code == m_key_manager->key("down"))
+        {
+            m_focus_position.y = m_focus_position.y + 1;
+        }
+        else if (event.key.code == m_key_manager->key("shift"))
+        {
+            m_game->checkFlag(m_focus_position);
+        }
+        else if (event.key.code == m_key_manager->key("enter"))
+        {
+            setState(State::Pressed);
+            m_press_event_type = PressEvents::Key;
+        }
+        
+        m_focus_position.x %= m_game->getFieldSize().x;
+        m_focus_position.y %= m_game->getFieldSize().y;
+        
+        break;
+    case sf::Event::KeyReleased:
+        
+        if (event.key.code == m_key_manager->key("enter")
+                && m_press_event_type == PressEvents::Key
+                && getState() == State::Pressed)
+        {
+            m_game->checkTile(m_focus_position);
+            setState(State::Focused);
+        }
         
         break;
     default: break;
+    }
+}
+
+void GameWidget::onStateChange(State new_state)
+{
+    if (new_state == State::Focused
+            && getState() != State::Focused && getState() != State::Pressed)
+    {
+        m_focus_position = {0, 0};
     }
 }
 

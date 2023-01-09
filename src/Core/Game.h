@@ -35,7 +35,7 @@ public:
             : type(Type::Empty),
               neighbors(0),
               is_open(false),
-              have_flag(true)
+              have_flag(false)
         {};
         
         Type            type;
