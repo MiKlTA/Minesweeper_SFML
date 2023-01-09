@@ -172,31 +172,43 @@ void Game::restartGame()
 
 void Game::checkTile(Tile::Position tile_position)
 {
-    std::stack<Tile::Position> requiring_to_open;
-    requiring_to_open.push(tile_position);
-    
-    while (!requiring_to_open.empty() && !m_you_lose)
+    if (!getTile(tile_position).have_flag)
     {
-        Tile::Position opening_tile_position = requiring_to_open.top();
-        requiring_to_open.pop();
-        Tile &opening_tile = tile(opening_tile_position);
-        opening_tile.is_open = true;
-        if (opening_tile.type == Tile::Type::Mine
-                || opening_tile.type == Tile::Type::Duck)
-        {
-            loseGame();
-        }
+        std::stack<Tile::Position> requiring_to_open;
+        requiring_to_open.push(tile_position);
         
-        if (opening_tile.neighbors == 0)
+        while (!requiring_to_open.empty() && !m_you_lose)
         {
-            processTileNeighbors(opening_tile_position,
-                                 [this, &requiring_to_open](Tile::Position tile_position){
-                if (!tile(tile_position).is_open)
-                {
-                    requiring_to_open.push(tile_position);
-                }
-            });
+            Tile::Position opening_tile_position = requiring_to_open.top();
+            requiring_to_open.pop();
+            Tile &opening_tile = tile(opening_tile_position);
+            opening_tile.is_open = true;
+            opening_tile.have_flag = false;
+            if (opening_tile.type == Tile::Type::Mine
+                    || opening_tile.type == Tile::Type::Duck)
+            {
+                loseGame();
+            }
+            
+            if (opening_tile.neighbors == 0)
+            {
+                processTileNeighbors(opening_tile_position,
+                                     [this, &requiring_to_open](Tile::Position tile_position){
+                    if (!tile(tile_position).is_open)
+                    {
+                        requiring_to_open.push(tile_position);
+                    }
+                });
+            }
         }
+    }
+}
+
+void Game::checkFlag(Tile::Position flag_position)
+{
+    if (!getTile(flag_position).is_open)
+    {
+        tile(flag_position).have_flag = !tile(flag_position).have_flag;
     }
 }
 

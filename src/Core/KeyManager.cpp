@@ -12,6 +12,7 @@ KeyManager::KeyManager()
     attachKey("enter", sf::Keyboard::Enter);
     attachKey("backspace", sf::Keyboard::Backspace);
     attachButton("left", sf::Mouse::Left);
+    attachButton("right", sf::Mouse::Right);
 }
 
 

@@ -43,7 +43,7 @@ void GameScene::onEvent(const sf::Event &event)
 
 void GameScene::update(float frametime)
 {
-    
+    // ...
 }
 
 void GameScene::onOpen()

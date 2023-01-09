@@ -104,6 +104,11 @@ void GameWidget::onEvent_(const sf::Event &event)
             setState(State::Pressed);
             m_pressed_position = m_focus_position;
         }
+        else if (event.mouseButton.button == m_key_manager->button("right")
+                 && getState() == State::Hovered)
+        {
+            m_game->checkFlag(m_focus_position);
+        }
         
         break;
     case sf::Event::MouseButtonReleased:
@@ -172,9 +177,9 @@ void GameWidget::draw_(sf::RenderTarget &target, sf::RenderStates states) const
         
         target.draw(tile_brush, transform);
         
+        bool need_draw = false;
         if (tile.is_open)
         {
-            bool need_draw = false;
             if (tile.type == Game::Tile::Empty && tile.neighbors > 0)
             {
                 content_brush.setTextureRect(getNumberTexRect(tile.neighbors));
@@ -190,14 +195,19 @@ void GameWidget::draw_(sf::RenderTarget &target, sf::RenderStates states) const
                 content_brush.setTextureRect(getDuckTexRect());
                 need_draw = true;
             }
+        }
+        else if (tile.have_flag)
+        {
+            content_brush.setTextureRect(getFlagTexRect());
+            need_draw = true;
+        }
+        
+        if (need_draw)
+        {
+            transform.translate((m_config->tileSize().x - m_config->contentSize().x) / 2.f,
+                                (m_config->tileSize().y - m_config->contentSize().y) / 2.f);
             
-            if (need_draw)
-            {
-                transform.translate((m_config->tileSize().x - m_config->contentSize().x) / 2.f,
-                                    (m_config->tileSize().y - m_config->contentSize().y) / 2.f);
-                
-                target.draw(content_brush, transform);
-            }
+            target.draw(content_brush, transform);
         }
         
     });

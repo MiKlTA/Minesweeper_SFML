@@ -34,12 +34,14 @@ public:
         Tile()
             : type(Type::Empty),
               neighbors(0),
-              is_open(false)
+              is_open(false),
+              have_flag(true)
         {};
         
         Type            type;
         unsigned int    neighbors;
         bool            is_open;
+        bool            have_flag;
     };
     
     
@@ -64,6 +66,7 @@ public:
     void restartGame();
     
     void checkTile(Tile::Position tile_position);
+    void checkFlag(Tile::Position flag_position);
     
     
     
