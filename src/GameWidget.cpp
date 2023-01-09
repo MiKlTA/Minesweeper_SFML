@@ -6,14 +6,13 @@ GameWidget::GameWidget(Core *core, Game *game)
     : Widget(*core->getWindow()),
       
       m_game(game),
+      m_resource_manager(core->getResourceManager()),
       m_key_manager(core->getKeyManager()),
+      m_config(core->getConfig()),
       
       m_padding(0.f, 0.f),
       
-      m_focus_position(0, 0),
-      
-      m_tile_brush(*core->getResourceManager()->getTexture("tiles")),
-      m_content_brush(*core->getResourceManager()->getTexture("content"))
+      m_focus_position(0, 0)
 {
    
 }
@@ -22,7 +21,8 @@ GameWidget::GameWidget(Core *core, Game *game)
 
 void GameWidget::refresh()
 {
-    
+    m_game->createField();
+    m_game->generateField();
 }
 
 
@@ -78,11 +78,43 @@ void GameWidget::onEvent_(const sf::Event &event)
 
 
 
-void GameWidget::draw_(sf::RenderTarget &target, sf::RenderStates) const
+void GameWidget::draw_(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    // ...
+    sf::Sprite tile_brush(*m_resource_manager->getTexture("tiles"));
+    sf::Sprite content_brush(*m_resource_manager->getTexture("content"));
     
-    target.draw(m_content_brush);
+    m_game->processAllTiles([&](Game::Tile::Position tile_position){
+        const Game::Tile &tile = m_game->getTile(tile_position);
+        bool need_draw = false;
+        
+        
+        if (tile.type == Game::Tile::Empty && tile.neighbors > 0)
+        {
+            content_brush.setTextureRect(getNumberTexRect(tile.neighbors));
+            need_draw = true;
+        }
+        else if (tile.type == Game::Tile::Mine)
+        {
+            content_brush.setTextureRect(getMineTexRect());
+            need_draw = true;
+        }
+        else if (tile.type == Game::Tile::Duck)
+        {
+            content_brush.setTextureRect(getDuckTexRect());
+            need_draw = true;
+        }
+        
+        
+        
+        if (need_draw)
+        {
+            sf::Transform transform;
+            transform.translate(m_padding);
+            transform.translate(tile_position.x * 16.f, tile_position.y * 16.f);
+            
+            target.draw(content_brush, transform);
+        }
+    });
 }
 
 
@@ -91,39 +123,60 @@ void GameWidget::draw_(sf::RenderTarget &target, sf::RenderStates) const
 
 
 
-void GameWidget::setNumberTexRect(int number)
+sf::IntRect GameWidget::getNumberTexRect(int number) const
 {
-    m_content_brush.setTextureRect({(2 + number) * 16, 0, 16, 16});
+    return {
+        (2 + number) * m_config->contentSize().x, 0,
+        m_config->contentSize().x, m_config->contentSize().y
+    };
 }
 
-void GameWidget::setMineTexRect()
+sf::IntRect GameWidget::getMineTexRect() const
 {
-    m_content_brush.setTextureRect({0, 0, 16, 16});
+    return {
+        0, 0,
+        m_config->contentSize().x, m_config->contentSize().y
+    };
 }
 
-void GameWidget::setDuckTexRect()
+sf::IntRect GameWidget::getDuckTexRect() const
 {
-    m_content_brush.setTextureRect({16, 0, 16, 16});
+    return {
+        m_config->contentSize().x, 0,
+        m_config->contentSize().x, m_config->contentSize().y
+    };
 }
 
-void GameWidget::setFlagTexRect()
+sf::IntRect GameWidget::getFlagTexRect() const
 {
-    m_content_brush.setTextureRect({2 * 16, 0, 16, 16});
+    return {
+        2 * m_config->contentSize().x, 0,
+        m_config->contentSize().x, m_config->contentSize().y
+    };
 }
 
 
 
-void GameWidget::setClosedTileTexRect()
+sf::IntRect GameWidget::getClosedTileTexRect() const
 {
-    m_tile_brush.setTextureRect({0, 0, 24, 24});
+    return {
+        0, 0,
+        m_config->tileSize().x, m_config->tileSize().y
+    };
 }
 
-void GameWidget::setHoveredTIleTexRect()
+sf::IntRect GameWidget::getHoveredTIleTexRect() const
 {
-    m_tile_brush.setTextureRect({24, 0, 24, 24});
+    return {
+        m_config->tileSize().x, 0,
+        m_config->tileSize().x, m_config->tileSize().y
+    };
 }
 
-void GameWidget::setOpenedTileTexRect()
+sf::IntRect GameWidget::getOpenedTileTexRect() const
 {
-    m_tile_brush.setTextureRect({2 * 24, 0, 24, 24});
+    return {
+        2 * m_config->tileSize().x, 0,
+        m_config->tileSize().x, m_config->tileSize().y
+    };
 }

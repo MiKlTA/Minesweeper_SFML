@@ -172,7 +172,7 @@ Game::FieldSize Game::getFieldSize() const
 
 unsigned int Game::getMinTotalMinesNumber() const
 {
-    return 50;
+    return 200;
 }
 
 unsigned int Game::getMinTotalDucksNumber() const

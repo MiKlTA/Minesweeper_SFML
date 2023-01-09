@@ -41,27 +41,26 @@ protected:
     
 private:
     
-    void setNumberTexRect(int number);
-    void setMineTexRect();
-    void setDuckTexRect();
-    void setFlagTexRect();
+    sf::IntRect getNumberTexRect(int number) const;
+    sf::IntRect getMineTexRect() const;
+    sf::IntRect getDuckTexRect() const;
+    sf::IntRect getFlagTexRect() const;
     
-    void setClosedTileTexRect();
-    void setHoveredTIleTexRect();
-    void setOpenedTileTexRect();
+    sf::IntRect getClosedTileTexRect() const;
+    sf::IntRect getHoveredTIleTexRect() const;
+    sf::IntRect getOpenedTileTexRect() const;
     
     
     
-    Game *m_game;
-    KeyManager *m_key_manager;
+    Game            *m_game;
+    ResourceManager *m_resource_manager;
+    KeyManager      *m_key_manager;
+    Config          *m_config;
     
     sf::Vector2f m_padding;
     sf::Vector2f m_real_size;
     
     sf::Vector2u m_focus_position;
-    
-    sf::Sprite m_tile_brush;
-    sf::Sprite m_content_brush;
 };
 
 

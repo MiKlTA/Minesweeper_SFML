@@ -26,6 +26,8 @@ void printVector(const VecType &vector)
 
 int main(int, char *argv[])
 {
+    std::srand(123);
+    
     Config *config = new Config;
     
     SceneManager *scene_manager = new SceneManager;

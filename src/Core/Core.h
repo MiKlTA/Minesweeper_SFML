@@ -32,6 +32,7 @@ public:
     
     
     
+    Config * getConfig();
     ResourceManager * getResourceManager();
     KeyManager * getKeyManager();
     const sf::RenderWindow * getWindow();

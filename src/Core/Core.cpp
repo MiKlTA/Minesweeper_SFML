@@ -43,6 +43,11 @@ sf::Vector2f Core::getViewSize() const
 
 
 
+Config * Core::getConfig()
+{
+    return m_config;
+}
+
 ResourceManager * Core::getResourceManager()
 {
     return m_resource_manager;
