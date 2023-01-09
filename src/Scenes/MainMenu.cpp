@@ -12,17 +12,18 @@ MainMenu::MainMenu(Core *core, Game *game)
       
       m_background(new Image(core->getResourceManager(), *core->getWindow())),
       
-      m_continue_game(new Button(core->getResourceManager(), core->getKeyManager(),
-                                 *core->getWindow(),
+      m_continue_game(new Button(core->getResourceManager(), core->getSoundManager(),
+                                 core->getKeyManager(), *core->getWindow(),
                                  Button::Theme::Default, L"Continue")),
-      m_new_game(new Button(core->getResourceManager(), core->getKeyManager(),
-                            *core->getWindow(),
+      m_new_game(new Button(core->getResourceManager(), core->getSoundManager(),
+                            core->getKeyManager(), *core->getWindow(),
                                Button::Theme::Default, L"New game")),
-      m_settings(new Button(core->getResourceManager(), core->getKeyManager(),
+      m_settings(new Button(core->getResourceManager(), core->getSoundManager(),
+                            core->getKeyManager(),
                             *core->getWindow(),
                                Button::Theme::Default, L"Settings")),
-      m_exit(new Button(core->getResourceManager(), core->getKeyManager(),
-                        *core->getWindow(),
+      m_exit(new Button(core->getResourceManager(), core->getSoundManager(),
+                        core->getKeyManager(), *core->getWindow(),
                                Button::Theme::Default, L"Exit")),
       
       m_popup_game_settings(new PopupGameSettings(core, game))
@@ -31,7 +32,8 @@ MainMenu::MainMenu(Core *core, Game *game)
                                   Text::Alignment::Left,
                                   L"Do you want to start a new game?");
     im_sure_text->setCharacterSize(32);
-    m_popup_im_sure = new PopupYouSure(core->getResourceManager(), core->getKeyManager(),
+    m_popup_im_sure = new PopupYouSure(core->getResourceManager(), core->getSoundManager(),
+                                       core->getKeyManager(),
                                        *core->getWindow(), im_sure_text);
     
     configureButton(m_continue_game);

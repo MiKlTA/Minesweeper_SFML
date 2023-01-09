@@ -2,7 +2,9 @@
 
 
 
-PopupYouSure::PopupYouSure(ResourceManager *resource_manager, KeyManager *key_manager,
+PopupYouSure::PopupYouSure(
+        ResourceManager *resource_manager, SoundManager *sound_manager,
+        KeyManager *key_manager,
         const sf::RenderWindow &window, Text *title)
     : Widget(window),
       
@@ -15,9 +17,9 @@ PopupYouSure::PopupYouSure(ResourceManager *resource_manager, KeyManager *key_ma
       
       m_title(title),
       
-      m_go_back(new Button(resource_manager, key_manager, window,
+      m_go_back(new Button(resource_manager, sound_manager, key_manager, window,
                 Button::Theme::Default, L"Back")),
-      m_Im_sure(new Button(resource_manager, key_manager, window,
+      m_Im_sure(new Button(resource_manager, sound_manager, key_manager, window,
                 Button::Theme::Default, L"I'm sure"))
 {
     m_layout_vertical->setPadding({20.f, 40.f, 20.f, 20.f});

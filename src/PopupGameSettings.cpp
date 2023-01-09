@@ -61,9 +61,11 @@ PopupGameSettings::PopupGameSettings(Core *core, Game *game)
       m_mine_image(core->getResourceManager(), *core->getWindow()),
       m_duck_image(core->getResourceManager(), *core->getWindow()),
       
-      m_go_back(core->getResourceManager(), core->getKeyManager(), *core->getWindow(),
+      m_go_back(core->getResourceManager(), core->getSoundManager(),
+                core->getKeyManager(), *core->getWindow(),
                 Button::Theme::Default, L"Back"),
-      m_start(core->getResourceManager(), core->getKeyManager(), *core->getWindow(),
+      m_start(core->getResourceManager(), core->getSoundManager(),
+              core->getKeyManager(), *core->getWindow(),
                 Button::Theme::Default, L"Start!")
 {
     m_go_back.setCallback([this](){

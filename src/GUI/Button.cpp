@@ -1,11 +1,13 @@
 #include "Button.h"
 
 #include "../Core/ResourceManager.h"
+#include "../Core/SoundManager.h"
 #include "../Core/KeyManager.h"
 
 
 
-Button::Button(ResourceManager *resource_manager, KeyManager *key_manager,
+Button::Button(ResourceManager *resource_manager, SoundManager *sound_manager,
+               KeyManager *key_manager,
                const sf::RenderWindow &window,
                Theme theme, std::wstring text)
     : Widget(window),
@@ -18,7 +20,10 @@ Button::Button(ResourceManager *resource_manager, KeyManager *key_manager,
       
       m_button_default(resource_manager, window),
       m_button_hovered(resource_manager, window),
-      m_button_pressed(resource_manager, window)
+      m_button_pressed(resource_manager, window),
+      
+      m_hover_sound(*sound_manager->getSoundBuffer("click2")),
+      m_press_sound(*sound_manager->getSoundBuffer("click1"))
 {
     switch (theme)
     {
@@ -161,6 +166,17 @@ void Button::onSizeChange(sf::Vector2f new_size)
 void Button::onStateChange(State new_state)
 {
     locateText(new_state, getSize(), getPosition());
+    
+    if (getState() == State::Default
+            && (new_state == State::Hovered || new_state == State::Focused))
+    {
+        m_hover_sound.play();
+    }
+    else if ((getState() == State::Hovered || getState() == State::Focused)
+             && new_state == State::Pressed)
+    {
+        m_press_sound.play();
+    }
 }
 
 

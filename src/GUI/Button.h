@@ -5,6 +5,8 @@
 
 #include <functional>
 
+#include "SFML/Audio.hpp"
+
 
 
 #include "Widget.h"
@@ -15,6 +17,7 @@
 
 
 class ResourceManager;
+class SoundManager;
 class KeyManager;
 
 class Button : public Widget
@@ -29,7 +32,8 @@ public:
     
     
     
-    Button(ResourceManager *resource_manager, KeyManager *key_manager,
+    Button(ResourceManager *resource_manager, SoundManager *sound_manager,
+           KeyManager *key_manager,
             const sf::RenderWindow &window,
             Theme theme, std::wstring text);
     
@@ -88,6 +92,9 @@ private:
     sf::Vector2f    m_text_padding;
     
     PressEvents     m_press_event_type;
+    
+    sf::Sound       m_hover_sound;
+    sf::Sound       m_press_sound;
 };
 
 

@@ -7,11 +7,13 @@
 
 
 Core::Core(Config *config, SceneManager *scene_manager,
-           ResourceManager *resource_manager, KeyManager *key_manager,
+           ResourceManager *resource_manager, SoundManager *sound_manager,
+           KeyManager *key_manager,
            Game *game)
     : m_config(config),
       m_scene_manager(scene_manager),
       m_resource_manager(resource_manager),
+      m_sound_manager(sound_manager),
       m_key_manager(key_manager)
 {
     m_window = new sf::RenderWindow(
@@ -26,7 +28,7 @@ Core::Core(Config *config, SceneManager *scene_manager,
     m_scene_manager->addScene("MainMenu", new MainMenu(this, game));
     m_scene_manager->addScene("Settings", new Settings(this, game));
     m_scene_manager->addScene("GameScene", new GameScene(this, game));
-    m_scene_manager->setScene("GameScene");
+    m_scene_manager->setScene("MainMenu");
 }
 
 Core::~Core()
@@ -56,6 +58,11 @@ SceneManager * Core::getSceneManager()
 ResourceManager * Core::getResourceManager()
 {
     return m_resource_manager;
+}
+
+SoundManager * Core::getSoundManager()
+{
+    return m_sound_manager;
 }
 
 KeyManager *Core::getKeyManager()

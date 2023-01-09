@@ -9,6 +9,7 @@
 #include "Button.h"
           
 #include "../Core/ResourceManager.h"
+#include "../Core/SoundManager.h"
 #include "../Core/KeyManager.h"
 
 
@@ -17,7 +18,8 @@ class PopupYouSure : public Widget
 {
 public:
     
-    PopupYouSure(ResourceManager *resource_manager, KeyManager *key_manager,
+    PopupYouSure(ResourceManager *resource_manager, SoundManager *sound_manager,
+                 KeyManager *key_manager,
                  const sf::RenderWindow &window, Text *title);
     ~PopupYouSure();
     

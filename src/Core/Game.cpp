@@ -260,7 +260,7 @@ unsigned int Game::getMinTotalMinesNumber() const
 
 unsigned int Game::getMinTotalDucksNumber() const
 {
-    return 10;
+    return 3;
 }
 
 unsigned int Game::getMaxTotalMinesNumber() const
