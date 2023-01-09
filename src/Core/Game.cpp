@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include <cmath>
+#include <stack>
 
 
 
@@ -65,41 +66,63 @@ void Game::createField()
 
 void Game::generateField()
 {
+    int mines_number = getTotalMinesNumber();
+    int ducks_number = getTotalDucksNumber();
     int tiles_number = getFieldSize().x * getFieldSize().y;
+    
     int *random_tiles = new int[tiles_number];
     fillRandomNumbers(random_tiles, tiles_number);
     
-    int mines_number = getTotalMinesNumber();
-    int ducks_number = getTotalDucksNumber();
     
     for (int i = 0; i < mines_number; ++i)
     {
-        Tile::Position tile_position(fromLinearToPoint(random_tiles[i]));
-        
-        tile(tile_position).type = Tile::Type::Mine;
-        processTileNeighbors(tile_position, [this](Tile::Position neighbor_position){
-            this->tile(neighbor_position).neighbors++;
-        });
+        emplaceMine(fromLinearToPoint(random_tiles[i]));
     }
     
     for (int i = mines_number; i < mines_number + ducks_number; ++i)
     {
-        Tile::Position tile_position(fromLinearToPoint(random_tiles[i]));
-        
-        tile(tile_position).type = Tile::Type::Duck;
-        processTileNeighbors(tile_position, [this](Tile::Position neighbor_position){
-            unsigned int &neighbors = this->tile(neighbor_position).neighbors;
-            if (neighbors > 0)
-            {
-                neighbors--;
-            }
-        });
+        emplaceDuck(fromLinearToPoint(random_tiles[i]));
     }
 }
 
 void Game::generateField(Tile::Position definitely_empty_tile)
 {
-    // ...
+    int mines_number = getTotalMinesNumber();
+    int ducks_number = getTotalDucksNumber();
+    int tiles_number = getFieldSize().x * getFieldSize().y;
+    int available_tiles_number = tiles_number - mines_number - ducks_number;
+    
+    if (available_tiles_number > 16)
+    {
+        int *random_tiles = new int[available_tiles_number];
+        fillRandomNumbers(random_tiles, available_tiles_number);
+        
+        
+        int random_tile_index = 0;
+        for (int i = 0; i < mines_number; ++i)
+        {
+            Tile::Position random_tile_position;
+            do
+            {
+                ++random_tile_index;
+                random_tile_position = fromLinearToPoint(random_tiles[random_tile_index]);
+            }
+            while (isPointInArea(definitely_empty_tile, random_tile_position));
+            emplaceMine(random_tile_position);
+        }
+        
+        for (int i = mines_number; i < mines_number + ducks_number; ++i)
+        {
+            Tile::Position random_tile_position;
+            do
+            {
+                ++random_tile_index;
+                random_tile_position = fromLinearToPoint(random_tiles[random_tile_index]);
+            }
+            while (isPointInArea(definitely_empty_tile, random_tile_position));
+            emplaceDuck(fromLinearToPoint(random_tiles[random_tile_index]));
+        }
+    }
 }
 
 void Game::destroyField()
@@ -129,16 +152,41 @@ void Game::loadGame()
 
 
 
-void Game::startGame()
+void Game::restartGame()
 {
-    // ...
+    m_you_lose = false;
+    processAllTiles([this](Tile::Position tile_position){
+        tile(tile_position).is_open = false;
+    });
 }
 
 
 
 void Game::checkTile(Tile::Position tile_position)
 {
-    // ... 
+    std::stack<Tile::Position> requiring_to_open;
+    requiring_to_open.push(tile_position);
+    
+    while (!requiring_to_open.empty() && !m_you_lose)
+    {
+        Tile::Position opening_tile_position = requiring_to_open.top();
+        requiring_to_open.pop();
+        Tile &opening_tile = tile(opening_tile_position);
+        opening_tile.is_open = true;
+        if (opening_tile.type == Tile::Type::Mine
+                || opening_tile.type == Tile::Type::Duck)
+        {
+            loseGame();
+        }
+        
+        processTileNeighbors(opening_tile_position,
+                             [this, &requiring_to_open](Tile::Position tile_position){
+            if (!tile(tile_position).is_open)
+            {
+                requiring_to_open.push(tile_position);
+            }
+        });
+    }
 }
 
 
@@ -172,12 +220,12 @@ Game::FieldSize Game::getFieldSize() const
 
 unsigned int Game::getMinTotalMinesNumber() const
 {
-    return 200;
+    return 150;
 }
 
 unsigned int Game::getMinTotalDucksNumber() const
 {
-    return 0;
+    return 20;
 }
 
 unsigned int Game::getMaxTotalMinesNumber() const
@@ -257,7 +305,7 @@ Game::Tile::Position Game::fromLinearToPoint(unsigned int linear_position)
 
 
 void Game::processTileNeighbors(Tile::Position tile_position,
-                                std::function<void(Tile::Position)> handler)
+                                std::function<void(Tile::Position)> handler) const
 {
     bool on_left_border = tile_position.x == 0;
     bool on_right_border = tile_position.x == getFieldSize().x - 1;
@@ -305,7 +353,60 @@ void Game::processTileNeighbors(Tile::Position tile_position,
     }
 }
 
+bool Game::isPointInArea(Tile::Position area_centre, Tile::Position point) const
+{
+    if (area_centre.x == point.x && area_centre.y == point.y)
+    {
+        return true;
+    }
+    
+    bool is_point_in_area = false;
+    processTileNeighbors(area_centre,
+                         [&is_point_in_area, point](Tile::Position tile_position){
+        is_point_in_area |= tile_position.x == point.x && tile_position.y == point.y;
+    });
+    
+    return is_point_in_area;
+}
+
+
+
 Game::Tile & Game::tile(Tile::Position tile_position)
 {
     return m_tiles[tile_position.y][tile_position.x];
+}
+
+void Game::emplaceMine(Tile::Position mine_position)
+{
+    tile(mine_position).type = Tile::Type::Mine;
+    processTileNeighbors(mine_position, [this](Tile::Position neighbor_position){
+        this->tile(neighbor_position).neighbors++;
+    });
+}
+
+void Game::emplaceDuck(Tile::Position duck_position)
+{
+    tile(duck_position).type = Tile::Type::Duck;
+    processTileNeighbors(duck_position, [this](Tile::Position neighbor_position){
+        unsigned int &neighbors = this->tile(neighbor_position).neighbors;
+        if (neighbors > 1)
+        {
+            neighbors--;
+        }
+        else if (neighbors == 0)
+        {
+            neighbors = 1;
+        }
+    });
+}
+
+
+
+void Game::loseGame()
+{
+    m_you_lose = true;
+    
+    processAllTiles([this](Tile::Position tile_position){
+        tile(tile_position).is_open = true;
+    });
 }
