@@ -109,6 +109,10 @@ private:
     
     
     
+    void loseGame();
+    
+    
+    
     std::string     m_game_path;
     
     bool            m_you_lose;

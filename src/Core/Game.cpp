@@ -83,6 +83,10 @@ void Game::generateField()
     {
         emplaceDuck(fromLinearToPoint(random_tiles[i]));
     }
+    
+    
+    
+    m_you_lose = false;
 }
 
 void Game::generateField(Tile::Position definitely_empty_tile)
@@ -123,6 +127,10 @@ void Game::generateField(Tile::Position definitely_empty_tile)
             emplaceDuck(fromLinearToPoint(random_tiles[random_tile_index]));
         }
     }
+    
+    
+    
+    m_you_lose = false;
 }
 
 void Game::destroyField()
@@ -179,13 +187,16 @@ void Game::checkTile(Tile::Position tile_position)
             loseGame();
         }
         
-        processTileNeighbors(opening_tile_position,
-                             [this, &requiring_to_open](Tile::Position tile_position){
-            if (!tile(tile_position).is_open)
-            {
-                requiring_to_open.push(tile_position);
-            }
-        });
+        if (opening_tile.neighbors == 0)
+        {
+            processTileNeighbors(opening_tile_position,
+                                 [this, &requiring_to_open](Tile::Position tile_position){
+                if (!tile(tile_position).is_open)
+                {
+                    requiring_to_open.push(tile_position);
+                }
+            });
+        }
     }
 }
 
@@ -220,12 +231,12 @@ Game::FieldSize Game::getFieldSize() const
 
 unsigned int Game::getMinTotalMinesNumber() const
 {
-    return 150;
+    return 70;
 }
 
 unsigned int Game::getMinTotalDucksNumber() const
 {
-    return 20;
+    return 10;
 }
 
 unsigned int Game::getMaxTotalMinesNumber() const
@@ -242,7 +253,7 @@ unsigned int Game::getMaxTotalDucksNumber() const
 
 Game::FieldSize Game::getMinFieldSize()
 {
-    return FieldSize{30, 30};
+    return FieldSize{20, 20};
 }
 
 Game::FieldSize Game::getMaxFieldSize()
