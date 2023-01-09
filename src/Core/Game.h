@@ -4,6 +4,7 @@
 
 
 #include <fstream>
+#include <functional>
 
 
 
@@ -30,8 +31,15 @@ public:
             Duck
         };
         
+        Tile()
+            : type(Type::Empty),
+              neighbors(0),
+              is_open(false)
+        {};
+        
         Type            type;
         unsigned int    neighbors;
+        bool            is_open;
     };
     
     
@@ -47,6 +55,7 @@ public:
     
     void createField();
     void generateField();
+    void generateField(Tile::Position definitely_empty_tile);
     void destroyField();
     
     void saveGame();
@@ -54,7 +63,7 @@ public:
     
     void startGame(); // or restart
     
-    void checkTile(Tile::Position);
+    void checkTile(Tile::Position tile_position);
     
     
     
@@ -72,12 +81,25 @@ public:
     static FieldSize getMaxFieldSize();
     
     const Tile & getTile(Tile::Position tile_position) const;
+    void processAllTiles(std::function<void(Tile::Position)> handler) const;
     
     bool isDefeated() const;
     
     
     
 private:
+    
+    // fills the container with random numbers from 0 to N - 1
+    static void fillRandomNumbers(int *container, unsigned int container_size);
+    
+    Tile::Position fromLinearToPoint(unsigned int linear_position);
+    
+    void processTileNeighbors(Tile::Position tile_position,
+                              std::function<void(Tile::Position)> handler);
+    
+    Tile & tile(Tile::Position tile_position);
+    
+    
     
     std::string     m_game_path;
     

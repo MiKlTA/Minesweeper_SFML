@@ -65,7 +65,41 @@ void Game::createField()
 
 void Game::generateField()
 {
+    int tiles_number = getFieldSize().x * getFieldSize().y;
+    int *random_tiles = new int[tiles_number];
+    fillRandomNumbers(random_tiles, tiles_number);
     
+    int mines_number = getTotalMinesNumber();
+    int ducks_number = getTotalDucksNumber();
+    
+    for (int i = 0; i < mines_number; ++i)
+    {
+        Tile::Position tile_position(fromLinearToPoint(random_tiles[i]));
+        
+        tile(tile_position).type = Tile::Type::Mine;
+        processTileNeighbors(tile_position, [this](Tile::Position neighbor_position){
+            this->tile(neighbor_position).neighbors++;
+        });
+    }
+    
+    for (int i = mines_number; i < mines_number + ducks_number; ++i)
+    {
+        Tile::Position tile_position(fromLinearToPoint(random_tiles[i]));
+        
+        tile(tile_position).type = Tile::Type::Duck;
+        processTileNeighbors(tile_position, [this](Tile::Position neighbor_position){
+            unsigned int &neighbors = this->tile(neighbor_position).neighbors;
+            if (neighbors > 0)
+            {
+                neighbors--;
+            }
+        });
+    }
+}
+
+void Game::generateField(Tile::Position definitely_empty_tile)
+{
+    // ...
 }
 
 void Game::destroyField()
@@ -83,16 +117,28 @@ void Game::destroyField()
 
 
 
-void Game::startGame()
+void Game::saveGame()
 {
-    
+    // ...
+}
+
+void Game::loadGame()
+{
+    // ...
 }
 
 
 
-void Game::checkTile(Tile::Position)
+void Game::startGame()
 {
-    
+    // ...
+}
+
+
+
+void Game::checkTile(Tile::Position tile_position)
+{
+    // ... 
 }
 
 
@@ -126,7 +172,7 @@ Game::FieldSize Game::getFieldSize() const
 
 unsigned int Game::getMinTotalMinesNumber() const
 {
-    return 1;
+    return 50;
 }
 
 unsigned int Game::getMinTotalDucksNumber() const
@@ -148,7 +194,7 @@ unsigned int Game::getMaxTotalDucksNumber() const
 
 Game::FieldSize Game::getMinFieldSize()
 {
-    return FieldSize{2, 2};
+    return FieldSize{30, 30};
 }
 
 Game::FieldSize Game::getMaxFieldSize()
@@ -163,9 +209,103 @@ const Game::Tile & Game::getTile(Tile::Position tile_position) const
     return m_tiles[tile_position.y][tile_position.x];
 }
 
+void Game::processAllTiles(std::function<void(Tile::Position)> handler) const
+{
+    for (unsigned int y = 0; y < getFieldSize().y; ++y)
+    {
+        for (unsigned int x = 0; x < getFieldSize().x; ++x)
+        {
+            handler(Tile::Position({x, y}));
+        }
+    }
+}
+
 
 
 bool Game::isDefeated() const
 {
     return m_you_lose;
+}
+
+
+
+// private:
+
+
+
+void Game::fillRandomNumbers(int *container, unsigned int container_size)
+{
+    for (unsigned int i = 0; i < container_size; ++i)
+    {
+        container[i] = i;
+    }
+    
+    for (unsigned int i = 0; i < container_size; ++i)
+    {
+        int random_index = rand() % (container_size - i) + i;
+        std::swap(container[i], container[random_index]);
+    }
+}
+
+Game::Tile::Position Game::fromLinearToPoint(unsigned int linear_position)
+{
+    return {
+        linear_position % getFieldSize().x,
+        linear_position / getFieldSize().x
+    };
+}
+
+
+void Game::processTileNeighbors(Tile::Position tile_position,
+                                std::function<void(Tile::Position)> handler)
+{
+    bool on_left_border = tile_position.x == 0;
+    bool on_right_border = tile_position.x == getFieldSize().x - 1;
+    bool on_top_border = tile_position.y == 0;
+    bool on_bottom_border = tile_position.y == getFieldSize().y - 1;
+    
+    // 1 8 7
+    // 2 - 6
+    // 3 4 5
+    
+    if (!on_left_border)
+    {
+        if (!on_top_border)
+        {
+            handler({tile_position.x - 1, tile_position.y - 1}); // 1
+        }
+        handler({tile_position.x - 1, tile_position.y}); // 2
+        if (!on_bottom_border)
+        {
+            handler({tile_position.x - 1, tile_position.y + 1}); // 3
+        }
+    }
+    
+    if (!on_bottom_border)
+    {
+        handler({tile_position.x, tile_position.y + 1}); // 4
+    }
+    
+    if (!on_right_border)
+    {
+        if (!on_bottom_border)
+        {
+            handler({tile_position.x + 1, tile_position.y + 1}); // 5
+        }
+        handler({tile_position.x + 1, tile_position.y}); // 6
+        if (!on_top_border)
+        {
+            handler({tile_position.x + 1, tile_position.y - 1}); // 7
+        }
+    }
+    
+    if (!on_top_border)
+    {
+        handler({tile_position.x, tile_position.y - 1}); // 8
+    }
+}
+
+Game::Tile & Game::tile(Tile::Position tile_position)
+{
+    return m_tiles[tile_position.y][tile_position.x];
 }
