@@ -76,7 +76,6 @@ protected:
     virtual void onPositionChange(sf::Vector2f new_position) {};
     virtual void onSizeChange(sf::Vector2f new_size) {};
     virtual void onStateChange(State new_state) {};
-    virtual void onHide(bool will_hide) {};
     
     
     
