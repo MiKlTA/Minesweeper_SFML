@@ -22,12 +22,12 @@ PopupYouSure::PopupYouSure(
       m_Im_sure(new Button(resource_manager, sound_manager, key_manager, window,
                 Button::Theme::Default, L"I'm sure"))
 {
-    m_layout_vertical->setPadding({20.f, 40.f, 20.f, 20.f});
-    m_layout_vertical->setMargin(10.f);
-    
+    m_layout_horisontal->setMargin(20.f);
     m_layout_horisontal->addWidget(m_go_back);
     m_layout_horisontal->addWidget(m_Im_sure);
     
+    m_layout_vertical->setPadding({30.f, 30.f, 30.f, 20.f});
+    m_layout_vertical->setMargin(20.f);
     m_layout_vertical->addWidget(m_title);
     m_layout_vertical->addWidget(m_layout_horisontal);
     
