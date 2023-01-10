@@ -19,6 +19,7 @@ class MainMenu : public Scene
 public:
     
     MainMenu(Core *core, Game *game);
+    ~MainMenu();
     
     
     
@@ -44,14 +45,14 @@ private:
     
     
     
-    Layout *m_layout;
+    Layout m_layout;
     
-    Image *m_background;
+    Image m_background;
     
-    Button *m_continue_game;
-    Button *m_new_game;
-    Button *m_settings;
-    Button *m_exit;
+    Button m_continue_game;
+    Button m_new_game;
+    Button m_settings;
+    Button m_exit;
     
     
     

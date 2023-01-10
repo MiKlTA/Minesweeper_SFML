@@ -2,10 +2,9 @@
 
 
 
-PopupYouSure::PopupYouSure(
-        ResourceManager *resource_manager, SoundManager *sound_manager,
+PopupYouSure::PopupYouSure(ResourceManager *resource_manager, SoundManager *sound_manager,
         KeyManager *key_manager,
-        const sf::RenderWindow &window, Text *title)
+        const sf::RenderWindow &window, Text *title, std::wstring im_sure_button_text)
     : Widget(window),
       
       m_layout_vertical(new Layout(key_manager, window,
@@ -20,7 +19,7 @@ PopupYouSure::PopupYouSure(
       m_go_back(new Button(resource_manager, sound_manager, key_manager, window,
                 Button::Theme::Default, L"Back")),
       m_Im_sure(new Button(resource_manager, sound_manager, key_manager, window,
-                Button::Theme::Default, L"I'm sure"))
+                Button::Theme::Default, im_sure_button_text))
 {
     m_layout_horisontal->setMargin(20.f);
     m_layout_horisontal->addWidget(m_go_back);

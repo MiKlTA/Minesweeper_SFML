@@ -19,8 +19,8 @@ class PopupYouSure : public Widget
 public:
     
     PopupYouSure(ResourceManager *resource_manager, SoundManager *sound_manager,
-                 KeyManager *key_manager,
-                 const sf::RenderWindow &window, Text *title);
+                 KeyManager *key_manager, const sf::RenderWindow &window,
+                 Text *title, std::wstring im_sure_button_text);
     ~PopupYouSure();
     
     

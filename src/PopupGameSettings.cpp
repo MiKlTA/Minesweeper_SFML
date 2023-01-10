@@ -2,7 +2,7 @@
 
 
 
-PopupGameSettings::PopupGameSettings(Core *core, Game *game)
+PopupGameSettings::PopupGameSettings(Core *core, Game *game, Button::CallbackType apply_callback)
     : Widget(*core->getWindow()),
       
       m_game(game),
@@ -66,14 +66,25 @@ PopupGameSettings::PopupGameSettings(Core *core, Game *game)
                 Button::Theme::Default, L"Back"),
       m_start(core->getResourceManager(), core->getSoundManager(),
               core->getKeyManager(), *core->getWindow(),
-                Button::Theme::Default, L"Start!")
+                Button::Theme::Default, L"Apply"),
+      
+      
+      
+      m_popup_case_new_game(core, game, this, apply_callback)
 {
     m_go_back.setCallback([this](){
         this->setHide(!this->isHidden());
     });
-    m_start.setCallback([core]()
+    m_start.setCallback([game, this, apply_callback]()
     {
-       core->getSceneManager()->setScene("GameScene");
+        if (game->haveCreatedField())
+        {
+            m_popup_case_new_game.setHide(false);
+        }
+        else
+        {
+            apply_callback();
+        }
     });
     
     m_buttons_layout.setPadding({35.f, 0.f, 35.f, 30.f});
@@ -185,8 +196,22 @@ PopupGameSettings::PopupGameSettings(Core *core, Game *game)
     
     setSize(m_background.getSize());
     
+    m_popup_case_new_game.setHide(true);
+    
     core->goToCentre(this);
 }
+
+
+
+void PopupGameSettings::returnSliderToActualPositions()
+{
+    m_field_width.setSliderValue(m_game->getFieldSize().x);
+    m_field_height.setSliderValue(m_game->getFieldSize().y);
+    m_mines_count.setSliderValue(m_game->getTotalMinesNumber());
+    m_ducks_count.setSliderValue(m_game->getTotalDucksNumber());
+}
+
+
 
 bool PopupGameSettings::isPassEvent(const sf::Event &)
 {
@@ -233,6 +258,7 @@ void PopupGameSettings::onEvent_(const sf::Event &event)
     
     m_background.onEvent(event);
     m_main_layout.onEvent(event);
+    m_popup_case_new_game.onEvent(event);
 }
 
 void PopupGameSettings::onPositionChange(sf::Vector2f new_position)
@@ -251,9 +277,9 @@ void PopupGameSettings::onStateChange(State new_state)
 
 void PopupGameSettings::draw_(sf::RenderTarget &target, sf::RenderStates) const
 {
-    
     target.draw(m_background);
     target.draw(m_main_layout);
+    target.draw(m_popup_case_new_game);
 }
 
 
@@ -264,10 +290,10 @@ void PopupGameSettings::draw_(sf::RenderTarget &target, sf::RenderStates) const
 
 void PopupGameSettings::updateLabels()
 {
-    m_field_width_label.setString(std::to_wstring(m_game->getFieldSize().x));
-    m_field_height_label.setString(std::to_wstring(m_game->getFieldSize().y));
-    m_mines_count_label.setString(std::to_wstring(m_game->getTotalMinesNumber()));
-    m_ducks_count_label.setString(std::to_wstring(m_game->getTotalDucksNumber()));
+    m_field_width_label.setString(std::to_wstring(m_field_width.getSliderValue()));
+    m_field_height_label.setString(std::to_wstring(m_field_height.getSliderValue()));
+    m_mines_count_label.setString(std::to_wstring(m_mines_count.getSliderValue()));
+    m_ducks_count_label.setString(std::to_wstring(m_ducks_count.getSliderValue()));
 }
 
 void PopupGameSettings::updateGame()

@@ -16,13 +16,19 @@
 #include "Core/ResourceManager.h"
 #include "Core/KeyManager.h"
 
+#include "PopupCaseNewGame.h"
+
 
 
 class PopupGameSettings : public Widget
 {
 public:
     
-    PopupGameSettings(Core *core, Game *game);
+    PopupGameSettings(Core *core, Game *game, Button::CallbackType apply_callback);
+    
+    
+    
+    void returnSliderToActualPositions();
     
     
     
@@ -74,7 +80,9 @@ private:
     Image m_background;
     
     
-    
+    sf::Vector2u m_default_field_size;
+    unsigned int m_default_mines;
+    unsigned int m_default_ducks;
     ScrollBar   m_field_width;
     ScrollBar   m_field_height;
     ScrollBar   m_mines_count;
@@ -92,6 +100,10 @@ private:
     
     Button m_go_back;
     Button m_start;
+    
+    
+    
+    PopupCaseNewGame m_popup_case_new_game;
 };
 
 
