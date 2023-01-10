@@ -119,15 +119,20 @@ void Game::loadGame()
 void Game::restartGame()
 {
     m_you_lose = false;
+    m_field_is_generated = false;
     
     if (m_new_field_size.x != m_real_field_size.x
-            || m_new_field_size.y != m_real_field_size.y)
+            || m_new_field_size.y != m_real_field_size.y
+            || m_tiles == nullptr)
     {
         recreateField();
     }
     
     processAllTiles([this](Tile::Position tile_position){
+        tile(tile_position).type = Tile::Type::Empty;
+        tile(tile_position).neighbors = 0;
         tile(tile_position).is_open = false;
+        tile(tile_position).have_flag = false;
     });
 }
 
@@ -222,7 +227,7 @@ Game::FieldSize Game::getFieldSize() const
 
 unsigned int Game::getMinTotalMinesNumber() const
 {
-    return 9;
+    return 1;
 }
 
 unsigned int Game::getMinTotalDucksNumber() const
@@ -445,8 +450,8 @@ void Game::generateField(Tile::Position definitely_empty_tile)
     
     if (available_tiles_number > 16)
     {
-        int *random_tiles = new int[available_tiles_number];
-        fillRandomNumbers(random_tiles, available_tiles_number);
+        int *random_tiles = new int[tiles_number];
+        fillRandomNumbers(random_tiles, tiles_number);
         
         
         int random_tile_index = 0;

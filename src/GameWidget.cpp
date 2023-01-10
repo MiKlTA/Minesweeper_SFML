@@ -29,7 +29,7 @@ void GameWidget::restartGame()
 
 void GameWidget::newGame()
 {
-    m_game->recreateField();
+    m_game->restartGame();
     recomputeRealSizeAndLocation();
 }
 
