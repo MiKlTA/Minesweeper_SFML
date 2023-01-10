@@ -273,6 +273,14 @@ void PopupGameSettings::onStateChange(State new_state)
     m_main_layout.setState(new_state);
 }
 
+void PopupGameSettings::onHide(bool will_hide)
+{
+    if (will_hide)
+    {
+        m_popup_case_new_game.setHide(true);
+    }
+}
+
 
 
 void PopupGameSettings::draw_(sf::RenderTarget &target, sf::RenderStates) const
