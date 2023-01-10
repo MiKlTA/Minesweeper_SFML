@@ -42,7 +42,8 @@ private:
     
     
     
-    sf::Sprite m_image;
+    sf::Sprite  m_image;
+    bool        m_can_be_scaled; 
 };
 
 

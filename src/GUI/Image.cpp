@@ -7,7 +7,9 @@
 Image::Image(ResourceManager *resource_manager, const sf::RenderWindow &window)
     : Widget(window),
       
-      m_resource_manager(resource_manager)
+      m_resource_manager(resource_manager),
+      
+      m_can_be_scaled(true)
 {
     
 }
@@ -23,6 +25,7 @@ void Image::setImage(std::string image_name)
 void Image::setRectangle(const sf::IntRect &rectangle)
 {
     m_image.setTextureRect(rectangle);
+    m_can_be_scaled = false;
     setSize(sf::Vector2f(rectangle.width, rectangle.height));
 }
 
@@ -43,7 +46,14 @@ void Image::onSizeChange(sf::Vector2f new_size)
 {
     if (getSize().x != 0 && getSize().y != 0)
     {
-        m_image.scale(new_size.x / getSize().x, new_size.y / getSize().y);
+        if (m_can_be_scaled)
+        {
+            m_image.scale(new_size.x / getSize().x, new_size.y / getSize().y);
+        }
+        else
+        {
+            m_can_be_scaled = true;
+        }
     }
 }
 
