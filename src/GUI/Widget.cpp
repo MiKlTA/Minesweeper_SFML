@@ -34,9 +34,12 @@ void Widget::move(sf::Vector2f delta)
 
 void Widget::setState(State state)
 {
-    onStateChange(state);
-    
-    m_state = state;
+    if (!m_is_hidden)
+    {
+        onStateChange(state);
+        
+        m_state = state;
+    }
 }
 
 void Widget::setHide(bool hidden)
