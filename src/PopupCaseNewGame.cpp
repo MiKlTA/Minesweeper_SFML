@@ -90,6 +90,12 @@ bool PopupCaseNewGame::canBeFocused_() const
 
 void PopupCaseNewGame::onEvent_(const sf::Event &event)
 {
+    if (event.type == sf::Event::MouseButtonPressed
+            && !containsPoint({event.mouseButton.x, event.mouseButton.y}))
+    {
+        setHide(true);
+    }
+    
     m_background.onEvent(event);
     m_layout_vertical.onEvent(event);
 }

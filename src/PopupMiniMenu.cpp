@@ -91,6 +91,7 @@ void PopupMiniMenu::onPositionChange(sf::Vector2f new_position)
 void PopupMiniMenu::onStateChange(State new_state)
 {
     m_layout_vertical.setState(new_state);
+    m_popup_game_settings->setState(new_state);
 }
 
 

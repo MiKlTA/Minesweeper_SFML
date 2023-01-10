@@ -61,15 +61,21 @@ GameScene::GameScene(Core *core, Game *game)
 
 void GameScene::onEvent(const sf::Event &event)
 {
-    m_popup_mini_menu.onEvent(event);
-    m_popup_win_or_lose.onEvent(event);
-    
-    if (event.type == sf::Event::KeyPressed
-            && event.key.code == m_key_manager->key("esc"))
+    if (event.type == sf::Event::KeyReleased)
     {
-        m_popup_mini_menu.setHide(!m_popup_mini_menu.isHidden());
+        if (event.key.code == m_key_manager->key("esc"))
+        {
+            m_popup_mini_menu.setHide(!m_popup_mini_menu.isHidden());
+        }
+        else
+        {
+            m_popup_mini_menu.setState(Widget::State::Focused);
+            m_popup_win_or_lose.setState(Widget::State::Focused);
+        }
     }
-    else if (m_popup_mini_menu.isHidden())
+    if (m_popup_mini_menu.isHidden() && m_popup_win_or_lose.isHidden()
+            && (event.type != sf::Event::KeyPressed
+                || event.key.code != m_key_manager->key("esc")))
     {
         m_game_widget.onEvent(event);
         if (m_game->isDefeated() && m_game_state != GameState::Lose)
@@ -85,6 +91,9 @@ void GameScene::onEvent(const sf::Event &event)
             m_game_state = GameState::Win;
         }
     }
+    
+    m_popup_mini_menu.onEvent(event);
+    m_popup_win_or_lose.onEvent(event);
 }
 
 void GameScene::update(float frametime)
