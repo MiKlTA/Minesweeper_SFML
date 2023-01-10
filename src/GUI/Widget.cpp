@@ -44,6 +44,8 @@ void Widget::setState(State state)
 
 void Widget::setHide(bool hidden)
 {
+    onHide(hidden);
+    
     m_is_hidden = hidden;
 }
 
