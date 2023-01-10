@@ -29,11 +29,8 @@ void GameWidget::restartGame()
 
 void GameWidget::newGame()
 {
-    m_game->destroyField();
-    m_game->createField();
+    m_game->recreateField();
     recomputeRealSizeAndLocation();
-    
-    m_game->generateField(); // !!!
 }
 
 

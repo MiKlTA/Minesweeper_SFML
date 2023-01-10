@@ -55,12 +55,13 @@ public:
     void setTotalDucksNumber(unsigned int ducks_number);
     void setFieldSize(FieldSize field_size);
     
+    bool haveCreatedField();
     void createField();
-    void generateField();
-    void generateField(Tile::Position definitely_empty_tile);
     void destroyField();
+    void recreateField();
     
     void saveGame();
+    bool foundSaves();
     void loadGame();
     
     void restartGame();
@@ -87,6 +88,7 @@ public:
     void processAllTiles(std::function<void(Tile::Position)> handler) const;
     
     bool isDefeated() const;
+    bool isWin() const;
     
     
     
@@ -110,6 +112,9 @@ private:
     void emplaceMine(Tile::Position mine_position);
     void emplaceDuck(Tile::Position duck_position);
     
+    void generateField();
+    void generateField(Tile::Position definitely_empty_tile);
+    
     
     
     void loseGame();
@@ -119,6 +124,7 @@ private:
     std::string     m_game_path;
     
     bool            m_you_lose;
+    bool            m_field_is_generated;
     
     unsigned int    m_mines_total_number;
     unsigned int    m_mines_number_found;

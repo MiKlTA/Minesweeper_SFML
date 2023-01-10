@@ -50,6 +50,8 @@ GameScene::GameScene(Core *core, Game *game)
     m_popup_win_or_lose.setImSureCallback([this](){
         m_game_state = GameState::Playing;
         m_game->restartGame();
+        m_popup_mini_menu.setHide(true);
+        m_popup_win_or_lose.setHide(true);
     });
     core->goToCentre(&m_popup_mini_menu);
     core->goToCentre(&m_popup_win_or_lose);

@@ -8,7 +8,8 @@
 Game::Game(std::string game_path)
     : m_game_path(game_path),
       
-      m_you_lose(true),
+      m_you_lose(false),
+      m_field_is_generated(false),
       
       m_mines_total_number(),
       m_mines_number_found(0),
@@ -54,9 +55,14 @@ void Game::setFieldSize(FieldSize field_size)
 
 
 
+bool Game::haveCreatedField()
+{
+    return m_tiles != nullptr;
+}
+
 void Game::createField()
 {
-    if (m_tiles == nullptr)
+    if (!haveCreatedField())
     {
         m_tiles = new Tile*[m_real_field_size.y];
         for (unsigned int y = 0; y < m_real_field_size.x; ++y)
@@ -64,80 +70,13 @@ void Game::createField()
             m_tiles[y] = new Tile[m_real_field_size.x];
         }
     }
-}
-
-void Game::generateField()
-{
-    int mines_number = getTotalMinesNumber();
-    int ducks_number = getTotalDucksNumber();
-    int tiles_number = getFieldSize().x * getFieldSize().y;
     
-    int *random_tiles = new int[tiles_number];
-    fillRandomNumbers(random_tiles, tiles_number);
-    
-    
-    for (int i = 0; i < mines_number; ++i)
-    {
-        emplaceMine(fromLinearToPoint(random_tiles[i]));
-    }
-    
-    for (int i = mines_number; i < mines_number + ducks_number; ++i)
-    {
-        emplaceDuck(fromLinearToPoint(random_tiles[i]));
-    }
-    
-    
-    
-    m_you_lose = false;
-}
-
-void Game::generateField(Tile::Position definitely_empty_tile)
-{
-    int mines_number = getTotalMinesNumber();
-    int ducks_number = getTotalDucksNumber();
-    int tiles_number = getFieldSize().x * getFieldSize().y;
-    int available_tiles_number = tiles_number - mines_number - ducks_number;
-    
-    if (available_tiles_number > 16)
-    {
-        int *random_tiles = new int[available_tiles_number];
-        fillRandomNumbers(random_tiles, available_tiles_number);
-        
-        
-        int random_tile_index = 0;
-        for (int i = 0; i < mines_number; ++i)
-        {
-            Tile::Position random_tile_position;
-            do
-            {
-                ++random_tile_index;
-                random_tile_position = fromLinearToPoint(random_tiles[random_tile_index]);
-            }
-            while (isPointInArea(definitely_empty_tile, random_tile_position));
-            emplaceMine(random_tile_position);
-        }
-        
-        for (int i = mines_number; i < mines_number + ducks_number; ++i)
-        {
-            Tile::Position random_tile_position;
-            do
-            {
-                ++random_tile_index;
-                random_tile_position = fromLinearToPoint(random_tiles[random_tile_index]);
-            }
-            while (isPointInArea(definitely_empty_tile, random_tile_position));
-            emplaceDuck(fromLinearToPoint(random_tiles[random_tile_index]));
-        }
-    }
-    
-    
-    
-    m_you_lose = false;
+    m_field_is_generated = false;
 }
 
 void Game::destroyField()
 {
-    if (m_tiles != nullptr)
+    if (haveCreatedField())
     {
         for (unsigned int y = 0; y < m_real_field_size.x; ++y)
         {
@@ -150,11 +89,24 @@ void Game::destroyField()
     m_real_field_size = m_new_field_size;
 }
 
+void Game::recreateField()
+{
+    destroyField();
+    createField();
+}
+
 
 
 void Game::saveGame()
 {
     // ...
+}
+
+bool Game::foundSaves()
+{
+    // ...
+    
+    return false;
 }
 
 void Game::loadGame()
@@ -167,6 +119,13 @@ void Game::loadGame()
 void Game::restartGame()
 {
     m_you_lose = false;
+    
+    if (m_new_field_size.x != m_real_field_size.x
+            || m_new_field_size.y != m_real_field_size.y)
+    {
+        recreateField();
+    }
+    
     processAllTiles([this](Tile::Position tile_position){
         tile(tile_position).is_open = false;
     });
@@ -176,6 +135,10 @@ void Game::restartGame()
 
 void Game::checkTile(Tile::Position tile_position)
 {
+    if (!m_field_is_generated)
+    {
+        generateField(tile_position);
+    }
     if (!getTile(tile_position).have_flag)
     {
         std::stack<Tile::Position> requiring_to_open;
@@ -259,12 +222,12 @@ Game::FieldSize Game::getFieldSize() const
 
 unsigned int Game::getMinTotalMinesNumber() const
 {
-    return 70;
+    return 9;
 }
 
 unsigned int Game::getMinTotalDucksNumber() const
 {
-    return 3;
+    return 0;
 }
 
 unsigned int Game::getMaxTotalMinesNumber() const
@@ -281,7 +244,7 @@ unsigned int Game::getMaxTotalDucksNumber() const
 
 Game::FieldSize Game::getMinFieldSize()
 {
-    return FieldSize{20, 20};
+    return FieldSize{12, 12};
 }
 
 Game::FieldSize Game::getMaxFieldSize()
@@ -312,6 +275,13 @@ void Game::processAllTiles(std::function<void(Tile::Position)> handler) const
 bool Game::isDefeated() const
 {
     return m_you_lose;
+}
+
+bool Game::isWin() const
+{
+    // ...
+    
+    return false;
 }
 
 
@@ -437,6 +407,77 @@ void Game::emplaceDuck(Tile::Position duck_position)
             neighbors = 1;
         }
     });
+}
+
+
+
+void Game::generateField()
+{
+    int mines_number = getTotalMinesNumber();
+    int ducks_number = getTotalDucksNumber();
+    int tiles_number = getFieldSize().x * getFieldSize().y;
+    
+    int *random_tiles = new int[tiles_number];
+    fillRandomNumbers(random_tiles, tiles_number);
+    
+    
+    for (int i = 0; i < mines_number; ++i)
+    {
+        emplaceMine(fromLinearToPoint(random_tiles[i]));
+    }
+    
+    for (int i = mines_number; i < mines_number + ducks_number; ++i)
+    {
+        emplaceDuck(fromLinearToPoint(random_tiles[i]));
+    }
+    
+    
+    
+    m_field_is_generated = true;
+}
+
+void Game::generateField(Tile::Position definitely_empty_tile)
+{
+    int mines_number = getTotalMinesNumber();
+    int ducks_number = getTotalDucksNumber();
+    int tiles_number = getFieldSize().x * getFieldSize().y;
+    int available_tiles_number = tiles_number - mines_number - ducks_number;
+    
+    if (available_tiles_number > 16)
+    {
+        int *random_tiles = new int[available_tiles_number];
+        fillRandomNumbers(random_tiles, available_tiles_number);
+        
+        
+        int random_tile_index = 0;
+        for (int i = 0; i < mines_number; ++i)
+        {
+            Tile::Position random_tile_position;
+            do
+            {
+                ++random_tile_index;
+                random_tile_position = fromLinearToPoint(random_tiles[random_tile_index]);
+            }
+            while (isPointInArea(definitely_empty_tile, random_tile_position));
+            emplaceMine(random_tile_position);
+        }
+        
+        for (int i = mines_number; i < mines_number + ducks_number; ++i)
+        {
+            Tile::Position random_tile_position;
+            do
+            {
+                ++random_tile_index;
+                random_tile_position = fromLinearToPoint(random_tiles[random_tile_index]);
+            }
+            while (isPointInArea(definitely_empty_tile, random_tile_position));
+            emplaceDuck(fromLinearToPoint(random_tiles[random_tile_index]));
+        }
+    }
+    
+    
+    
+    m_field_is_generated = true;
 }
 
 
