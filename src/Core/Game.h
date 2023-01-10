@@ -126,7 +126,8 @@ private:
     unsigned int    m_ducks_total_number;
     unsigned int    m_ducks_number_found;
     
-    FieldSize       m_field_size;
+    FieldSize       m_new_field_size;
+    FieldSize       m_real_field_size;
     Tile **m_tiles;
     
 };

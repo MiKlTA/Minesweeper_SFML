@@ -16,7 +16,8 @@ Game::Game(std::string game_path)
       m_ducks_total_number(),
       m_ducks_number_found(0),
       
-      m_field_size(getMinFieldSize()),
+      m_new_field_size(getMinFieldSize()),
+      m_real_field_size(getMinFieldSize()),
       
       m_tiles(nullptr)
 {
@@ -44,9 +45,10 @@ void Game::setTotalDucksNumber(unsigned int ducks_number)
 
 void Game::setFieldSize(FieldSize field_size)
 {
+    m_new_field_size = field_size;
     if (m_tiles == nullptr)
     {
-        m_field_size = field_size;
+        m_real_field_size = m_new_field_size;
     }
 }
 
@@ -56,10 +58,10 @@ void Game::createField()
 {
     if (m_tiles == nullptr)
     {
-        m_tiles = new Tile*[m_field_size.y];
-        for (unsigned int y = 0; y < m_field_size.x; ++y)
+        m_tiles = new Tile*[m_real_field_size.y];
+        for (unsigned int y = 0; y < m_real_field_size.x; ++y)
         {
-            m_tiles[y] = new Tile[m_field_size.x];
+            m_tiles[y] = new Tile[m_real_field_size.x];
         }
     }
 }
@@ -137,13 +139,15 @@ void Game::destroyField()
 {
     if (m_tiles != nullptr)
     {
-        for (unsigned int y = 0; y < m_field_size.x; ++y)
+        for (unsigned int y = 0; y < m_real_field_size.x; ++y)
         {
             delete[] m_tiles[y];
         }
         delete[] m_tiles;
         m_tiles = nullptr;
     }
+    
+    m_real_field_size = m_new_field_size;
 }
 
 
@@ -248,7 +252,7 @@ unsigned int Game::getDucksNumberFound() const
 
 Game::FieldSize Game::getFieldSize() const
 {
-    return m_field_size;
+    return m_real_field_size;
 }
 
 
@@ -265,13 +269,13 @@ unsigned int Game::getMinTotalDucksNumber() const
 
 unsigned int Game::getMaxTotalMinesNumber() const
 {
-    const int field_area = m_field_size.x * m_field_size.y;
+    const int field_area = m_real_field_size.x * m_real_field_size.y;
     return std::max<int>(field_area - std::round(field_area / 9.f) - getTotalDucksNumber(), 0);
 }
 
 unsigned int Game::getMaxTotalDucksNumber() const
 {
-    const int field_area = m_field_size.x * m_field_size.y;
+    const int field_area = m_real_field_size.x * m_real_field_size.y;
     return std::max<int>(field_area - std::round(field_area / 9.f) - getTotalMinesNumber(), 0);
 }
 
