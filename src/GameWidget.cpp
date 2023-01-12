@@ -91,8 +91,8 @@ void GameWidget::onEvent_(const sf::Event &event)
                     || getState() == State::Hovered)
             {
                 setState(State::Hovered);
-                m_focus_position = tile_position;
             }
+            m_focus_position = tile_position;
         }
         else
         {
@@ -210,7 +210,7 @@ void GameWidget::onStateChange(State new_state)
 }
 
 
-
+#include <iostream>
 void GameWidget::draw_(sf::RenderTarget &target, sf::RenderStates states) const
 {
     sf::Sprite tile_brush(*m_resource_manager->getTexture("tiles"));
@@ -229,17 +229,17 @@ void GameWidget::draw_(sf::RenderTarget &target, sf::RenderStates states) const
         {
             tile_brush.setTextureRect(getOpenedTileTexRect());
         }
-        else if (m_focus_position.x == tile_position.x
+        else if ((getState() == State::Hovered || getState() == State::Focused)
+                 && m_focus_position.x == tile_position.x
                  && m_focus_position.y == tile_position.y)
         {
-            if (getState() == State::Hovered || getState() == State::Focused)
-            {
-                tile_brush.setTextureRect(getHoveredTileTexRect());
-            }
-            else if (getState() == State::Pressed)
-            {
-                tile_brush.setTextureRect(getOpenedTileTexRect());
-            }
+            tile_brush.setTextureRect(getHoveredTileTexRect());
+        }
+        else if (getState() == State::Pressed
+                 && m_pressed_position.x == tile_position.x
+                 && m_pressed_position.y == tile_position.y)
+        {
+            tile_brush.setTextureRect(getOpenedTileTexRect());
         }
         else
         {

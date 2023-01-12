@@ -249,7 +249,7 @@ unsigned int Game::getMaxTotalDucksNumber() const
 
 Game::FieldSize Game::getMinFieldSize()
 {
-    return FieldSize{12, 12};
+    return FieldSize{4, 2};
 }
 
 Game::FieldSize Game::getMaxFieldSize()
@@ -478,6 +478,10 @@ void Game::generateField(Tile::Position definitely_empty_tile)
             while (isPointInArea(definitely_empty_tile, random_tile_position));
             emplaceDuck(fromLinearToPoint(random_tiles[random_tile_index]));
         }
+    }
+    else
+    {
+        generateField();
     }
     
     

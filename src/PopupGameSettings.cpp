@@ -143,7 +143,6 @@ PopupGameSettings::PopupGameSettings(Core *core, Game *game, Button::CallbackTyp
         updateGame();
         updateLabels();
     });
-    m_field_width.setSliderValue(game->getFieldSize().x);
     m_field_height.setOnValueChangeCallback([this](){
         m_mines_count.setRange(m_game->getMinTotalMinesNumber(),
                                m_game->getMaxTotalMinesNumber());
@@ -153,7 +152,6 @@ PopupGameSettings::PopupGameSettings(Core *core, Game *game, Button::CallbackTyp
         updateGame();
         updateLabels();
     });
-    m_field_height.setSliderValue(game->getFieldSize().y);
     m_mines_count.setOnValueChangeCallback([this](){
         m_ducks_count.setRange(m_game->getMinTotalDucksNumber(),
                                m_game->getMaxTotalDucksNumber());
@@ -161,7 +159,6 @@ PopupGameSettings::PopupGameSettings(Core *core, Game *game, Button::CallbackTyp
         updateGame();
         updateLabels();
     });
-    m_mines_count.setSliderValue(game->getTotalMinesNumber());
     m_ducks_count.setOnValueChangeCallback([this](){
         m_mines_count.setRange(m_game->getMinTotalMinesNumber(),
                                m_game->getMaxTotalMinesNumber());
@@ -169,7 +166,7 @@ PopupGameSettings::PopupGameSettings(Core *core, Game *game, Button::CallbackTyp
         updateGame();
         updateLabels();
     });
-    m_ducks_count.setSliderValue(game->getTotalDucksNumber());
+    updateScrollbars();
     
     alignLayoutRelativeTo(&m_labels_layout, &m_scrollbars_layout,
                           m_field_width_label.getSize().y, m_field_width.getSize().y);
@@ -279,6 +276,11 @@ void PopupGameSettings::onHide(bool will_hide)
     {
         m_popup_case_new_game.setHide(true);
     }
+    else
+    {
+        updateScrollbars();
+        updateLabels();
+    }
 }
 
 
@@ -295,6 +297,18 @@ void PopupGameSettings::draw_(sf::RenderTarget &target, sf::RenderStates) const
 // private:
 
 
+
+void PopupGameSettings::updateScrollbars()
+{
+    Game::FieldSize field_size = m_game->getFieldSize();
+    unsigned int mines_number = m_game->getTotalMinesNumber();
+    unsigned int ducks_number = m_game->getTotalDucksNumber();
+    
+    m_field_width.setSliderValue(field_size.x);
+    m_field_height.setSliderValue(field_size.y);
+    m_mines_count.setSliderValue(mines_number);
+    m_ducks_count.setSliderValue(ducks_number);
+}
 
 void PopupGameSettings::updateLabels()
 {

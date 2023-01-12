@@ -60,6 +60,7 @@ protected:
     
 private:
     
+    void updateScrollbars();
     void updateLabels();
     void updateGame();
     void updateMineScrollbar();
