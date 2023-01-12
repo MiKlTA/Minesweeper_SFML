@@ -65,7 +65,7 @@ void Game::createField()
     if (!haveCreatedField())
     {
         m_tiles = new Tile*[m_real_field_size.y];
-        for (unsigned int y = 0; y < m_real_field_size.x; ++y)
+        for (unsigned int y = 0; y < m_real_field_size.y; ++y)
         {
             m_tiles[y] = new Tile[m_real_field_size.x];
         }
@@ -78,7 +78,7 @@ void Game::destroyField()
 {
     if (haveCreatedField())
     {
-        for (unsigned int y = 0; y < m_real_field_size.x; ++y)
+        for (unsigned int y = 0; y < m_real_field_size.y; ++y)
         {
             delete[] m_tiles[y];
         }
